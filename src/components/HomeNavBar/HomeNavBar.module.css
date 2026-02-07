@@ -1,0 +1,110 @@
+.container {
+  position: sticky;
+  top: 0;
+  z-index: 9999999999999999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 8px;
+  border-radius: 0px 0px 12px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.30);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  cursor: pointer;
+  transition: transform 140ms ease;
+}
+
+.logo:hover {
+  transform: translateY(-1px);
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.navLinks a {
+  position: relative;
+  font-size: 1.1rem;
+  font-weight: 540;
+  color: rgba(0, 0, 0, 0.78);
+  text-decoration: none;
+
+  padding: 8px 6px;
+  border-radius: 10px;
+  transition: all 140ms ease-in-out;
+}
+
+.navLinks a:hover {
+  color: rgba(0, 0, 0, 0.92);
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.navLinks a::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 4px;
+  height: 2px;
+  border-radius: 1000px;
+  background: rgba(0, 0, 0, 0.28);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 160ms ease;
+}
+
+.navLinks a:hover::after {
+  transform: scaleX(1);
+}
+
+.userActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.loginButton {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.88);
+  color: white;
+
+  padding: 10px 14px;
+  border-radius: 14px;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.10),
+    0 10px 22px rgba(0, 0, 0, 0.12);
+
+  transition: transform all 140ms ease-in-out;
+}
+
+.loginButton:hover {
+  transform: translateY(-1px);
+  background: rgba(0, 0, 0, 0.95);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.12),
+    0 14px 28px rgba(0, 0, 0, 0.14);
+}
+
+.loginButton:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.loginButton:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 4px rgba(59, 130, 246, 0.35),
+    0 12px 26px rgba(0, 0, 0, 0.12);
+}
