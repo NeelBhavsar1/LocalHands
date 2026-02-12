@@ -1,0 +1,43 @@
+.container {
+  position: relative;
+}
+
+.languageButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.languageButton span {
+  color: rgba(0,0,0,0.85);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+
+.dropdown {
+  position: fixed;
+  top: 6.8rem;
+  right: 0.2rem;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.dropdown div {
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.dropdown div:hover {
+  background: #f3f3f3;
+}
+
+

@@ -1,4 +1,5 @@
 "use client";
+import LanguageButton from "../LanguageButton/LanguageButton";
 import ToggleButton from "../ToggleButton/ToggleButton";
 import styles from "./HomeNavBar.module.css";
 import Image from "next/image";
@@ -7,10 +8,7 @@ import { useState } from "react";
 
 /*
 Features to implement:
-1) Language selection dropdown using next-i18next
-2) Fix mobile hamburger menu dropdown
-3) Update the CSS for the mobile menu to ensure it displays correctly on all screen sizes
-4) Provide global CSS for the toggle buttons!
+1) Provide global CSS for the toggle buttons!
 */
 
 export default function HomeNavBar() {
@@ -37,6 +35,7 @@ export default function HomeNavBar() {
             </div>
             
             <div className={styles.userActions}>
+                <LanguageButton/>
                 <ToggleButton />
                 <button className={styles.loginButton}>Login</button>
             </div>
@@ -58,6 +57,7 @@ export default function HomeNavBar() {
 
 
                     <div className={styles.actionButton}>
+                        <LanguageButton/>
                         <ToggleButton />
                         <button className={styles.loginButton}>Login</button>
                     </div>

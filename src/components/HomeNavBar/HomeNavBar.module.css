@@ -173,7 +173,8 @@
   }
 
   .hamburgerIcon {
-    background: transparent;
+    background: none;
+    background-color: none;
   }
 
   .actionButton {
@@ -182,6 +183,8 @@
     align-items: center;
     gap: 10px;
   }
+
+  
 
 
 }
