@@ -1,13 +1,22 @@
+/*
+in coalition with the next-themes package to handle themes throughout the application
+
+TODO:
+1) custom vars for the navbar section for light mode / dark mode. also update the changes
+in the HomeNavBar component.
+*/
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #ffffff;
-    --foreground: #ededed;
-  }
+/* removed the prefers dark color scheme for next-themes 
+it adds class="dark" to <html>
+*/
+.dark {
+  --background: #0b0b0b;
+  --foreground: #ededed;
 }
 
 html,
@@ -19,7 +28,7 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif; /* change to google fonts later */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -35,8 +44,5 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-}
+
+
