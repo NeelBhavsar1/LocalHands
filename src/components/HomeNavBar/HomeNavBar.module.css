@@ -8,12 +8,13 @@
   padding: 3px 8px;
   border-radius: 0px 0px 12px 12px;
   border: 1px solid rgba(0, 0, 0, 0.30);
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--navbarbackgroundcolor);
 }
 
 .logo {
   display: flex;
   align-items: center;
+  color: var(--navbartext);
 }
 
 .logo p {
@@ -46,7 +47,7 @@
   position: relative;
   font-size: 1.1rem;
   font-weight: 540;
-  color: rgba(0, 0, 0, 0.78);
+  color: var(--navbartext);
   text-decoration: none;
 
   padding: 8px 6px;
@@ -55,7 +56,7 @@
 }
 
 .navLinks a:hover {
-  color: rgba(0, 0, 0, 0.92);
+  color: var(--linkshover);
   background: rgba(0, 0, 0, 0.04);
 }
 

@@ -9,14 +9,25 @@ in the HomeNavBar component.
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --navbarbackgroundcolor: rgba(255, 255, 255, 0.7);
+  --navbartext: #222222;
+  --linkshover: rgba(0, 0, 0, 0.92);
+  --togglebackground: rgba(255, 255, 255, 0.65);
+  
 }
 
 /* removed the prefers dark color scheme for next-themes 
 it adds class="dark" to <html>
 */
 .dark {
-  --background: #0b0b0b;
+  --background: #888888;
   --foreground: #ededed;
+  --navbarbackgroundcolor: #444444;
+  --navbartext: #ffffff;
+  --linkshover: rgba(255, 255, 255, 0.7);
+  --togglebackground:#171717;
+  
+
 }
 
 html,
