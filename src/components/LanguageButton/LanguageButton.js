@@ -24,7 +24,7 @@ export default function LanguageButton() {
     return (
         <div className={styles.container}>
             <button className={styles.languageButton} onClick={toggleDropdown}>
-                <Image src="/language.png" alt="Language Icon" width={24} height={24} />
+                <Image src="/language.png" alt="Language Icon" width={24} height={24} className={styles.icon}/>
                 <span className={styles.selectedLanguage}>{selected}</span>
             </button>
 

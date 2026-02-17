@@ -5,12 +5,6 @@ import styles from "./HomeNavBar.module.css";
 import Image from "next/image";
 import { useState } from "react";
 
-
-/*
-Features to implement:
-1) Provide global CSS for the toggle buttons!
-*/
-
 export default function HomeNavBar() {
     
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

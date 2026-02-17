@@ -4,15 +4,16 @@
 }
 
 .toggleButton {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border-radius: 999px;
 
   display: grid;
   place-items: center;
 
-  background: rgba(255, 255, 255, 0.65);
-  border: 1px solid rgba(0, 0, 0, 0.10);
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+  box-shadow: 0 6px 18px rgba(15,23,42,0.10);
 
   cursor: pointer;
   transition: all 140ms ease-in-out;
@@ -20,8 +21,7 @@
 
 .toggleButton:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(0, 0, 0, 0.14);
+  border-color: rgba(99,102,241,0.35);
 }
 
 .toggleButton:active {
@@ -38,5 +38,9 @@
 
 .toggleButton :global(img) {
   transition: transform 140ms ease;
+}
+
+:global(html.dark) .icon {
+  filter: invert(1);
 }
 

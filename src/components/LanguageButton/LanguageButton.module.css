@@ -2,19 +2,33 @@
   position: relative;
 }
 
+:global(html.dark) .icon {
+  filter: invert(1);
+}
+
 .languageButton {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: white;
-  border: 1px solid #ccc;
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
   padding: 8px 12px;
   border-radius: 10px;
+  box-shadow: var(--shadow);
   cursor: pointer;
+  transition: all 140ms ease-in-out;
+  
 }
 
+.languageButton:hover {
+  transform: translateY(-2px);
+  border-color: rgba(99,102,241,0.35);
+}
+
+
+
 .languageButton span {
-  color: rgba(0,0,0,0.85);
+  color: var(--text);
   font-weight: 600;
   font-size: 0.95rem;
 }
@@ -24,8 +38,8 @@
   position: fixed;
   top: 6.8rem;
   right: 0.2rem;
-  background: white;
-  border: 1px solid #ddd;
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.1);
   overflow: hidden;
@@ -34,10 +48,12 @@
 .dropdown div {
   padding: 10px 16px;
   cursor: pointer;
+  color: var(--text);
 }
 
 .dropdown div:hover {
-  background: #f3f3f3;
+  background: rgba(99,102,241,0.10);
+  
 }
 
 

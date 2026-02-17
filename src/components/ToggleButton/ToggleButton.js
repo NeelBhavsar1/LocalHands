@@ -59,7 +59,7 @@ export default function ToggleButton() {
     return (
         <div className={styles.toggleButtonContainer}>
             <button type="button" className={styles.toggleButton} onClick={toggleButton}>
-                <Image src={isDark ? "/moon.png" : "/sun.png"} alt="toggle theme" width={24} height={24} />
+                <Image src={isDark ? "/moon.png" : "/sun.png"} alt="toggle theme" width={24} height={24} className={styles.icon} />
             </button>
         </div>
     );
