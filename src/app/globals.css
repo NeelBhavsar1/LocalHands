@@ -6,6 +6,7 @@
   --muted: #475569;        
   --surface: rgba(255, 255, 255, 0.70);
   --surface-strong: rgba(255, 255, 255, 0.92);
+  
 
   --border: rgba(15, 23, 42, 0.10);
   --shadow: 0 8px 30px rgba(15, 23, 42, 0.10);
@@ -15,7 +16,7 @@
   --navbarbackgroundcolor: var(--surface);
   --navbartext: var(--text);
   --linkshover: var(--text);
-  --togglebackground: var(--surface);
+  --togglebackground: var(--surface); 
 }
 
 .dark {
