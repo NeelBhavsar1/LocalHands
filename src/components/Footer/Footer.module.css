@@ -1,0 +1,99 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+    align-items: center;
+    color: var(--text);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.leftColumn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    min-width: 180px;
+}
+
+.leftColumn p {
+    font-size: 1.3rem;
+    font-weight: 500;
+    cursor: default;
+    
+}
+
+.leftColumn p span {
+    font-size: 1.5rem;
+}
+
+.localHandsImage {
+    transition: all 120ms ease-in-out;
+    cursor: pointer;
+}
+
+.localHandsImage:hover {
+    transform: translateY(-1px);
+    
+}
+
+.middleColumns {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 220px;
+}
+
+.middleColumns h2 {
+    font-size: 1.2rem;
+    margin: 0;
+    font-weight: 700;
+}
+
+.linkColumn {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+    gap: 10px 18px;
+}
+
+.linkColumn a {
+    text-decoration: none;
+    color: var(--text);
+    padding: px 5px;
+    font-weight: 500;
+
+    transition: all 120ms ease-in-out;
+}
+
+.linkColumn a:hover {
+    color: #94a3b8;
+    transform: translateY(-1px);
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--footerBackgroundColor);
+}
+
+.copyWriteLolHailCC {
+    color: var(--text);
+    align-items: center;
+    display: flex;
+    margin: 0 auto;
+}
+
+@media(max-width: 768px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 auto;
+        padding: 3px;
+        margin-bottom: 5px;
+    }
+}
+
+
+

@@ -17,6 +17,9 @@
   --navbartext: var(--text);
   --linkshover: var(--text);
   --togglebackground: var(--surface); 
+
+  --linkTextColorHover: #0f172a;
+  --footerBackgroundColor: rgba(255, 255, 255, 0.644);
 }
 
 .dark {
@@ -34,6 +37,10 @@
   --navbartext: var(--text);
   --linkshover: #ffffff;
   --togglebackground: var(--surface);
+
+  --linkTextColorHover: #94a3b8;
+  --footerBackgroundColor: rgba(41, 51, 74, 0.55);;
+
 }
 
 body {
