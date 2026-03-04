@@ -158,7 +158,6 @@
     align-items: center;
     gap: 12px;
     
-
     width: min(40vw, 100px);
     background: rgba(255, 255, 255, 0.98);
     border: 1px solid rgba(0,0,0,0.12);
@@ -167,6 +166,12 @@
 
     z-index: 999999999;   
     box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+  }
+
+  .mobileMenu a {
+    color: black;
+    text-decoration: none;
+
   }
 
   .hamburgerIcon {
