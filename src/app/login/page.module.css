@@ -1,26 +1,86 @@
-.container h1 {
-    font-size: 2.4rem;
-    cursor: default;
-    margin-bottom: 25px;    
-    font-weight: 600;
-
-}
 .container {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    width: 100%;
+    margin: 30px auto;
+    padding: 30px;
+    border: 1px solid var(--border);
+    max-width: 400px;
+    border-radius: 12px;
+    color: var(--text);
 }
 
-.card {
+.wrapper h1 {
+    justify-content: center;
+    margin-top: 12px;
     display: flex;
-    align-items: center;
-    flex-direction: column;
-    padding: 40px;
-    border: 1px solid black;
-    border-radius: 16px;
-    width: 350px;
 }
+
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: auto;
+    
+}
+
+.loginForm label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+.loginForm label input {
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background-color: none;
+}
+
+.submitForm {
+    padding: 8px 12px;
+    color: var(--text);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-size: 1.1rem;
+    background-color: var(--navbarbackgroundcolor);
+    cursor: pointer;
+    transition: all 120ms ease-in-out;
+}
+
+.submitForm:hover {
+    transform: translateY(-2px);
+}
+
+.goToSignUp {
+    margin-bottom: 5px;
+    cursor: default;
+}
+
+.goToSignUp span {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+@media(max-width: 768px) {
+    .container {
+        max-width: 300px;
+        border: none;
+    }
+
+    .goToSignUp {
+        margin-bottom: 12px;
+        font-size: 1rem;
+    }
+}
+
+
+
+
 
 
