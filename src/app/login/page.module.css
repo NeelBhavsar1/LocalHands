@@ -1,86 +1,175 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    margin: 30px auto;
-    padding: 30px;
-    border: 1px solid var(--border);
-    max-width: 400px;
-    border-radius: 12px;
+.wrapper {
+    min-height: 100vh;
     color: var(--text);
 }
 
-.wrapper h1 {
-    justify-content: center;
-    margin-top: 12px;
+.main {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px 60px;
 }
 
+.card {
+    width: 100%;
+    max-width: 430px;
+    padding: 32px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--navbarbackgroundcolor);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.header h1 {
+    margin: 0 0 8px 0;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.header p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text);
+    opacity: 0.8;
+}
 
 .loginForm {
     display: flex;
     flex-direction: column;
-    margin: 0 auto;
-    width: auto;
-    
+    gap: 18px;
 }
 
 .loginForm label {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    font-size: 1.1rem;
-    font-weight: 500;
-    margin-bottom: 30px;
+    font-size: 0.98rem;
+    font-weight: 600;
 }
 
-.loginForm label input {
-    padding: 12px;
+.loginForm input[type="email"],
+.loginForm input[type="password"] {
+    width: 100%;
+    padding: 13px 14px;
     border-radius: 12px;
     border: 1px solid var(--border);
-    background-color: none;
+    background-color: transparent;
+    color: var(--text);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+    box-sizing: border-box;
+}
+
+.loginForm input[type="email"]::placeholder,
+.loginForm input[type="password"]::placeholder {
+    opacity: 0.65;
+}
+
+.loginForm input[type="email"]:focus,
+.loginForm input[type="password"]:focus {
+    border-color: var(--text);
+    box-shadow: 0 0 0 3px rgba(100, 100, 100, 0.15);
+}
+
+.optionsRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: -4px;
+}
+
+.rememberMe {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    font-weight: 500 !important;
+    margin: 0;
+}
+
+.rememberMe input {
+    accent-color: currentColor;
+}
+
+.forgotPassword {
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: var(--text);
+    opacity: 0.85;
+    transition: opacity 0.2s ease;
+}
+
+.forgotPassword:hover {
+    opacity: 1;
+    text-decoration: underline;
 }
 
 .submitForm {
-    padding: 8px 12px;
+    width: 100%;
+    padding: 12px 16px;
     color: var(--text);
     border: 1.5px solid var(--border);
     border-radius: 12px;
-    font-size: 1.1rem;
-    background-color: var(--navbarbackgroundcolor);
+    font-size: 1rem;
+    font-weight: 600;
+    background-color: transparent;
     cursor: pointer;
-    transition: all 120ms ease-in-out;
+    transition: transform 120ms ease-in-out, background-color 120ms ease-in-out;
+    margin-top: 8px;
 }
 
 .submitForm:hover {
     transform: translateY(-2px);
 }
 
+.submitForm:active {
+    transform: translateY(0);
+}
+
 .goToSignUp {
-    margin-bottom: 5px;
+    text-align: center;
+    margin: 8px 0 0 0;
+    font-size: 0.95rem;
     cursor: default;
 }
 
-.goToSignUp span {
+.goToSignUp a {
     text-decoration: underline;
-    cursor: pointer;
+    color: var(--text);
+    font-weight: 600;
 }
 
-@media(max-width: 768px) {
-    .container {
-        max-width: 300px;
-        border: none;
+@media (max-width: 768px) {
+    .main {
+        padding: 24px 16px 40px;
+        align-items: flex-start;
+    }
+
+    .card {
+        max-width: 100%;
+        padding: 24px 20px;
+        border-radius: 16px;
+        box-shadow: none;
+    }
+
+    .header h1 {
+        font-size: 1.7rem;
+    }
+
+    .optionsRow {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     .goToSignUp {
-        margin-bottom: 12px;
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 }
-
-
-
-
-
-

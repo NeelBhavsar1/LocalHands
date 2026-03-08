@@ -4,6 +4,7 @@ import ToggleButton from "../ToggleButton/ToggleButton";
 import styles from "./HomeNavBar.module.css";
 import Image from "next/image";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function HomeNavBar() {
     
@@ -17,7 +18,7 @@ export default function HomeNavBar() {
     return (
         <div className={styles.container}>
             <div className={styles.logo}>
-                <Image src="/logo-v2.png" alt="LocalHands Logo" width={100} height={100} className={styles.localHandsImage}/>
+                <Link href="/"><Image src="/logo-v2.png" alt="LocalHands Logo" width={100} height={100} className={styles.localHandsImage}/></Link>
                 <p>Local<span>Hands</span></p>
             </div>
 
