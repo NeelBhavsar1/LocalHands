@@ -62,7 +62,7 @@
     color: var(--text);
     font-size: 1rem;
     outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+    transition: all 120ms ease-in-out;
     box-sizing: border-box;
 }
 
@@ -122,7 +122,7 @@
     font-weight: 600;
     background-color: transparent;
     cursor: pointer;
-    transition: transform 120ms ease-in-out, background-color 120ms ease-in-out;
+    transition: all 120ms ease-in-out;
     margin-top: 8px;
 }
 

@@ -63,7 +63,7 @@
     font-size: 1rem;
     outline: none;
     box-sizing: border-box;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition:all 120ms ease-in-out;
 }
 
 .signUpForm input::placeholder {
@@ -85,7 +85,7 @@
     font-weight: 600;
     background-color: transparent;
     cursor: pointer;
-    transition: transform 120ms ease-in-out, background-color 120ms ease-in-out;
+    transition: all 120ms ease-in-out;
     margin-top: 8px;
 }
 
