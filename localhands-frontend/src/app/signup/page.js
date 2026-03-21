@@ -1,15 +1,71 @@
 "use client";
-
-import React from 'react'
+//updates in frontend doc 
+import React, { useState } from 'react'
 import styles from './page.module.css'
 import HomeNavBar from '@/components/HomeNavBar/HomeNavBar'
 import Link from 'next/link';
 
 export default function page() {
 
+    const [formData, setFormData] = useState({
+        fname: '',
+        lname: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
+
+    const [errors, setErrors] = useState({});
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+
+        setFormData((prev) => ({...prev, [name]: value}));
+    }
+
+    const validateForm = () => {
+        const newErrors = {};
+
+        if (!formData.fname.trim()) {
+            newErrors.fname = "First name is required!"
+        }
+
+        if (!formData.lname.trim()) {
+            newErrors.lname = "Last name is required!"
+        }
+
+        if (!formData.email.trim()) {
+            newErrors.email = "Email address is required!"
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = "Enter a valid email address";
+        }
+
+        if (!formData.password) {
+            newErrors.password = "Password is required";
+        } else if (formData.password.length < 8) {
+            newErrors.password = "Password must be at least 8 characters";
+        }
+
+        if (!formData.confirmPassword) {
+            newErrors.confirmPassword = "Please confirm your password";
+        } else if (formData.password !== formData.confirmPassword) {
+            newErrors.confirmPassword = "Passwords do not match";
+        }
+
+        return newErrors;
+    }
+
     const submitForm = (e) => {
         e.preventDefault();
-        console.log("Form submitted!");
+
+        const validationErorrs = validateForm();
+        setErrors(validationErorrs);
+
+        if (Object.keys(validationErorrs).length > 0) {
+            return;
+        }
+
+        console.log("Form submitted!", formData);
     }
 
   return (
@@ -24,23 +80,39 @@ export default function page() {
                     <p>Please submit your information to use LocalHands</p>
                 </div>
 
-                <form name="signup-form" className={styles.signUpForm} onSubmit={submitForm}>
+                <form name="signup-form" className={styles.signUpForm} onSubmit={submitForm} autoComplete='off'>
+                    <div className={styles.formGrid}>
 
-                    <label htmlFor='fname'>First Name
-                        <input type='text' id='fname' name='fname' required placeholder='John' autoComplete='name' />
-                    </label>
+                        <div className={styles.leftColumn}>
+                            <label htmlFor='fname'>First Name
+                                <input type='text' id='fname' name='fname' required placeholder='John' value={formData.fname} onChange={handleChange}/>
+                                {errors.fname && <span className={styles.error}>{errors.fname}</span>}
+                            </label>
 
-                    <label htmlFor='lname'>Last Name
-                        <input type='text' id='lname' name='lname' required placeholder='Doe' />
-                    </label>
+                            <label htmlFor='lname'>Last Name
+                                <input type='text' id='lname' name='lname' required placeholder='Doe' value={formData.lname} onChange={handleChange}/>
+                                {errors.lname && <span className={styles.error}>{errors.lname}</span>}
+                            </label>
 
-                    <label htmlFor='password'>Password
-                        <input type='password' id='password' name='password' required/>
-                    </label>
+                            <label htmlFor='email'>Email Address
+                                <input type='email' id='email' name='email' required placeholder='jdoe@gmail.com' value={formData.email} onChange={handleChange}/>
+                                {errors.email && <span className={styles.error}>{errors.email}</span>}
+                            </label>
+                        </div>
 
-                    <label htmlFor='confirmPassword'>Confirm Password
-                        <input type='password' id='password2' name='password2' required/>
-                    </label>
+                        <div className={styles.rightColumn}>
+                            <label htmlFor='password'>Password
+                                <input type='password' id='password' name='password' required placeholder='**********' value={formData.password} onChange={handleChange}/>
+                                {errors.password && <span className={styles.error}>{errors.password}</span>}
+                            </label>
+
+                            <label htmlFor='confirmPassword'>Confirm Password
+                                <input type='password' id='confirmPassword' name='confirmPassword' required placeholder='**********' value={formData.confirmPassword} onChange={handleChange}/>
+                                {errors.confirmPassword && <span className={styles.error}>{errors.confirmPassword}</span>}
+                            </label>
+                        </div>
+
+                    </div>
 
                     <button type='submit' className={styles.submitForm}>
                         Continue
@@ -50,7 +122,6 @@ export default function page() {
                         Already have an account?{" "}
                         <Link href="/login">Login</Link>
                     </p>
-
 
                 </form>
 
