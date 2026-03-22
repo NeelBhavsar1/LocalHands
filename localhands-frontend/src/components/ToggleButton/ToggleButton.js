@@ -10,7 +10,7 @@ it will be used in the navbar components for both homeNavBar and loggedinNavBar,
 used to toggle between light and dark mode for the entire website.
 */
 
-export default function ToggleButton() {
+export default function ToggleButton({ onToggleComplete }) {
     /*
     this is a hook that allows us to access the current theme and set the theme, 
     it also gives us access to the system theme (light or dark) which we can use 
@@ -54,6 +54,10 @@ export default function ToggleButton() {
     */
     const toggleButton = () => {
         setTheme(isDark ? "light" : "dark"); 
+
+        if (onToggleComplete) {
+            onToggleComplete();
+        }
     }
 
     return (

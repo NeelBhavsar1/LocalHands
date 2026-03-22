@@ -12,8 +12,11 @@ export default function HomeNavBar() {
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
-        console.log("Mobile menu toggled:", !isMobileMenuOpen);
     };
+
+    const closeMobileMenu = () => {
+        setIsMobileMenuOpen(false);
+    }
 
     return (
         <div className={styles.container}>
@@ -24,23 +27,21 @@ export default function HomeNavBar() {
 
             <div className={styles.navLinks}>
                 <a href="#home">Home</a>
-                <a href="#services">Services</a>
                 <a href="#about">About Us</a>
+                <a href="#services">Services</a>
                 <a href="#contact">Contact</a>
             </div>
             
             <div className={styles.userActions}>
                 <LanguageButton/>
                 <ToggleButton />
-                <button className={styles.loginButton}>Login</button>
+                <Link href="/login"><button className={styles.loginButton}>Login</button></Link>
             </div>
 
             <div className={styles.mobileMenuButton}>
-                <button onClick={toggleMobileMenu}>
+                <button onClick={toggleMobileMenu} className={styles.hamburgerButton}>
                     <Image src="/hamburger.png" alt="Mobile Menu Icon" width={30} height={30} className={styles.hamburgerIcon} />
                 </button>
-
-
             </div>
 
             {isMobileMenuOpen &&
@@ -53,8 +54,8 @@ export default function HomeNavBar() {
 
                     <div className={styles.actionButton}>
                         <LanguageButton/>
-                        <ToggleButton />
-                        <button className={styles.loginButton}>Login</button>
+                        <ToggleButton onToggleComplete={closeMobileMenu}/>
+                        <Link href="/login"><button className={styles.loginButton}>Login</button></Link>
                     </div>
                 </div>
             }

@@ -179,6 +179,15 @@
     background-color: none;
   }
 
+  .hamburgerButton {
+    border: none;
+    background: none;
+  }
+
+  :global(html.dark) .hamburgerButton {
+  filter: invert(1);
+}
+
   .actionButton {
     display: flex;
     flex-direction: column;
