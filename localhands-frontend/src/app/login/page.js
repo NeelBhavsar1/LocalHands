@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import styles from "./page.module.css";
 import HomeNavBar from "@/components/HomeNavBar/HomeNavBar";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 export default function page() {
+  const {t} = useTranslation();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -62,39 +64,39 @@ export default function page() {
         <section className={styles.card}>
 
           <div className={styles.header}>
-            <h1>Welcome back</h1>
-            <p>Log in to continue using LocalHands.</p>
+            <h1>{t("login.title")}</h1>
+            <p>{t("login.subtitle")}</p>
           </div>
 
           <form name="login-form" className={styles.loginForm} onSubmit={submitForm} autoComplete="off">
-            <label htmlFor="email">Email
-              <input type="email" id="email" name="email" required placeholder="jdoe@gmail.com" value={formData.email} onChange={handleChange} />
+            <label htmlFor="email">{t("login.email")}
+              <input type="email" id="email" name="email" required placeholder={t("login.emailexample")} value={formData.email} onChange={handleChange} />
               {errors.email && <span className={styles.error}>{errors.email}</span>}
             </label>
 
-            <label htmlFor="password">Password
-              <input type="password" id="password" name="password" required placeholder="Enter your password" value={formData.password} onChange={handleChange}/>
+            <label htmlFor="password">{t("login.password")}
+              <input type="password" id="password" name="password" required placeholder={t("login.passwordExample")} value={formData.password} onChange={handleChange}/>
               {errors.password && <span className={styles.error}>{errors.password}</span>}
             </label>
 
             <div className={styles.optionsRow}>
               <label className={styles.rememberMe}>
                 <input type="checkbox" name="rememberMe" />
-                Remember me
+                {t("login.rememberme")}
               </label>
 
               <Link href="/forgot-password" className={styles.forgotPassword}>
-                Forgot password?
+                {t("login.forgotpassword")}
               </Link>
             </div>
 
             <button type="submit" className={styles.submitForm}>
-              Continue
+              {t("login.continue")}
             </button>
 
             <p className={styles.goToSignUp}>
-              Don't have an account?{" "}
-              <Link href="/signup">Sign up</Link>
+              {t("login.donthaveanaccount")}{" "}
+              <Link href="/signup">{t("login.signup")}</Link>
             </p>
           </form>
 

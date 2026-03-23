@@ -3,8 +3,10 @@
 import Link from 'next/link';
 import styles from './Footer.module.css'
 import Image from 'next/image'
+import { useTranslation } from 'react-i18next';
 
 export default function Footer() {
+  const { t } = useTranslation();
   return (
     <div className={styles.wrapper}>
 
@@ -14,14 +16,14 @@ export default function Footer() {
             <p>Local<span>Hands</span></p>
           </div>
           <div className={styles.middleColumns}>
-            <h2>Links</h2>
+            <h2>{t("footer.links")}</h2>
             <div className={styles.linkColumn}>
-              <Link href='/'>Home</Link>
-              <Link href='/'>FAQ</Link>
-              <Link href='/'>Contact Us</Link>
-              <Link href='/'>Terms of Service</Link>
-              <Link href='/'>Privacy Policy</Link>
-              <Link href='/'>Site Map</Link>
+              <Link href='/'>{t("footer.home")}</Link>
+              <Link href='/'>{t("footer.faq")}</Link>
+              <Link href='/'>{t("footer.contactus")}</Link>
+              <Link href='/'>{t("footer.termsofservice")}</Link>
+              <Link href='/'>{t("footer.privacypolicy")}</Link>
+              <Link href='/'>{t("footer.sitemap")}</Link>
             </div>
           </div>           
       </div>

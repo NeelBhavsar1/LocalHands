@@ -5,9 +5,10 @@ import styles from "./HomeNavBar.module.css";
 import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 export default function HomeNavBar() {
-    
+    const { t } = useTranslation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const toggleMobileMenu = () => {
@@ -26,16 +27,16 @@ export default function HomeNavBar() {
             </div>
 
             <div className={styles.navLinks}>
-                <a href="#home">Home</a>
-                <a href="#about">About Us</a>
-                <a href="#services">Services</a>
-                <a href="#contact">Contact</a>
+                <a href="#home">{t("nav.home")}</a>
+                <a href="#about">{t("nav.about")}</a>
+                <a href="#services">{t("nav.services")}</a>
+                <a href="#contact">{t("nav.contact")}</a>
             </div>
             
             <div className={styles.userActions}>
                 <LanguageButton/>
                 <ToggleButton />
-                <Link href="/login"><button className={styles.loginButton}>Login</button></Link>
+                <Link href="/login"><button className={styles.loginButton}>{t("nav.login")}</button></Link>
             </div>
 
             <div className={styles.mobileMenuButton}>
@@ -46,10 +47,10 @@ export default function HomeNavBar() {
 
             {isMobileMenuOpen &&
                 <div className={styles.mobileMenu}>
-                    <a href="#home" onClick={toggleMobileMenu}>Home</a>
-                    <a href="#services" onClick={toggleMobileMenu}>Services</a>
-                    <a href="#about" onClick={toggleMobileMenu}>About Us</a>
-                    <a href="#contact" onClick={toggleMobileMenu}>Contact</a>
+                    <a href="#home" onClick={toggleMobileMenu}>{t("nav.home")}</a>
+                    <a href="#services" onClick={toggleMobileMenu}>{t("nav.services")}</a>
+                    <a href="#about" onClick={toggleMobileMenu}>{t("nav.about")}</a>
+                    <a href="#contact" onClick={toggleMobileMenu}>{t("nav.contact")}</a>
 
 
                     <div className={styles.actionButton}>

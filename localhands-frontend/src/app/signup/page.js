@@ -4,8 +4,10 @@ import React, { useState } from 'react'
 import styles from './page.module.css'
 import HomeNavBar from '@/components/HomeNavBar/HomeNavBar'
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 export default function page() {
+    const {t} = useTranslation();
 
     const [formData, setFormData] = useState({
         fname: '',
@@ -76,37 +78,37 @@ export default function page() {
             <div className={styles.card}>
 
                 <div className={styles.header}>
-                    <h1>Welcome to LocalHands</h1>
-                    <p>Please submit your information to use LocalHands</p>
+                    <h1>{t("signup.title")}</h1>
+                    <p>{t("signup.subtitle")}</p>
                 </div>
 
                 <form name="signup-form" className={styles.signUpForm} onSubmit={submitForm} autoComplete='off'>
                     <div className={styles.formGrid}>
 
                         <div className={styles.leftColumn}>
-                            <label htmlFor='fname'>First Name
-                                <input type='text' id='fname' name='fname' required placeholder='John' value={formData.fname} onChange={handleChange}/>
+                            <label htmlFor='fname'>{t("signup.fname")}
+                                <input type='text' id='fname' name='fname' required placeholder={t("signup.fnameExample")} value={formData.fname} onChange={handleChange}/>
                                 {errors.fname && <span className={styles.error}>{errors.fname}</span>}
                             </label>
 
-                            <label htmlFor='lname'>Last Name
-                                <input type='text' id='lname' name='lname' required placeholder='Doe' value={formData.lname} onChange={handleChange}/>
+                            <label htmlFor='lname'>{t("signup.lname")}
+                                <input type='text' id='lname' name='lname' required placeholder={t("signup.lnameExample")} value={formData.lname} onChange={handleChange}/>
                                 {errors.lname && <span className={styles.error}>{errors.lname}</span>}
                             </label>
 
-                            <label htmlFor='email'>Email Address
-                                <input type='email' id='email' name='email' required placeholder='jdoe@gmail.com' value={formData.email} onChange={handleChange}/>
+                            <label htmlFor='email'>{t("signup.email")}
+                                <input type='email' id='email' name='email' required placeholder={t("signup.emailExample")} value={formData.email} onChange={handleChange}/>
                                 {errors.email && <span className={styles.error}>{errors.email}</span>}
                             </label>
                         </div>
 
                         <div className={styles.rightColumn}>
-                            <label htmlFor='password'>Password
+                            <label htmlFor='password'>{t("signup.password")}
                                 <input type='password' id='password' name='password' required placeholder='**********' value={formData.password} onChange={handleChange}/>
                                 {errors.password && <span className={styles.error}>{errors.password}</span>}
                             </label>
 
-                            <label htmlFor='confirmPassword'>Confirm Password
+                            <label htmlFor='confirmPassword'>{t("signup.confirmPassword")}
                                 <input type='password' id='confirmPassword' name='confirmPassword' required placeholder='**********' value={formData.confirmPassword} onChange={handleChange}/>
                                 {errors.confirmPassword && <span className={styles.error}>{errors.confirmPassword}</span>}
                             </label>
@@ -115,12 +117,12 @@ export default function page() {
                     </div>
 
                     <button type='submit' className={styles.submitForm}>
-                        Continue
+                        {t("signup.continue")}
                     </button>
 
                     <p className={styles.goToLogin}>
-                        Already have an account?{" "}
-                        <Link href="/login">Login</Link>
+                        {t("signup.alreadyhaveanaccount")}{" "}
+                        <Link href="/login">{t("signup.login")}</Link>
                     </p>
 
                 </form>

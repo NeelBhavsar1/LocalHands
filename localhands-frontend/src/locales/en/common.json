@@ -1,0 +1,51 @@
+{
+    
+    "language.english": "English",
+    "language.spanish": "Spanish",
+    "language.french": "French",
+    "language.german": "German",
+
+    "nav.login": "Login",
+    "nav.signup": "Sign Up",
+    "nav.home": "Home",
+    "nav.about": "About us",
+    "nav.services": "Services",
+    "nav.contact": "Contact",
+
+    "footer.links": "Links",
+    "footer.home": "Home",
+    "footer.contactus": "Contact us",
+    "footer.privacypolicy": "Privacy Policy",
+    "footer.faq": "FAQ",
+    "footer.termsofservice": "Terms of Service",
+    "footer.sitemap": "Site Map",
+
+    "login.title": "Welcome Back",
+    "login.subtitle": "Log in to continue using LocalHands.",
+    "login.email": "Email",
+    "login.emailexample": "jdoe@gmail.com",
+    "login.password": "Password",
+    "login.passwordExample": "Enter your password",
+    "login.rememberme": "Remember me",
+    "login.forgotpassword": "Forgot password?",
+    "login.continue": "Continue",
+    "login.donthaveanaccount": "Don't have an account?",
+    "login.signup": "Sign up",
+
+    "signup.title": "Welcome to LocalHands",
+    "signup.subtitle": "Please submit your information to use LocalHands",
+    "signup.fname": "First Name",
+    "signup.lname": "Last Name",
+    "signup.email": "Email Address",
+    "signup.emailExample": "jdoe@gmail.com",
+    "signup.fnameExample": "John",
+    "signup.lnameExample": "Doe",
+    "signup.continue": "Continue",
+    "signup.alreadyhaveanaccount": "Already have an account?",
+    "signup.login": "Login",
+    "signup.confirmPassword": "Confirm Password",
+
+    "hero.title": "LocalHands",
+    "hero.subtitle": "Connecting communities through trusted local services.",
+    "hero.cta": "Get Started"
+}
