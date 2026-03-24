@@ -44,7 +44,9 @@
     "signup.login": "Connexion",
     "signup.confirmPassword": "Confirmer le mot de passe",
 
-    "hero.title": "LocalHands",
-    "hero.subtitle": "Relier les communautés grâce à des services locaux fiables.",
-    "hero.cta": "Commencer"
+    "hero.title": "Les meilleurs services de votre communauté",
+    "hero.titleHighlight": "Tout au même endroit !",
+    "hero.subtitle": "LocalHands vous met en relation avec des professionnels de quartier de confiance pour chaque tâche.",
+    "hero.buttonTry": "Essayez maintenant !",
+    "hero.buttonHow": "Voir comment ça marche"
 }

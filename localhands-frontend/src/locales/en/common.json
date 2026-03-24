@@ -45,7 +45,9 @@
     "signup.login": "Login",
     "signup.confirmPassword": "Confirm Password",
 
-    "hero.title": "LocalHands",
+    "hero.title": "Your Community's Best Services",
+    "hero.titleSecond": "All In One Place!",
     "hero.subtitle": "Connecting communities through trusted local services.",
-    "hero.cta": "Get Started"
+    "hero.buttonTry": "Try Now!",
+    "hero.buttonHow": "See How It Works"
 }

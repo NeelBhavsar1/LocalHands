@@ -15,13 +15,21 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-
+      
       <HomeNavBar showLinks={true}/>
 
       <section className={styles.hero}>
         <div className={styles.heroContent}>
-          <h1 className={styles.title}>{t("hero.title")}</h1>
+          <h1 className={styles.title}>
+            {t("hero.title")}<br/> 
+            <span className={styles.titleSecond}>{t("hero.titleSecond")}</span>
+          </h1>
           <p className={styles.subtitle}>{t("hero.subtitle")}</p>
+
+          <div className={styles.buttonGroup}>
+            <button className={styles.tryButton}>{t("hero.buttonTry")}</button>
+            <button className={styles.howButton}>{t("hero.buttonHow")}</button>
+          </div>
         </div>
 
 

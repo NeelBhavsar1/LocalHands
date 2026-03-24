@@ -1,0 +1,65 @@
+.hero {
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    min-height: 60vh;
+    padding: 4rem 2rem;
+    text-align: left;
+}
+
+.heroContent {
+    max-width: 800px;
+}
+
+.title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+}
+
+.titleSecond {
+    font-weight: 400;
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    color: var(--text);
+    margin-bottom: 2.5rem;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: left;
+    gap: 1.5rem;
+}
+
+.tryButton,
+.howButton {
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tryButton {
+    background-color: var(--text);
+    color: var(--background);
+    border: none;
+}
+
+.tryButton:hover {
+    opacity: 0.8;
+}
+
+.howButton {
+    background-color: transparent;
+    color: var(--text);
+    border: 1x solid currentColor;
+}
+
+.howButton:hover {
+    background-color: var(--text);
+    color: var(--background);
+}
