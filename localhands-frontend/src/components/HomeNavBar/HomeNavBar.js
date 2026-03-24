@@ -7,7 +7,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
-export default function HomeNavBar() {
+export default function HomeNavBar({ showLinks = true }) {
     const { t } = useTranslation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -26,17 +26,19 @@ export default function HomeNavBar() {
                 <p>Local<span>Hands</span></p>
             </div>
 
+            {showLinks && (
             <div className={styles.navLinks}>
                 <a href="#home">{t("nav.home")}</a>
                 <a href="#about">{t("nav.about")}</a>
                 <a href="#services">{t("nav.services")}</a>
                 <a href="#contact">{t("nav.contact")}</a>
             </div>
+            )}
             
             <div className={styles.userActions}>
                 <LanguageButton/>
                 <ToggleButton />
-                <Link href="/login"><button className={styles.loginButton}>{t("nav.login")}</button></Link>
+                {showLinks && (<Link href="/login"><button className={styles.loginButton}>{t("nav.login")}</button></Link>)}
             </div>
 
             <div className={styles.mobileMenuButton}>
@@ -47,16 +49,17 @@ export default function HomeNavBar() {
 
             {isMobileMenuOpen &&
                 <div className={styles.mobileMenu}>
-                    <a href="#home" onClick={toggleMobileMenu}>{t("nav.home")}</a>
+                    {( showLinks && 
+                    <><a href="#home" onClick={toggleMobileMenu}>{t("nav.home")}</a>
                     <a href="#services" onClick={toggleMobileMenu}>{t("nav.services")}</a>
                     <a href="#about" onClick={toggleMobileMenu}>{t("nav.about")}</a>
-                    <a href="#contact" onClick={toggleMobileMenu}>{t("nav.contact")}</a>
-
+                    <a href="#contact" onClick={toggleMobileMenu}>{t("nav.contact")}</a></>
+                    )}
 
                     <div className={styles.actionButton}>
                         <LanguageButton/>
                         <ToggleButton onToggleComplete={closeMobileMenu}/>
-                        <Link href="/login"><button className={styles.loginButton}>Login</button></Link>
+                        {showLinks && (<Link href="/login"><button className={styles.loginButton}>Login</button></Link>)}
                     </div>
                 </div>
             }

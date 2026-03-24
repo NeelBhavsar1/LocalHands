@@ -72,7 +72,7 @@ export default function page() {
 
   return (
     <div className={styles.wrapper}>
-        <HomeNavBar />
+        <HomeNavBar showLinks={false}/>
 
         <div className={styles.main}>
             <div className={styles.card}>

@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
 
-      <HomeNavBar />
+      <HomeNavBar showLinks={true}/>
 
       <section className={styles.hero}>
         <div className={styles.heroContent}>

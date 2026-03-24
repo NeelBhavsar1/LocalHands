@@ -57,7 +57,7 @@ export default function page() {
 
   return (
     <div className={styles.wrapper}>
-      <HomeNavBar />
+      <HomeNavBar showLinks={false}/>
 
       <main className={styles.main}>
 
