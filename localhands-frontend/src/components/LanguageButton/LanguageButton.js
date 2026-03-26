@@ -9,12 +9,22 @@ export default function LanguageButton() {
     const [isOpen, setIsOpen] = useState(false);
     const { i18n, t } = useTranslation();
 
+    const supportedLangs = ["en", "es", "fr", "de"];
+    const displayByLang = {
+        en: "EN",
+        es: "ES",
+        fr: "FR",
+        de: "DE",
+    };
+
     const [selected, setSelected] = useState("EN");
 
     useEffect(() => {
-        const savedLanguage = localStorage.getItem("language") || "en";
-        i18n.changeLanguage(savedLanguage);
-        setSelected(savedLanguage.toUpperCase())
+        const savedLanguage = (localStorage.getItem("language") || "en").toLowerCase();
+        const normalized = supportedLangs.includes(savedLanguage) ? savedLanguage : "en";
+
+        i18n.changeLanguage(normalized);
+        setSelected(displayByLang[normalized] ?? normalized.toUpperCase());
     }, [i18n]);
 
 
@@ -23,9 +33,10 @@ export default function LanguageButton() {
     };
 
     const selectLanguage = (lang) => {
-        i18n.changeLanguage(lang);
-        localStorage.setItem("language", lang);
-        setSelected(lang.toUpperCase());
+        const normalized = supportedLangs.includes(lang.toLowerCase()) ? lang.toLowerCase() : "en";
+        i18n.changeLanguage(normalized);
+        localStorage.setItem("language", normalized);
+        setSelected(displayByLang[normalized] ?? normalized.toUpperCase());
         setIsOpen(false);
     };
 
@@ -38,10 +49,10 @@ export default function LanguageButton() {
 
             {isOpen && (
                 <div className={styles.dropdown}>
-                    <div onClick={() => selectLanguage("EN")}>{t("language.english")}</div> 
-                    <div onClick={() => selectLanguage("ES")}>{t("language.spanish")}</div>
-                    <div onClick={() => selectLanguage("FR")}>{t("language.french")}</div>
-                    <div onClick={() => selectLanguage("DE")}>{t("language.german")}</div>
+                    <div onClick={() => selectLanguage("en")}>{t("language.english")}</div> 
+                    <div onClick={() => selectLanguage("es")}>{t("language.spanish")}</div>
+                    <div onClick={() => selectLanguage("fr")}>{t("language.french")}</div>
+                    <div onClick={() => selectLanguage("de")}>{t("language.german")}</div>
 
                 </div>
             )}
