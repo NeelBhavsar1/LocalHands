@@ -2,7 +2,6 @@ package com.localhands.backend.repository;
 
 import com.localhands.backend.entity.Listing;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -21,4 +20,6 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
             @Param("lon") double lon,
             @Param("radius") double radius
     );
+
+    List<Listing> findByUserId(Long userId);
 }

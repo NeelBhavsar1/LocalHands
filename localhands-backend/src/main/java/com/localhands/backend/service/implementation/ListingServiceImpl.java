@@ -144,4 +144,17 @@ public class ListingServiceImpl implements ListingService {
 
         listingRepository.delete(listing);
     }
+
+    @Override
+    public void deleteListingsByUserId(Long userId) {
+        List<Listing> listings = listingRepository.findByUserId(userId);
+
+        for (Listing listing : listings) {
+            for (ListingPhoto photo : listing.getPhotos()) {
+                fileStorageService.delete(photo.getUrl());
+            }
+
+            listingRepository.delete(listing);
+        }
+    }
 }

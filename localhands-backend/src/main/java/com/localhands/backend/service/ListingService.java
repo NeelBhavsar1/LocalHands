@@ -16,4 +16,6 @@ public interface ListingService {
     public ListingResponseDTO updateListing(long id, ListingRequestDTO requestDTO, List<MultipartFile> photoFiles, List<String> altTexts);
 
     public void deleteListing(long id);
+
+    public void deleteListingsByUserId(Long userId);
 }

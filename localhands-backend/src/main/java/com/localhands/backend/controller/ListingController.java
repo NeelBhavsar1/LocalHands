@@ -35,7 +35,11 @@ public class ListingController {
     }
 
     @GetMapping("/radius")
-    public ResponseEntity<List<ListingResponseDTO>> getListingsWithinRadius(@RequestParam double latitude, @RequestParam double longitude, @RequestParam double radius) {
+    public ResponseEntity<List<ListingResponseDTO>> getListingsWithinRadius(
+            @RequestParam double latitude,
+            @RequestParam double longitude,
+            @RequestParam double radius
+    ) {
         List<ListingResponseDTO> listingResponseDTO = listingService.getListingsWithinRadius(latitude, longitude, radius);
         return ResponseEntity.ok(listingResponseDTO);
     }
