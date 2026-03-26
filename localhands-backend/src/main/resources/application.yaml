@@ -1,3 +1,21 @@
 spring:
   application:
     name: localhands-backend
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+security:
+  jwt:
+    token:
+      secret-key=${JWT_KEY}:
