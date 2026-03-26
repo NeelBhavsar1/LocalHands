@@ -6,8 +6,6 @@ import esCommon from "./locales/es/common.json";
 import frCommon from "./locales/fr/common.json";
 import deCommon from "./locales/de/common.json";
 
-// keep these language keys lowercase and use the same codes everywhere
-// (resource keys, changeLanguage values, and localStorage values)
 const resources = {
   en: {
     common: enCommon,
@@ -24,20 +22,16 @@ const resources = {
 };
 
 if (!i18n.isInitialized) {
-  // initialize once on the client so every component using useTranslation()
-  // shares the same i18n instance
   i18n.use(initReactI18next).init({
     resources,
-    // default language shown on first load.
     lng: "en",
     fallbackLng: "en",
-    // we use one namespace file: src/locales/<lang: en, fr, de, es>/common.json
     defaultNS: "common",
     ns: ["common"],
     interpolation: {
       escapeValue: false,
     },
-  });
+  })
 }
 
 export default i18n;

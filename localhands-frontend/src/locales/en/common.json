@@ -47,5 +47,14 @@
 
     "hero.title": "LocalHands",
     "hero.subtitle": "Connecting communities through trusted local services.",
-    "hero.cta": "Get Started"
+    "hero.cta": "Get Started",
+    "dashboard.welcomeMessage": "Welcome back ",
+    "sidebar.dashboard": "Dashboard",
+    "sidebar.services": "Services",
+    "sidebar.requests": "My Requests",
+    "sidebar.messages": "Messages",
+    "sidebar.wallet": "Wallet",
+    "sidebar.profile": "Profile",
+    "sidebar.settings": "Settings",
+    "sidebar.logout": "Logout"
 }

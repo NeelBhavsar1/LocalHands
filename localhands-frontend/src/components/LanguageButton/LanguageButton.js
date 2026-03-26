@@ -7,15 +7,11 @@ import { useTranslation } from 'react-i18next';
 
 export default function LanguageButton() {
     const [isOpen, setIsOpen] = useState(false);
-    // useTranslation gives both:
-    // - t() for translated text
-    // - i18n instance for changeLanguage()
     const { i18n, t } = useTranslation();
 
     const [selected, setSelected] = useState("EN");
 
     useEffect(() => {
-        // restores the last selected locale after refresh
         const savedLanguage = localStorage.getItem("language") || "en";
         i18n.changeLanguage(savedLanguage);
         setSelected(savedLanguage.toUpperCase())
@@ -27,7 +23,6 @@ export default function LanguageButton() {
     };
 
     const selectLanguage = (lang) => {
-        // lang must match keys defined in src/i18n.js resources
         i18n.changeLanguage(lang);
         localStorage.setItem("language", lang);
         setSelected(lang.toUpperCase());
@@ -43,10 +38,10 @@ export default function LanguageButton() {
 
             {isOpen && (
                 <div className={styles.dropdown}>
-                    <div onClick={() => selectLanguage("en")}>{t("language.english")}</div> 
-                    <div onClick={() => selectLanguage("es")}>{t("language.spanish")}</div>
-                    <div onClick={() => selectLanguage("fr")}>{t("language.french")}</div>
-                    <div onClick={() => selectLanguage("de")}>{t("language.german")}</div>
+                    <div onClick={() => selectLanguage("EN")}>{t("language.english")}</div> 
+                    <div onClick={() => selectLanguage("ES")}>{t("language.spanish")}</div>
+                    <div onClick={() => selectLanguage("FR")}>{t("language.french")}</div>
+                    <div onClick={() => selectLanguage("DE")}>{t("language.german")}</div>
 
                 </div>
             )}

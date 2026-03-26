@@ -10,21 +10,18 @@ import { useTranslation } from "react-i18next";
 
 export default function Home() {
 
-  // use keys that exist in src/locales/<lang>/common.json.
   const { t } = useTranslation();
 
   return (
     <div className={styles.container}>
 
-      <HomeNavBar showLinks={true}/>
+      <HomeNavBar />
 
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <h1 className={styles.title}>{t("hero.title")}</h1>
           <p className={styles.subtitle}>{t("hero.subtitle")}</p>
         </div>
-
-
       </section>
 
       <Footer />
