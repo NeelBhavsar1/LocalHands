@@ -77,7 +77,7 @@ export default function page() {
 
     const setAccountTypeFromCheckbox = (type, isChecked) => {
         // Enforce "one selected": selecting a checkbox sets `accountType`,
-        // unchecking clears it (so validation can show an error).
+        // unchecking clears it (so validation can show an error)
         if (!isChecked) {
             setFormData((prev) => ({ ...prev, accountType: "" }));
             return;
@@ -161,8 +161,6 @@ export default function page() {
 
             </div>
         </div>
-
-
 
     </div>
   )

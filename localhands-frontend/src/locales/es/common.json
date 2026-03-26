@@ -32,7 +32,7 @@
     "login.signup": "Registrarse",
 
     "signup.title": "Bienvenido a LocalHands",
-    "signup.subtitle": "Por favor introduce tu información para usar LocalHands",
+    "signup.subtitle": "Por favor, introduzca su información para usar LocalHands",
     "signup.fname": "Nombre",
     "signup.lname": "Apellido",
     "signup.email": "Correo electrónico",
@@ -42,7 +42,13 @@
     "signup.continue": "Continuar",
     "signup.alreadyhaveanaccount": "¿Ya tienes una cuenta?",
     "signup.login": "Iniciar sesión",
+    "signup.password": "Contraseña",
     "signup.confirmPassword": "Confirmar contraseña",
+    "signup.accountType": "Tipo de cuenta",
+    "signup.customer": "Cliente",
+    "signup.provider": "Proveedor",
+    "signup.pleaseSelectAccountType": "Por favor seleccione un tipo de cuenta",
+    "signup.chooseAccountType": "Elegir tipo de cuenta",
 
     "hero.title": "LocalHands",
     "hero.subtitle": "Conectando comunidades a través de servicios locales de confianza.",

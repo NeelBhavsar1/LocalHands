@@ -134,12 +134,19 @@
     flex-direction: row;
     gap: 16px;
     margin-top: 8px;
+    cursor: pointer;
 }
 
 .accountTypeOptionLabel {
     display: flex;
     align-items: center;
     gap: 10px;
+    cursor: pointer;
+}
+
+.accountTypeOptionLabel input:focus {
+    box-shadow: none;
+    outline: none;
     cursor: pointer;
 }
 

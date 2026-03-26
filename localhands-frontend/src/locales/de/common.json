@@ -42,7 +42,14 @@
     "signup.continue": "Weiter",
     "signup.alreadyhaveanaccount": "Haben Sie bereits ein Konto?",
     "signup.login": "Anmelden",
+    "signup.password": "Passwort",
     "signup.confirmPassword": "Passwort bestätigen",
+    "signup.accountType": "Kontotyp",
+    "signup.customer": "Kunde",
+    "signup.provider": "Anbieter",
+    "signup.pleaseSelectAccountType": "Bitte wählen Sie einen Kontotyp aus",
+    "signup.chooseAccountType": "Kontotyp auswählen",
+
 
     "hero.title": "LocalHands",
     "hero.subtitle": "Verbindet Gemeinschaften durch vertrauenswürdige lokale Dienstleistungen.",
