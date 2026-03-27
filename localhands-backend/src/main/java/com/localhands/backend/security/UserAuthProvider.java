@@ -14,6 +14,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import java.security.SecureRandom;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 
@@ -29,11 +31,9 @@ public class UserAuthProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(Long userId, Set<Role> roles, boolean isRefreshToken) {
-        Date now = new Date();
+    public String createAccessToken(Long userId, Set<Role> roles, Instant now) {
 
-        // 24 hours if refresh and 15 minutes if access token.
-        Date validity = new Date(now.getTime() + (isRefreshToken ? 86400000 : 900000));
+        Instant expiry = now.plus(Duration.ofMinutes(15));
 
         List<String> roleNames = roles
                 .stream()
@@ -44,10 +44,21 @@ public class UserAuthProvider {
         return JWT.create()
                 .withSubject(userId.toString())
                 .withJWTId(UUID.randomUUID().toString())
-                .withIssuedAt(now)
-                .withExpiresAt(validity)
+                .withIssuedAt(Date.from(now))
+                .withExpiresAt(Date.from(expiry))
                 .withClaim("roles", roleNames)
                 .sign(algorithm);
+    }
+
+    public String createRefreshToken() {
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] randomBytes = new byte[64];
+
+        secureRandom.nextBytes(randomBytes);
+
+        return Base64.getUrlEncoder()
+                .withoutPadding()
+                .encodeToString(randomBytes);
     }
 
     public Authentication validateToken(String token) {
@@ -80,14 +91,5 @@ public class UserAuthProvider {
 
         Date expiration = decodedJWT.getExpiresAt();
         return expiration.toInstant();
-    }
-
-    public Long getUserId(String token) {
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
-        DecodedJWT decodedJWT = JWT.require(algorithm)
-                .build()
-                .verify(token);
-
-        return Long.valueOf(decodedJWT.getSubject());
     }
 }

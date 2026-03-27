@@ -5,7 +5,6 @@ import com.localhands.backend.dto.request.UserRegisterRequestDTO;
 import com.localhands.backend.dto.request.UserUpdateRequestDTO;
 import com.localhands.backend.dto.response.CookieResponseDTO;
 import com.localhands.backend.dto.response.UserInfoResponseDTO;
-import com.localhands.backend.security.UserAuthProvider;
 import com.localhands.backend.security.UserPrincipal;
 import com.localhands.backend.service.UserService;
 import lombok.AllArgsConstructor;
@@ -22,18 +21,20 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-    private final UserAuthProvider userAuthProvider;
 
-    // Blacklist of refresh tokens as random UUIDs in db rather than JWTS.
     // Cross origin behaviour and role based access urls in securityconfig.
-    // Make a refresh endpoint and make sure blacklist is checked.
-    // Delete logging.
     // Forgot password functionality, and change email confirmation.
-    // Registering or logging on with JWTS still there/signed in?
-    // Editing listing to now tie to user.
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody UserRegisterRequestDTO requestDTO) {
+    public ResponseEntity<String> registerUser(
+            @CookieValue(value = "refreshToken", required = false) String refreshToken,
+            @RequestBody UserRegisterRequestDTO requestDTO
+    )
+    {
+        if (refreshToken != null) {
+            userService.logout(refreshToken);
+        }
+
         CookieResponseDTO cookies = userService.registerUser(requestDTO);
 
         return ResponseEntity.ok()
@@ -43,7 +44,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody UserLoginRequestDTO requestDTO) {
+    public ResponseEntity<String> loginUser(
+            @CookieValue(value = "refreshToken", required = false) String refreshToken,
+            @RequestBody UserLoginRequestDTO requestDTO
+    )
+    {
+        if (refreshToken != null) {
+            userService.logout(refreshToken);
+        }
+
         CookieResponseDTO cookies = userService.loginUser(requestDTO);
 
         return ResponseEntity.ok()
@@ -53,8 +62,13 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout() {
-        ResponseCookie refreshCookie = ResponseCookie.from("refreshJWT", "")
+    public ResponseEntity<String> logout(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
+
+        if (refreshToken != null) {
+            userService.logout(refreshToken);
+        }
+
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", "")
                 .httpOnly(true)
                 .secure(true)
                 .path("/api/auth/refresh")
@@ -62,7 +76,7 @@ public class UserController {
                 .sameSite("Strict")
                 .build();
 
-        ResponseCookie accessCookie = ResponseCookie.from("accessJWT", "")
+        ResponseCookie accessCookie = ResponseCookie.from("accessToken", "")
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
@@ -97,7 +111,7 @@ public class UserController {
     public ResponseEntity<String> deleteUser(@AuthenticationPrincipal UserPrincipal user) {
         userService.deleteUser(user.getId());
 
-        ResponseCookie refreshCookie = ResponseCookie.from("refreshJWT", "")
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", "")
                 .httpOnly(true)
                 .secure(true)
                 .path("/api/auth/refresh")
@@ -105,7 +119,7 @@ public class UserController {
                 .sameSite("Strict")
                 .build();
 
-        ResponseCookie accessCookie = ResponseCookie.from("accessJWT", "")
+        ResponseCookie accessCookie = ResponseCookie.from("accessToken", "")
                 .httpOnly(true)
                 .secure(true)
                 .path("/")

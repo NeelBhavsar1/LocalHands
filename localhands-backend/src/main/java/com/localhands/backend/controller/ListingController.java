@@ -2,9 +2,11 @@ package com.localhands.backend.controller;
 
 import com.localhands.backend.dto.request.ListingRequestDTO;
 import com.localhands.backend.dto.response.ListingResponseDTO;
+import com.localhands.backend.security.UserPrincipal;
 import com.localhands.backend.service.ListingService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,11 +22,12 @@ public class ListingController {
 
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<ListingResponseDTO> createListing (
+            @AuthenticationPrincipal UserPrincipal user,
             @RequestPart("listing") ListingRequestDTO listingRequestDTO,
             @RequestPart("photos") List<MultipartFile> photos,
             @RequestParam("altTexts") List<String> altTexts
     ) {
-        ListingResponseDTO listingResponseDTO = listingService.createListing(listingRequestDTO, photos, altTexts);
+        ListingResponseDTO listingResponseDTO = listingService.createListing(user.getId(), listingRequestDTO, photos, altTexts);
         return ResponseEntity.ok(listingResponseDTO);
     }
 
@@ -46,18 +49,19 @@ public class ListingController {
 
     @PutMapping(consumes = "multipart/form-data")
     public ResponseEntity<ListingResponseDTO> updateListing (
+            @AuthenticationPrincipal UserPrincipal user,
             @RequestPart("listing") ListingRequestDTO listingRequestDTO,
             @RequestPart("photos") List<MultipartFile> photos,
             @RequestParam("altTexts") List<String> altTexts,
             @RequestParam("listingId") Long listingId
     ) {
-        ListingResponseDTO listingResponseDTO = listingService.updateListing(listingId, listingRequestDTO, photos, altTexts);
+        ListingResponseDTO listingResponseDTO = listingService.updateListing(user.getId(), listingId, listingRequestDTO, photos, altTexts);
         return ResponseEntity.ok(listingResponseDTO);
     }
 
     @DeleteMapping
-    public ResponseEntity<String> deleteListingById(@RequestParam Long listingId) {
-        listingService.deleteListing(listingId);
+    public ResponseEntity<String> deleteListingById(@AuthenticationPrincipal UserPrincipal user, @RequestParam Long listingId) {
+        listingService.deleteListing(user.getId(), listingId);
         return ResponseEntity.ok("Listing deleted successfully");
     }
 }
