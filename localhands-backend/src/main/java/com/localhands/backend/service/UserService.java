@@ -7,9 +7,13 @@ import com.localhands.backend.dto.response.CookieResponseDTO;
 import com.localhands.backend.dto.response.UserInfoResponseDTO;
 
 public interface UserService {
+    CookieResponseDTO generateNewTokenCookies(String refreshToken);
+
     CookieResponseDTO registerUser(UserRegisterRequestDTO registerDTO);
 
     CookieResponseDTO loginUser (UserLoginRequestDTO loginDto);
+
+    void logout(String refreshToken);
 
     UserInfoResponseDTO getUserInfoById(Long userId);
 

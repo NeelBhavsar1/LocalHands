@@ -4,9 +4,11 @@ import com.localhands.backend.dto.request.ListingRequestDTO;
 import com.localhands.backend.dto.response.ListingResponseDTO;
 import com.localhands.backend.entity.Listing;
 import com.localhands.backend.entity.ListingPhoto;
+import com.localhands.backend.entity.User;
 import com.localhands.backend.exception.AppException;
 import com.localhands.backend.mapper.ListingMapper;
 import com.localhands.backend.repository.ListingRepository;
+import com.localhands.backend.repository.UserRepository;
 import com.localhands.backend.service.FileStorageService;
 import com.localhands.backend.service.ListingService;
 import lombok.AllArgsConstructor;
@@ -24,14 +26,24 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ListingServiceImpl implements ListingService {
 
+    private UserRepository userRepository;
     private ListingRepository listingRepository;
     private FileStorageService fileStorageService;
 
     @Override
     @Transactional
-    public ListingResponseDTO createListing(ListingRequestDTO requestDTO, List<MultipartFile> photoFiles, List<String> altTexts) {
+    public ListingResponseDTO createListing(Long userId, ListingRequestDTO requestDTO, List<MultipartFile> photoFiles, List<String> altTexts) {
+
+        if (photoFiles.size() != altTexts.size()) {
+            throw new AppException("Mismatch between photos and alt texts.", HttpStatus.BAD_REQUEST);
+        }
 
         Listing listing = ListingMapper.mapToListing(requestDTO);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("Could not find user with id: " + userId, HttpStatus.NOT_FOUND));
+
+        listing.setUser(user);
 
         List<ListingPhoto> photos = new ArrayList<>();
         List<String> savedFileUrls = new ArrayList<>();
@@ -85,10 +97,18 @@ public class ListingServiceImpl implements ListingService {
 
     @Override
     @Transactional
-    public ListingResponseDTO updateListing(long id, ListingRequestDTO requestDTO, List<MultipartFile> photoFiles, List<String> altTexts) {
+    public ListingResponseDTO updateListing(Long userId, long listingId, ListingRequestDTO requestDTO, List<MultipartFile> photoFiles, List<String> altTexts) {
 
-        Listing listing = listingRepository.findById(id)
-                .orElseThrow(() -> new AppException("Listing not found with id: " + id, HttpStatus.NOT_FOUND));
+        if (photoFiles.size() != altTexts.size()) {
+            throw new AppException("Mismatch between photos and alt texts.", HttpStatus.BAD_REQUEST);
+        }
+
+        Listing listing = listingRepository.findById(listingId)
+                .orElseThrow(() -> new AppException("Listing not found with id: " + listingId, HttpStatus.NOT_FOUND));
+
+        if (listing.getUser() == null || !listing.getUser().getId().equals(userId)) {
+            throw new AppException("User is not the owner of this listing.", HttpStatus.FORBIDDEN);
+        }
 
         List<String> savedFileUrls = new ArrayList<>();
 
@@ -134,9 +154,13 @@ public class ListingServiceImpl implements ListingService {
     }
 
     @Override
-    public void deleteListing(long id) {
-        Listing listing = listingRepository.findById(id)
-                .orElseThrow(() -> new AppException("Listing not found with id: " + id, HttpStatus.NOT_FOUND));
+    public void deleteListing(long userId, long listingId) {
+        Listing listing = listingRepository.findById(listingId)
+                .orElseThrow(() -> new AppException("Listing not found with id: " + listingId, HttpStatus.NOT_FOUND));
+
+        if (listing.getUser() == null || !listing.getUser().getId().equals(userId)) {
+            throw new AppException("User is not the owner of this listing.", HttpStatus.FORBIDDEN);
+        }
 
         for (ListingPhoto photo : listing.getPhotos()) {
             fileStorageService.delete(photo.getUrl());

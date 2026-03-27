@@ -1,7 +1,6 @@
 package com.localhands.backend.mapper;
 
 import com.localhands.backend.dto.request.UserRegisterRequestDTO;
-import com.localhands.backend.dto.response.UserAuthenticationResponseDTO;
 import com.localhands.backend.dto.response.UserInfoResponseDTO;
 import com.localhands.backend.entity.User;
 

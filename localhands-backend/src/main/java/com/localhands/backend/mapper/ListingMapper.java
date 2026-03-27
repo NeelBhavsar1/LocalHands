@@ -29,6 +29,7 @@ public class ListingMapper {
 
         return new ListingResponseDTO (
                 listing.getId(),
+                listing.getUser().getId(),
                 listing.getName(),
                 listing.getDescription(),
                 point.getY(),

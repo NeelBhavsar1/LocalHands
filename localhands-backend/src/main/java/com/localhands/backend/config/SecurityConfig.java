@@ -32,7 +32,12 @@ public class SecurityConfig {
                         .authenticationEntryPoint(userAuthenticationEntryPoint)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(
+                                "/uploads/**",
+                                "/api/auth/**",
+                                "/api/users/login",
+                                "/api/users/register"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .build();

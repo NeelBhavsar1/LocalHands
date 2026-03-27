@@ -7,15 +7,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ListingService {
-    public ListingResponseDTO createListing(ListingRequestDTO requestDTO, List<MultipartFile> photoFiles, List<String> altTexts);
+    public ListingResponseDTO createListing(Long userId, ListingRequestDTO requestDTO, List<MultipartFile> photoFiles, List<String> altTexts);
 
     public ListingResponseDTO getListing(long id);
 
     public List<ListingResponseDTO> getListingsWithinRadius(double lat, double lon, double radius);
 
-    public ListingResponseDTO updateListing(long id, ListingRequestDTO requestDTO, List<MultipartFile> photoFiles, List<String> altTexts);
+    public ListingResponseDTO updateListing(Long userId, long listingId, ListingRequestDTO requestDTO, List<MultipartFile> photoFiles, List<String> altTexts);
 
-    public void deleteListing(long id);
+    public void deleteListing(long userId, long listingId);
 
     public void deleteListingsByUserId(Long userId);
 }

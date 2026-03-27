@@ -7,25 +7,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "listing_photos")
-public class ListingPhoto {
+@Table(name = "refresh_tokens")
+public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "url", nullable = false)
-    private String url;
+    @Column(name = "token", nullable = false, unique = true)
+    private String token;
 
-    @Column(name = "alt_text", nullable = false)
-    private String altText;
+    @Column(name = "expiry_date", nullable = false)
+    private Instant expiryDate;
 
     @ManyToOne
-    @JoinColumn(name = "listing_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
-    private Listing listing;
+    private User user;
 }

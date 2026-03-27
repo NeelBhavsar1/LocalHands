@@ -30,7 +30,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             return "/uploads/listing-images/" + fileName;
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to store file");
+            throw new RuntimeException("Failed to store file.");
         }
     }
 
@@ -39,7 +39,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             Path path = Paths.get("." + url);
             Files.deleteIfExists(path);
         } catch (IOException e) {
-            // log error
+            System.out.println("Failed to delete file in " + url);
         }
     }
 }

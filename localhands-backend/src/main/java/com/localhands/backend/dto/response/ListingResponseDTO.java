@@ -13,7 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ListingResponseDTO {
-    private Long id;
+    private Long listingId;
+    private Long sellerId;
     private String name;
     private String description;
     private double latitude;
