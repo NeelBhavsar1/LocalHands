@@ -18,4 +18,4 @@ spring:
 security:
   jwt:
     token:
-      secret-key=${JWT_KEY}:
+      secret-key: ${JWT_KEY}

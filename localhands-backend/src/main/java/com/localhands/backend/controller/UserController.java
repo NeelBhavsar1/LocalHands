@@ -20,35 +20,58 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users")
 public class UserController {
 
-        private final UserService userService;
-        private final UserAuthProvider userAuthProvider;
+    private final UserService userService;
 
-        // Blacklist of refresh tokens as random UUIDs in db rather than JWTS.
-        // Cross origin behaviour and role based access urls in securityconfig.
-        // Make a refresh endpoint and make sure blacklist is checked.
-        // Delete logging.
-        // Forgot password functionality, and change email confirmation.
-        // Registering or logging on with JWTS still there/signed in?
-        // Editing listing to now tie to user.
+    // Cross origin behaviour and role based access urls in securityconfig.
+    // Forgot password functionality, and change email confirmation.
 
-        @PostMapping("/register")
-        public ResponseEntity<String> registerUser(@RequestBody UserRegisterRequestDTO requestDTO) {
-                CookieResponseDTO cookies = userService.registerUser(requestDTO);
-
-                return ResponseEntity.ok()
-                                .header(HttpHeaders.SET_COOKIE, cookies.getRefreshCookie().toString())
-                                .header(HttpHeaders.SET_COOKIE, cookies.getAccessCookie().toString())
-                                .body("Registered and logged in to new account.");
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(
+            @CookieValue(value = "refreshToken", required = false) String refreshToken,
+            @RequestBody UserRegisterRequestDTO requestDTO
+    )
+    {
+        if (refreshToken != null) {
+            userService.logout(refreshToken);
         }
 
-        @PostMapping("/login")
-        public ResponseEntity<String> loginUser(@RequestBody UserLoginRequestDTO requestDTO) {
-                CookieResponseDTO cookies = userService.loginUser(requestDTO);
+        CookieResponseDTO cookies = userService.registerUser(requestDTO);
 
-                return ResponseEntity.ok()
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookies.getRefreshCookie().toString())
+                .header(HttpHeaders.SET_COOKIE, cookies.getAccessCookie().toString())
+                .body("Registered and logged in to new account.");
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(
+            @CookieValue(value = "refreshToken", required = false) String refreshToken,
+            @RequestBody UserLoginRequestDTO requestDTO
+    )
+    {
+        if (refreshToken != null) {
+            userService.logout(refreshToken);
+        }
+
+        CookieResponseDTO cookies = userService.loginUser(requestDTO);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookies.getRefreshCookie().toString())
+                .header(HttpHeaders.SET_COOKIE, cookies.getAccessCookie().toString())
+                .body("Logged in to new account.");
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
+
+        if (refreshToken != null) {
+            userService.logout(refreshToken);
+        }
+
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", "")
                 .httpOnly(true)
                 .secure(true)
+                .path("/api/auth/refresh")
                 .maxAge(0)
                 .sameSite("Strict")
                 .build();
@@ -60,74 +83,53 @@ public class UserController {
                 .maxAge(0)
                 .sameSite("Strict")
                 .build();
-=======
 
-        @PostMapping("/logout")
-        public ResponseEntity<String> logout() {
-                ResponseCookie refreshCookie = ResponseCookie.from("refreshJWT", "")
-                                .httpOnly(true)
-                                .secure(true)
-                                .path("/api/auth/refresh")
-                                .maxAge(0)
-                                .sameSite("Strict")
-                                .build();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
+                .body("Logged out successfully.");
+    }
 
-                ResponseCookie accessCookie = ResponseCookie.from("accessJWT", "")
-                                .httpOnly(true)
-                                .secure(true)
-                                .path("/")
-                                .maxAge(0)
-                                .sameSite("Strict")
-                                .build();
->>>>>>> Stashed changes
+    @GetMapping
+    public ResponseEntity<UserInfoResponseDTO> getUserByJWT(@AuthenticationPrincipal UserPrincipal user) {
+        UserInfoResponseDTO userInfo = userService.getUserInfoById(user.getId());
 
-                return ResponseEntity.ok()
-                                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-                                .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
-                                .body("Logged out successfully.");
-        }
+        return ResponseEntity.ok(userInfo);
+    }
 
-        @GetMapping
-        public ResponseEntity<UserInfoResponseDTO> getUserByJWT(@AuthenticationPrincipal UserPrincipal user) {
-                UserInfoResponseDTO userInfo = userService.getUserInfoById(user.getId());
+    @PutMapping
+    public ResponseEntity<String> updateUser(@AuthenticationPrincipal UserPrincipal user, @RequestBody UserUpdateRequestDTO requestDTO) {
+        CookieResponseDTO cookies = userService.updateUser(user.getId(), requestDTO);
 
-                return ResponseEntity.ok(userInfo);
-        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookies.getRefreshCookie().toString())
+                .header(HttpHeaders.SET_COOKIE, cookies.getAccessCookie().toString())
+                .body("Updated user account successfully.");
+    }
 
-        @PutMapping
-        public ResponseEntity<String> updateUser(@AuthenticationPrincipal UserPrincipal user,
-                        @RequestBody UserUpdateRequestDTO requestDTO) {
-                CookieResponseDTO cookies = userService.updateUser(user.getId(), requestDTO);
+    @DeleteMapping
+    public ResponseEntity<String> deleteUser(@AuthenticationPrincipal UserPrincipal user) {
+        userService.deleteUser(user.getId());
 
-                return ResponseEntity.ok()
-                                .header(HttpHeaders.SET_COOKIE, cookies.getRefreshCookie().toString())
-                                .header(HttpHeaders.SET_COOKIE, cookies.getAccessCookie().toString())
-                                .body("Updated user account successfully.");
-        }
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/api/auth/refresh")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
 
-        @DeleteMapping
-        public ResponseEntity<String> deleteUser(@AuthenticationPrincipal UserPrincipal user) {
-                userService.deleteUser(user.getId());
+        ResponseCookie accessCookie = ResponseCookie.from("accessToken", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
 
-                ResponseCookie refreshCookie = ResponseCookie.from("refreshJWT", "")
-                                .httpOnly(true)
-                                .secure(true)
-                                .path("/api/auth/refresh")
-                                .maxAge(0)
-                                .sameSite("Strict")
-                                .build();
-
-                ResponseCookie accessCookie = ResponseCookie.from("accessJWT", "")
-                                .httpOnly(true)
-                                .secure(true)
-                                .path("/")
-                                .maxAge(0)
-                                .sameSite("Strict")
-                                .build();
-
-                return ResponseEntity.ok()
-                                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-                                .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
-                                .body("Deleted account successfully.");
-        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
+                .body("Deleted account successfully.");
+    }
 }
