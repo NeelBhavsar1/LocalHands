@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 
-export default function LanguageButton() {
+export default function LanguageButton({ onToggleComplete }) {
     const [isOpen, setIsOpen] = useState(false);
     const { i18n, t } = useTranslation();
 
@@ -30,6 +30,8 @@ export default function LanguageButton() {
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
+
+        
     };
 
     const selectLanguage = (lang) => {
@@ -38,6 +40,10 @@ export default function LanguageButton() {
         localStorage.setItem("language", normalized);
         setSelected(displayByLang[normalized] ?? normalized.toUpperCase());
         setIsOpen(false);
+
+        if (onToggleComplete) {
+            onToggleComplete();
+        }
     };
 
     return (
