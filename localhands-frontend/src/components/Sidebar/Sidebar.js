@@ -77,7 +77,7 @@ export default function Sidebar() {
           </Link>
 
           <Link
-            href="/settings"
+            href="/dashboard/settings"
             className={styles.navItem}
             title={isCollapsed ? t("sidebar.settings") : undefined}
           >

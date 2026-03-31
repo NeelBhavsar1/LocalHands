@@ -72,6 +72,7 @@ export default function page() {
             return;
         }
 
+        //remove me later
         console.log("Form submitted!", formData);
     }
 

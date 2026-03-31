@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import styles from "./page.module.css";
 import HomeNavBar from "@/components/HomeNavBar/HomeNavBar";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+
 
 export default function page() {
   const { t } = useTranslation();

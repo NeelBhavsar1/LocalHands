@@ -1,15 +1,12 @@
 "use client";
 
-import React from 'react'
-import styles from './page.module.css'
-import HomeNavBar from '@/components/HomeNavBar/HomeNavBar';
-import Sidebar from '@/components/Sidebar/Sidebar';
 
-export default function page() {
+import styles from './page.module.css'
+
+export default function page({ children }) {
   return (
     <div className={styles.container}>
-        <HomeNavBar showLinks={false}/>
-        <Sidebar />
+        <p>remove me later</p>
     </div>
   )
 }
