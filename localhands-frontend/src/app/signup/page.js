@@ -51,7 +51,7 @@ export default function page() {
 
         try {
             await registerUser(requestBody);
-            alert("Accoutn created successfully!");
+            alert("Account created successfully!");
             window.location.href="/login"
         } catch (error) {
             alert("Error: " + error);

@@ -6,7 +6,7 @@
  */
 
 import { ThemeProvider } from "next-themes";
-import "@/i18n";
+import "@/configs/i18n";
 
 export function Providers({ children }) {
     return (
