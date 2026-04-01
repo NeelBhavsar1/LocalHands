@@ -5,13 +5,15 @@ import styles from './page.module.css'
 import HomeNavBar from '@/components/HomeNavBar/HomeNavBar'
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
+import { registerUser } from '@/api/registrationApi';
+import { validateSignupForm } from '@/utils/validateSignup';
 
 export default function page() {
     const {t} = useTranslation();
 
     const [formData, setFormData] = useState({
-        fname: '',
-        lname: '',
+        firstName: '',
+        lastName: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -26,51 +28,35 @@ export default function page() {
         setFormData((prev) => ({...prev, [name]: value}));
     }
 
-    const validateForm = () => {
-        const newErrors = {};
+   
 
-        if (!formData.fname.trim()) {
-            newErrors.fname = "First name is required!"
-        }
-
-        if (!formData.lname.trim()) {
-            newErrors.lname = "Last name is required!"
-        }
-
-        if (!formData.email.trim()) {
-            newErrors.email = "Email address is required!"
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = "Enter a valid email address";
-        }
-
-        if (!formData.password) {
-            newErrors.password = "Password is required";
-        } else if (formData.password.length < 8) {
-            newErrors.password = "Password must be at least 8 characters";
-        }
-
-        if (!formData.confirmPassword) {
-            newErrors.confirmPassword = "Please confirm your password";
-        } else if (formData.password !== formData.confirmPassword) {
-            newErrors.confirmPassword = "Passwords do not match";
-        }
-
-        if (!formData.accountType) {
-            newErrors.accountType = "Please select an account type";
-        }
-
-        return newErrors;
-    }
-
-    const submitForm = (e) => {
+    const submitForm = async (e) => {
         e.preventDefault();
 
-        const validationErorrs = validateForm();
-        setErrors(validationErorrs);
+        const validationErrors = validateSignupForm(formData);
+        setErrors(validationErrors);
 
-        if (Object.keys(validationErorrs).length > 0) {
+        if (Object.keys(validationErrors).length > 0) {
             return;
         }
+
+        //do not send confirmPassword to backend only for frontend validation
+        const requestBody = {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            password: formData.password,
+            isServiceProvider: formData.accountType === "provider"
+        }
+
+        try {
+            await registerUser(requestBody);
+            alert("Accoutn created successfully!");
+            window.location.href="/login"
+        } catch (error) {
+            alert("Error: " + error);
+        }
+        
 
         //remove me later
         console.log("Form submitted!", formData);
@@ -103,14 +89,14 @@ export default function page() {
                     <div className={styles.formGrid}>
 
                         <div className={styles.leftColumn}>
-                            <label htmlFor='fname'>{t("signup.fname")}
-                                <input type='text' id='fname' name='fname' required placeholder={t("signup.fnameExample")} value={formData.fname} onChange={handleChange}/>
-                                {errors.fname && <span className={styles.error}>{errors.fname}</span>}
+                            <label htmlFor='firstName'>{t("signup.fname")}
+                                <input type='text' id='firstName' name='firstName' required placeholder={t("signup.fnameExample")} value={formData.firstName} onChange={handleChange}/>
+                                {errors.firstName && <span className={styles.error}>{errors.firstName}</span>}
                             </label>
 
-                            <label htmlFor='lname'>{t("signup.lname")}
-                                <input type='text' id='lname' name='lname' required placeholder={t("signup.lnameExample")} value={formData.lname} onChange={handleChange}/>
-                                {errors.lname && <span className={styles.error}>{errors.lname}</span>}
+                            <label htmlFor='lastName'>{t("signup.lname")}
+                                <input type='text' id='lastName' name='lastName' required placeholder={t("signup.lnameExample")} value={formData.lastName} onChange={handleChange}/>
+                                {errors.lastName && <span className={styles.error}>{errors.lastName}</span>}
                             </label>
 
                             <label htmlFor='email'>{t("signup.email")}
