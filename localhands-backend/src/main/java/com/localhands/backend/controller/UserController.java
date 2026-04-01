@@ -14,7 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("*")
+//neel modificatoin, changed from @CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/users")
@@ -90,6 +91,7 @@ public class UserController {
                 .body("Logged out successfully.");
     }
 
+    //who am i endpoint
     @GetMapping
     public ResponseEntity<UserInfoResponseDTO> getUserByJWT(@AuthenticationPrincipal UserPrincipal user) {
         UserInfoResponseDTO userInfo = userService.getUserInfoById(user.getId());

@@ -10,7 +10,8 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("*")
+//changed from origina crossOrigin("*") - neel
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
@@ -42,7 +43,7 @@ public class AuthController {
 
             ResponseCookie accessCookie = ResponseCookie.from("accessToken", "")
                     .httpOnly(true)
-                    .secure(true)
+                    .secure(false) //change to true rocco
                     .path("/")
                     .maxAge(0)
                     .sameSite("Strict")
