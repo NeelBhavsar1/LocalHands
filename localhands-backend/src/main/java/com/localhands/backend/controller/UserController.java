@@ -67,7 +67,7 @@ public class UserController {
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", "")
                 .httpOnly(true)
                 .secure(true)
-                .path("/api/auth/refresh")
+                .path("/")
                 .maxAge(0)
                 .sameSite("Strict")
                 .build();
@@ -110,7 +110,7 @@ public class UserController {
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", "")
                 .httpOnly(true)
                 .secure(true)
-                .path("/api/auth/refresh")
+                .path("/")
                 .maxAge(0)
                 .sameSite("Strict")
                 .build();

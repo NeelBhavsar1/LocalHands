@@ -1,6 +1,7 @@
 package com.localhands.backend.service.implementation;
 
 import com.localhands.backend.repository.ListingPhotoRepository;
+import com.localhands.backend.repository.PasswordResetCodeRepository;
 import com.localhands.backend.repository.RefreshTokenRepository;
 import com.localhands.backend.service.CleanupServices;
 import jakarta.transaction.Transactional;
@@ -23,6 +24,7 @@ public class CleanupServicesImpl implements CleanupServices {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final ListingPhotoRepository listingPhotoRepository;
+    private final PasswordResetCodeRepository passwordResetCodeRepository;
 
     @Scheduled(fixedRate = 3600000)
     @Transactional
@@ -31,7 +33,15 @@ public class CleanupServicesImpl implements CleanupServices {
         refreshTokenRepository.deleteAllExpiredSince(Instant.now());
     }
 
+    @Scheduled(fixedRate = 3600000)
+    @Transactional
+    @Override
+    public void cleanupExpiredPasswordResetCodes() {
+        passwordResetCodeRepository.deleteAllExpiredSince(Instant.now());
+    }
+
     @Scheduled(fixedRate = 86400000)
+    @Override
     public void cleanupUnusedListingImages() {
 
         try {

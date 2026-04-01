@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         return ResponseCookie.from("refreshToken", token)
                 .httpOnly(true)
                 .secure(true)
-                .path("/api/auth/refresh")
+                .path("/")
                 .maxAge(maxAge)
                 .sameSite("Strict")
                 .build();

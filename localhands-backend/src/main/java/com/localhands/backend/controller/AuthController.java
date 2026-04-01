@@ -1,7 +1,9 @@
 package com.localhands.backend.controller;
 
+import com.localhands.backend.dto.request.PasswordResetCodeRequestDTO;
 import com.localhands.backend.dto.response.CookieResponseDTO;
 import com.localhands.backend.exception.AppException;
+import com.localhands.backend.service.AuthService;
 import com.localhands.backend.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserService userService;
+    private final AuthService authService;
 
     @PostMapping("/refresh")
     public ResponseEntity<String> refreshAccessToken(@CookieValue(value = "refreshToken", required = false) String token) {
@@ -34,7 +37,7 @@ public class AuthController {
             ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", "")
                     .httpOnly(true)
                     .secure(true)
-                    .path("/api/auth/refresh")
+                    .path("/")
                     .maxAge(0)
                     .sameSite("Strict")
                     .build();
@@ -52,5 +55,17 @@ public class AuthController {
                     .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
                     .body(ex.getMessage());
         }
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+        authService.sendPasswordResetEmail(email);
+        return ResponseEntity.ok("Successfully set password reset code to " + email);
+    }
+
+    @PostMapping("/verify-password-reset-code")
+    public ResponseEntity<String> verifyPasswordResetCode(@RequestBody PasswordResetCodeRequestDTO passwordResetCodeRequestDTO) {
+        authService.verifyPasswordResetCode(passwordResetCodeRequestDTO.getEmail(), passwordResetCodeRequestDTO.getCode());
+        return ResponseEntity.ok("Password reset code has been successfully verified.");
     }
 }

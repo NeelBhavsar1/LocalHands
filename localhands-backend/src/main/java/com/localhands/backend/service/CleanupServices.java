@@ -6,5 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 public interface CleanupServices {
     void cleanupExpiredTokens();
 
+    void cleanupExpiredPasswordResetCodes();
+
     void cleanupUnusedListingImages();
 }

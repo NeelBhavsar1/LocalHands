@@ -15,6 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class FileStorageServiceImpl implements FileStorageService {
 
+    @Override
     public String save(MultipartFile file) {
         try {
 
@@ -34,6 +35,7 @@ public class FileStorageServiceImpl implements FileStorageService {
         }
     }
 
+    @Override
     public void delete(String url) {
         try {
             Path path = Paths.get("." + url);
