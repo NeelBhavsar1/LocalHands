@@ -4,6 +4,7 @@ import com.localhands.backend.security.JwtAuthFilter;
 import com.localhands.backend.security.UserAuthProvider;
 import com.localhands.backend.security.UserAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,7 +24,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable)
+        return http
+                .cors(cors -> {})
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )

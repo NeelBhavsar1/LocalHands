@@ -14,17 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-//neel modificatoin, changed from @CrossOrigin("*")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
-
-    // Cross origin behaviour and role based access urls in securityconfig.
-    // Forgot password functionality, and change email confirmation.
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(
@@ -91,7 +86,6 @@ public class UserController {
                 .body("Logged out successfully.");
     }
 
-    //who am i endpoint
     @GetMapping
     public ResponseEntity<UserInfoResponseDTO> getUserByJWT(@AuthenticationPrincipal UserPrincipal user) {
         UserInfoResponseDTO userInfo = userService.getUserInfoById(user.getId());

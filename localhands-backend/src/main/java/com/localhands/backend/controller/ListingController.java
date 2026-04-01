@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@CrossOrigin("*")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/listings")
