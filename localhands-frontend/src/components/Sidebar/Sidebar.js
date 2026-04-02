@@ -5,10 +5,24 @@ import Link from "next/link";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ClipboardList, Home, LogOut, Menu, MessageCircle, Settings, User, Wallet, Wrench, X } from "lucide-react";
+import { logoutUser } from "@/api/authApi";
+import { useRouter } from "next/navigation";
 
 export default function Sidebar() {
   const { t } = useTranslation();
+  const router = useRouter();
   const [isCollapsed, setIsCollapsed] = useState(true);
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      router.push("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+      // redirection even if logout fails
+      router.push("/login");
+    }
+  };
 
   return (
     <>
@@ -85,14 +99,14 @@ export default function Sidebar() {
             <span className={styles.label}>{t("sidebar.settings")}</span>
           </Link>
 
-          <Link
-            href="/logout"
+          <button
+            onClick={handleLogout}
             className={styles.navItem}
             title={isCollapsed ? t("sidebar.logout") : undefined}
           >
             <LogOut size={20} className={styles.icon} strokeWidth={2.1} />
             <span className={styles.label}>{t("sidebar.logout")}</span>
-          </Link>
+          </button>
         </div>
       </div>
     </>

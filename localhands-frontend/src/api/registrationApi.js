@@ -1,13 +1,11 @@
-import axios from "axios";
+
+import api from "./api";
 
 export const registerUser = async (userData) => {
     try {
-        const response = await axios.post(
-            'http://localhost:8080/api/users/register',
-            userData, 
-            {headers: 
-                {'Content-Type': 'application/json'}, withCredentials: true
-            }
+        const response = await api.post(
+            '/api/users/register', userData, 
+            {headers: { 'Content-Type': 'application/json' }, withCredentials: true }
         );
         return response.data;
 

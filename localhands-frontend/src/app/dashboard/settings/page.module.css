@@ -24,7 +24,6 @@
 .section {
     display: flex;
     flex-direction: column;
-    
 }
 
 .settingItem {
@@ -32,6 +31,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    border: 1.5px solid var(--border);
 
     width: 100%;
     padding: 14px 16px;

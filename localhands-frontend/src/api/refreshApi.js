@@ -1,15 +1,11 @@
-import axios from "axios";
+import api from "./api";
 
 export const refreshToken = async () => {
     try {
-        const res = await axios.post(
-            'http://localhost:8080/api/auth/refresh',
-            {},
-            { withCredentials: true}
-        );
-        return res.data;
+        const res = await api.post("/api/auth/refresh")
+        return res.data
     } catch (error) {
-        console.error("Refresh token failed: ", error);
-        throw error.response?.data || "Could not refresh token!";
+        console.error("Failed to refresh token: ", error)
+        throw error.response?.data || "Coudln't refresh token (oof)"
     }
 }
