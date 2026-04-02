@@ -6,11 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -26,8 +23,14 @@ public class PasswordResetCode {
     @Column(name = "code", nullable = false)
     private String code;
 
+    @Column(name = "attempts", nullable = false)
+    private int attempts = 0;
+
     @Column(name = "expiry_date", nullable = false)
     private Instant expiryDate;
+
+    @Column(name = "reset_token")
+    private String resetToken;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

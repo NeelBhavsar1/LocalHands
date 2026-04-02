@@ -1,6 +1,7 @@
 package com.localhands.backend.controller;
 
 import com.localhands.backend.dto.request.PasswordResetCodeRequestDTO;
+import com.localhands.backend.dto.request.PasswordResetRequestDTO;
 import com.localhands.backend.dto.response.CookieResponseDTO;
 import com.localhands.backend.exception.AppException;
 import com.localhands.backend.service.AuthService;
@@ -60,12 +61,18 @@ public class AuthController {
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {
         authService.sendPasswordResetEmail(email);
-        return ResponseEntity.ok("Successfully set password reset code to " + email);
+        return ResponseEntity.ok("Successfully sent password reset code to " + email);
     }
 
     @PostMapping("/verify-password-reset-code")
     public ResponseEntity<String> verifyPasswordResetCode(@RequestBody PasswordResetCodeRequestDTO passwordResetCodeRequestDTO) {
-        authService.verifyPasswordResetCode(passwordResetCodeRequestDTO.getEmail(), passwordResetCodeRequestDTO.getCode());
-        return ResponseEntity.ok("Password reset code has been successfully verified.");
+        String token = authService.verifyPasswordResetCode(passwordResetCodeRequestDTO.getEmail(), passwordResetCodeRequestDTO.getCode());
+        return ResponseEntity.ok(token);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody PasswordResetRequestDTO passwordResetRequestDTO) {
+        authService.resetPassword(passwordResetRequestDTO.getEmail(), passwordResetRequestDTO.getToken(), passwordResetRequestDTO.getPassword());
+        return ResponseEntity.ok("Successfully set new password.");
     }
 }
