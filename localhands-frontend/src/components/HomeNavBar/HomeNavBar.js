@@ -28,10 +28,10 @@ export default function HomeNavBar({ showLinks = true }) {
 
             {showLinks && (
             <div className={styles.navLinks}>
-                <a href="#home">{t("nav.home")}</a>
-                <a href="#about">{t("nav.about")}</a>
-                <a href="#services">{t("nav.services")}</a>
-                <a href="#contact">{t("nav.contact")}</a>
+                <Link href="/home">{t("nav.home")}</Link>
+                <Link href="/about">{t("nav.about")}</Link>
+                <Link href="/services">{t("nav.services")}</Link>
+                <Link href="/contact">{t("nav.contact")}</Link>
             </div>
             )}
             
@@ -50,10 +50,12 @@ export default function HomeNavBar({ showLinks = true }) {
             {isMobileMenuOpen &&
                 <div className={styles.mobileMenu}>
                     {( showLinks && 
-                    <><a href="#home" onClick={toggleMobileMenu}>{t("nav.home")}</a>
-                    <a href="#services" onClick={toggleMobileMenu}>{t("nav.services")}</a>
-                    <a href="#about" onClick={toggleMobileMenu}>{t("nav.about")}</a>
-                    <a href="#contact" onClick={toggleMobileMenu}>{t("nav.contact")}</a></>
+                    <>
+                        <Link href="/home" onClick={toggleMobileMenu}>{t("nav.home")}</Link>
+                        <Link href="/services" onClick={toggleMobileMenu}>{t("nav.services")}</Link>
+                        <Link href="/about" onClick={toggleMobileMenu}>{t("nav.about")}</Link>
+                        <Link href="/contact" onClick={toggleMobileMenu}>{t("nav.contact")}</Link>
+                    </>
                     )}
 
                     <div className={styles.actionButton}>
