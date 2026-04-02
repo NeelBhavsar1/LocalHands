@@ -6,7 +6,7 @@ import com.localhands.backend.exception.AppException;
 import com.localhands.backend.repository.UserRepository;
 import com.localhands.backend.service.AuthService;
 import com.localhands.backend.service.EmailSenderService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +16,7 @@ import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -38,11 +39,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userOptional.get();
 
         SecureRandom random = new SecureRandom();
-        String resetCode = String.valueOf(random.nextInt(1000000));
-
-        for (int i = 0; i < 6 - resetCode.length(); i++) {
-            resetCode = "0" + resetCode;
-        }
+        String resetCode = String.format("%06d", random.nextInt(1000000));
 
         PasswordResetCode passwordResetCode = new PasswordResetCode();
         passwordResetCode.setCode(passwordEncoder.encode(resetCode));
@@ -65,8 +62,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Transactional
-    public void verifyPasswordResetCode(String email, String code) {
+    @Transactional(noRollbackFor = AppException.class)
+    public String verifyPasswordResetCode(String email, String code) {
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException("Failed to verify code.", HttpStatus.UNAUTHORIZED));
 
@@ -74,17 +72,69 @@ public class AuthServiceImpl implements AuthService {
             throw new AppException("Failed to verify code.", HttpStatus.UNAUTHORIZED);
         }
 
+        boolean failed = false;
+
         PasswordResetCode resetCode = user.getPasswordResetCodes().getFirst();
 
-        if (resetCode.getExpiryDate().isBefore(Instant.now())) {
-            throw new AppException("Code expired.", HttpStatus.UNAUTHORIZED);
+        if (resetCode.getAttempts() >= 5) {
+            user.getPasswordResetCodes().clear();
+            userRepository.save(user);
+            throw new AppException("Failed to verify code.", HttpStatus.UNAUTHORIZED);
         }
 
         if (!passwordEncoder.matches(code, resetCode.getCode())) {
-            throw new AppException("Failed to verify code.", HttpStatus.UNAUTHORIZED);
+            failed = true;
         }
+
+        if (resetCode.getExpiryDate().isBefore(Instant.now())) {
+            failed = true;
+        }
+
+        if (failed) {
+            resetCode.setAttempts(resetCode.getAttempts() + 1);
+            userRepository.save(user);
+            throw new AppException("Failed to verify code.", HttpStatus.UNAUTHORIZED);
+        } else {
+            String token = UUID.randomUUID().toString();
+            resetCode.setResetToken(passwordEncoder.encode(token));
+
+            userRepository.save(user);
+
+            return token;
+        }
+    }
+
+    @Override
+    @Transactional
+    public void resetPassword(String email, String token, String password) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException("Failed to reset password.", HttpStatus.UNAUTHORIZED));
+
+        if (user.getPasswordResetCodes().isEmpty()) {
+            throw new AppException("Failed to reset password.", HttpStatus.UNAUTHORIZED);
+        }
+
+        PasswordResetCode resetCode = user.getPasswordResetCodes().getFirst();
+
+        if (resetCode.getResetToken() == null) {
+            throw new AppException("Failed to reset password.", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (resetCode.getExpiryDate().isBefore(Instant.now())) {
+            user.getPasswordResetCodes().clear();
+            userRepository.save(user);
+            throw new AppException("Failed to reset password.", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (!passwordEncoder.matches(token, resetCode.getResetToken())) {
+            throw new AppException("Failed to reset password.", HttpStatus.UNAUTHORIZED);
+        }
+
+        user.setPassword(passwordEncoder.encode(password));
 
         user.getPasswordResetCodes().clear();
         userRepository.save(user);
     }
+
 }
