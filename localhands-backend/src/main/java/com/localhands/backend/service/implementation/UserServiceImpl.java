@@ -41,14 +41,14 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final RefreshTokenRepository refreshTokenRepository;
-    UserRepository userRepository;
-    RoleRepository roleRepository;
-    PasswordEncoder passwordEncoder;
-    ListingService listingService;
-    UserAuthProvider userAuthProvider;
-    FileStorageService fileStorageService;
-    EmailSenderService emailSenderService;
-    NewEmailTokenRepository newEmailTokenRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final ListingService listingService;
+    private final UserAuthProvider userAuthProvider;
+    private final FileStorageService fileStorageService;
+    private final EmailSenderService emailSenderService;
+    private final NewEmailTokenRepository newEmailTokenRepository;
 
     private final String baseUrl;
 
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException("Invalid refresh token.", HttpStatus.UNAUTHORIZED));
 
         if (tokenEntity.getExpiryDate().isBefore(Instant.now())) {
-            throw new AppException("Refresh token expired", HttpStatus.UNAUTHORIZED);
+            throw new AppException("Refresh token expired.", HttpStatus.UNAUTHORIZED);
         }
 
         refreshTokenRepository.delete(tokenEntity);
@@ -249,91 +249,92 @@ public class UserServiceImpl implements UserService {
             throw new AppException("You must be 18 or older.", HttpStatus.BAD_REQUEST);
         }
 
-        if (passwordEncoder.matches(updateDTO.getExistingPassword(), user.getPassword())) {
-            user.setFirstName(updateDTO.getFirstName());
-            user.setLastName(updateDTO.getLastName());
-            user.setDateOfBirth(updateDTO.getDateOfBirth());
-
-            if (!user.getEmail().equals(updateDTO.getEmail())) {
-
-                NewEmailToken emailToken = new NewEmailToken();
-
-                String token = UUID.randomUUID().toString();
-
-                emailToken.setEmailToken(hashToken(token));
-                emailToken.setNewEmail(updateDTO.getEmail());
-                emailToken.setExpiryDate(Instant.now().plus(Duration.ofMinutes(10)));
-                emailToken.setUser(user);
-
-                user.getNewEmailTokens().clear();
-                user.getNewEmailTokens().add(emailToken);
-
-                String message = """
-                    <html>
-                        <body>
-                            <p>Hello %s,</p>
-                
-                            <p>Please confirm your new email address by clicking on the button below:</p>
-                
-                            <p><a href="%s">Confirm Email</a></p>
-                
-                            <p>It expires in 10 minutes.</p>
-                
-                            <p>After confirming, your new email will replace your old one.</p>
-                
-                            <p>If this was not you, please ignore this email.</p>
-                
-                            <p>Thanks,<br/>The LocalHands Team</p>
-                        </body>
-                    </html>
-                """.formatted(user.getFirstName(), baseUrl + "/confirm-email?token=" + token);
-
-                emailSenderService.sendEmail(
-                        updateDTO.getEmail(),"LocalHands Confirmation of New Email", message);
-            }
-
-            if (updateDTO.getNewPassword() != null && !updateDTO.getNewPassword().isEmpty()) {
-                user.setPassword(passwordEncoder.encode(updateDTO.getNewPassword()));
-            }
-
-            Role buyerRole = roleRepository.findByRoleName(RoleName.BUYER)
-                    .orElseThrow(() -> new AppException("Buyer role not found.", HttpStatus.INTERNAL_SERVER_ERROR));
-
-            Role sellerRole = roleRepository.findByRoleName(RoleName.SELLER)
-                    .orElseThrow(() -> new AppException("Seller role not found.", HttpStatus.INTERNAL_SERVER_ERROR));
-
-            user.getRoles().clear();
-            user.getRoles().add(buyerRole);
-
-            if (updateDTO.isServiceProvider()) {
-                user.getRoles().add(sellerRole);
-            } else {
-                user.getRoles().removeIf(role -> role.getRoleName() == RoleName.SELLER);
-
-                listingService.deleteListingsByUserId(user.getId());
-            }
-
-            Instant now = Instant.now();
-
-            String newRefreshToken = userAuthProvider.createRefreshToken();
-            String accessToken = userAuthProvider.createAccessToken(user.getId(), user.getRoles(), now);
-
-            RefreshToken refreshTokenEntity = new RefreshToken();
-            refreshTokenEntity.setToken(hashToken(newRefreshToken));
-            refreshTokenEntity.setUser(user);
-            refreshTokenEntity.setExpiryDate(now.plus(Duration.ofDays(1)));
-
-            user.getRefreshTokens().add(refreshTokenEntity);
-
-            userRepository.save(user);
-
-            ResponseCookie refreshCookie = generateRefreshTokenCookie(newRefreshToken, now, refreshTokenEntity.getExpiryDate());
-            ResponseCookie accessCookie = generateAccessTokenCookie(accessToken, now);
-
-            return new CookieResponseDTO(refreshCookie, accessCookie);
-        } else {
+        if (!passwordEncoder.matches(updateDTO.getExistingPassword(), user.getPassword())) {
             throw new AppException("Invalid password.", HttpStatus.UNAUTHORIZED);
         }
+
+        user.setFirstName(updateDTO.getFirstName());
+        user.setLastName(updateDTO.getLastName());
+        user.setDateOfBirth(updateDTO.getDateOfBirth());
+
+        if (!user.getEmail().equals(updateDTO.getEmail())) {
+
+            NewEmailToken emailToken = new NewEmailToken();
+
+            String token = UUID.randomUUID().toString();
+
+            emailToken.setEmailToken(hashToken(token));
+            emailToken.setNewEmail(updateDTO.getEmail());
+            emailToken.setExpiryDate(Instant.now().plus(Duration.ofMinutes(10)));
+            emailToken.setUser(user);
+
+            user.getNewEmailTokens().clear();
+            user.getNewEmailTokens().add(emailToken);
+
+            String message = """
+                <html>
+                    <body>
+                        <p>Hello %s,</p>
+            
+                        <p>Please confirm your new email address by clicking on the button below:</p>
+            
+                        <p><a href="%s">Confirm Email</a></p>
+            
+                        <p>It expires in 10 minutes.</p>
+            
+                        <p>After confirming, your new email will replace your old one.</p>
+            
+                        <p>If this was not you, please ignore this email.</p>
+            
+                        <p>Thanks,<br/>The LocalHands Team</p>
+                    </body>
+                </html>
+            """.formatted(user.getFirstName(), baseUrl + "/confirm-email?token=" + token);
+
+            emailSenderService.sendEmail(
+                    updateDTO.getEmail(),"LocalHands Confirmation of New Email", message);
+        }
+
+        if (updateDTO.getNewPassword() != null && !updateDTO.getNewPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(updateDTO.getNewPassword()));
+        }
+
+        Role buyerRole = roleRepository.findByRoleName(RoleName.BUYER)
+                .orElseThrow(() -> new AppException("Buyer role not found.", HttpStatus.INTERNAL_SERVER_ERROR));
+
+        Role sellerRole = roleRepository.findByRoleName(RoleName.SELLER)
+                .orElseThrow(() -> new AppException("Seller role not found.", HttpStatus.INTERNAL_SERVER_ERROR));
+
+        user.getRoles().clear();
+        user.getRoles().add(buyerRole);
+
+        if (updateDTO.isServiceProvider()) {
+            user.getRoles().add(sellerRole);
+        } else {
+            user.getRoles().removeIf(role -> role.getRoleName() == RoleName.SELLER);
+
+            listingService.deleteListingsByUserId(user.getId());
+        }
+
+        Instant now = Instant.now();
+
+        String newRefreshToken = userAuthProvider.createRefreshToken();
+        String accessToken = userAuthProvider.createAccessToken(user.getId(), user.getRoles(), now);
+
+        RefreshToken refreshTokenEntity = new RefreshToken();
+        refreshTokenEntity.setToken(hashToken(newRefreshToken));
+        refreshTokenEntity.setUser(user);
+        refreshTokenEntity.setExpiryDate(now.plus(Duration.ofDays(1)));
+
+        user.getRefreshTokens().clear();
+        user.getRefreshTokens().add(refreshTokenEntity);
+
+        userRepository.save(user);
+
+        ResponseCookie refreshCookie = generateRefreshTokenCookie(newRefreshToken, now, refreshTokenEntity.getExpiryDate());
+        ResponseCookie accessCookie = generateAccessTokenCookie(accessToken, now);
+
+        return new CookieResponseDTO(refreshCookie, accessCookie);
     }
 
     @Override
@@ -344,12 +345,10 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException("Invalid or expired token.", HttpStatus.UNAUTHORIZED));
 
         if (emailToken.getExpiryDate().isBefore(Instant.now())) {
-            newEmailTokenRepository.delete(emailToken);
             throw new AppException("Token has expired.", HttpStatus.UNAUTHORIZED);
         }
 
         if (userRepository.existsByEmail(emailToken.getNewEmail())) {
-            newEmailTokenRepository.delete(emailToken);
             throw new AppException("The new email has now been taken.", HttpStatus.UNAUTHORIZED);
         }
 
@@ -406,8 +405,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new AppException("User not found with id: " + userId, HttpStatus.NOT_FOUND);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found with id: " + userId, HttpStatus.NOT_FOUND));
+
+        for (ProfilePhoto photo : user.getProfilePhotos()) {
+            fileStorageService.delete(photo.getUrl());
         }
 
         listingService.deleteListingsByUserId(userId);

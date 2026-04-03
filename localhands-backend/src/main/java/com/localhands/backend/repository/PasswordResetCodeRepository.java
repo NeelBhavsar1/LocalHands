@@ -11,7 +11,7 @@ import java.time.Instant;
 public interface PasswordResetCodeRepository extends JpaRepository<PasswordResetCode, Long> {
 
     @Modifying
-    @Query("DELETE FROM RefreshToken t WHERE t.expiryDate < :now")
+    @Query("DELETE FROM PasswordResetCode c WHERE c.expiryDate < :now")
     void deleteAllExpiredSince(@Param("now") Instant now);
 
 }
