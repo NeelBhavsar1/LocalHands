@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Getter
@@ -19,7 +19,7 @@ public class ListingResponseDTO {
     private String description;
     private double latitude;
     private double longitude;
-    private LocalDateTime creationTime;
-    private LocalDateTime updatedTime;
+    private Instant creationTime;
+    private Instant updatedTime;
     private List<ListingPhotoResponseDTO> photos;
 }

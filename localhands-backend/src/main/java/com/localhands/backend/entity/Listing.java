@@ -10,7 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.locationtech.jts.geom.Point;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Getter
@@ -35,11 +35,11 @@ public class Listing {
 
     @Column(name = "creation_time", nullable = false)
     @CreationTimestamp
-    private LocalDateTime creationTime;
+    private Instant creationTime;
 
     @Column(name = "updated_time", nullable = false)
     @UpdateTimestamp
-    private LocalDateTime updatedTime;
+    private Instant updatedTime;
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ListingPhoto> photos;

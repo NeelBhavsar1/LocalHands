@@ -9,6 +9,8 @@ import java.util.List;
 public interface ListingService {
     public ListingResponseDTO createListing(Long userId, ListingRequestDTO requestDTO, List<MultipartFile> photoFiles, List<String> altTexts);
 
+    public List<ListingResponseDTO> getListingsByUserId(Long userId);
+
     public ListingResponseDTO getListing(long id);
 
     public List<ListingResponseDTO> getListingsWithinRadius(double lat, double lon, double radius);

@@ -53,7 +53,7 @@ public class ListingServiceImpl implements ListingService {
                 MultipartFile photoFile = photoFiles.get(i);
                 String altText = altTexts.get(i);
 
-                String url = fileStorageService.save(photoFile);
+                String url = fileStorageService.save(photoFile, "uploads/listing-images/");
                 savedFileUrls.add(url);
 
                 ListingPhoto photo = new ListingPhoto();
@@ -77,6 +77,14 @@ public class ListingServiceImpl implements ListingService {
 
             throw new AppException("Failed to create listing.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public List<ListingResponseDTO> getListingsByUserId(Long userId) {
+        return listingRepository.findByUserId(userId)
+                .stream()
+                .map(ListingMapper::mapToListingResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -129,7 +137,7 @@ public class ListingServiceImpl implements ListingService {
                 MultipartFile photoFile = photoFiles.get(i);
                 String altText = altTexts.get(i);
 
-                String url = fileStorageService.save(photoFile);
+                String url = fileStorageService.save(photoFile, "uploads/listing-images/");
                 savedFileUrls.add(url);
 
                 ListingPhoto photo = new ListingPhoto();

@@ -30,7 +30,13 @@ public class ListingController {
         return ResponseEntity.ok(listingResponseDTO);
     }
 
-    @GetMapping
+    @GetMapping("/me")
+    public ResponseEntity<List<ListingResponseDTO>> getListingsBelongingToUser(@AuthenticationPrincipal UserPrincipal user) {
+        List<ListingResponseDTO> listings = listingService.getListingsByUserId(user.getId());
+        return ResponseEntity.ok(listings);
+    }
+
+    @GetMapping("/id")
     public ResponseEntity<ListingResponseDTO> getListingById(@RequestParam Long listingId) {
         ListingResponseDTO listingResponseDTO = listingService.getListing(listingId);
         return ResponseEntity.ok(listingResponseDTO);

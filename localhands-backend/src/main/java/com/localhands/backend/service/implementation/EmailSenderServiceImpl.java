@@ -2,10 +2,11 @@ package com.localhands.backend.service.implementation;
 
 import com.localhands.backend.exception.AppException;
 import com.localhands.backend.service.EmailSenderService;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,18 +23,19 @@ public class EmailSenderServiceImpl implements EmailSenderService {
     @Override
     public void sendEmail(String toEmail, String subject, String body) {
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-            message.setTo(toEmail);
-            message.setFrom(fromEmail);
-            message.setSubject(subject);
-            message.setText(body);
+            helper.setTo(toEmail);
+            helper.setFrom(fromEmail);
+            helper.setSubject(subject);
+            helper.setText(body, true);
 
             javaMailSender.send(message);
 
             System.out.println("Email sent successfully!");
         } catch (Exception e) {
-            throw new AppException("Could not send password reset email confirmation.", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Could not send email.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -51,11 +51,23 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(user);
 
-        String message = "Hello, the code to reset your password is:\n\n" +
-                resetCode +
-                "\n\nIt expires in 10 minutes." +
-                "\n\nIf this was not you, please ignore this email." +
-                "\n\nThanks,\nThe LocalHands Team";
+        String message = """
+            <html>
+                <body>
+                    <p>Hello %s,</p>
+        
+                    <p>The code to reset your password is:</p>
+        
+                    <p><b>%s</b></p>
+        
+                    <p>It expires in 10 minutes, so resend another code if you need to.</p>
+        
+                    <p>If this was not you, please ignore this email.</p>
+        
+                    <p>Thanks,<br/>The LocalHands Team</p>
+                </body>
+            </html>
+        """.formatted(user.getFirstName(), resetCode);
 
         emailSenderService.sendEmail(
                 email,"LocalHands Password Reset Request", message);

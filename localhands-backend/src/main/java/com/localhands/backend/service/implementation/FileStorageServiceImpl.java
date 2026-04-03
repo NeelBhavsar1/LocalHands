@@ -16,10 +16,8 @@ import java.util.UUID;
 public class FileStorageServiceImpl implements FileStorageService {
 
     @Override
-    public String save(MultipartFile file) {
+    public String save(MultipartFile file, String uploadDir) {
         try {
-
-            String uploadDir = "uploads/listing-images/";
 
             String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
@@ -28,7 +26,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             Files.createDirectories(path.getParent());
             Files.write(path, file.getBytes());
 
-            return "/uploads/listing-images/" + fileName;
+            return "/" + uploadDir + fileName;
 
         } catch (IOException e) {
             throw new RuntimeException("Failed to store file.");
