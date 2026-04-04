@@ -20,7 +20,6 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-
 public class AuthServiceImpl implements AuthService {
 
     private UserRepository userRepository;

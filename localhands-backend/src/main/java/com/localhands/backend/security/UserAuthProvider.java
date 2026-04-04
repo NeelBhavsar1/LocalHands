@@ -26,9 +26,12 @@ public class UserAuthProvider {
     @Value("${security.jwt.token.secret-key:secret-key}")
     private String secretKey;
 
+    private Algorithm algorithm;
+
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+        algorithm = Algorithm.HMAC256(secretKey);
     }
 
     public String createAccessToken(Long userId, Set<Role> roles, Instant now) {
@@ -40,11 +43,12 @@ public class UserAuthProvider {
                 .map(role -> role.getRoleName().name())
                 .toList();
 
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+
         return JWT.create()
                 .withSubject(userId.toString())
                 .withJWTId(UUID.randomUUID().toString())
                 .withIssuedAt(Date.from(now))
+                .withIssuer("LocalHands")
                 .withExpiresAt(Date.from(expiry))
                 .withClaim("roles", roleNames)
                 .sign(algorithm);
@@ -63,9 +67,10 @@ public class UserAuthProvider {
 
     public Authentication validateToken(String token) {
 
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer("LocalHands")
+                .build();
 
-        JWTVerifier verifier = JWT.require(algorithm).build();
         DecodedJWT decoded = verifier.verify(token);
 
         Long userId = Long.parseLong(decoded.getSubject());
@@ -74,8 +79,8 @@ public class UserAuthProvider {
 
         List<GrantedAuthority> authorities = roles != null
                 ? roles.stream()
-                    .map(role -> (GrantedAuthority) new SimpleGrantedAuthority("ROLE_" + role))
-                    .toList()
+                .map(role -> (GrantedAuthority) new SimpleGrantedAuthority("ROLE_" + role))
+                .toList()
                 : List.of();
 
         UserPrincipal user = new UserPrincipal(userId);
@@ -84,12 +89,13 @@ public class UserAuthProvider {
     }
 
     public Instant getExpiration(String token) {
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
-        DecodedJWT decodedJWT = JWT.require(algorithm)
-                .build()
-                .verify(token);
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer("LocalHands")
+                .build();
 
-        Date expiration = decodedJWT.getExpiresAt();
+        DecodedJWT decoded = verifier.verify(token);
+
+        Date expiration = decoded.getExpiresAt();
         return expiration.toInstant();
     }
 }

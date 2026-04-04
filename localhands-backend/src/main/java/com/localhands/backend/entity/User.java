@@ -42,6 +42,12 @@ public class User {
     @Column(name = "bio")
     private String bio;
 
+    @Column(name = "public_profile", nullable = false)
+    private boolean publicProfile = true;
+
+    @Column(name = "messages_enabled", nullable = false)
+    private boolean messagesEnabled = true;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
@@ -64,4 +70,10 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PasswordResetCode> passwordResetCodes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> sentMessages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> receivedMessages = new ArrayList<>();
 }
