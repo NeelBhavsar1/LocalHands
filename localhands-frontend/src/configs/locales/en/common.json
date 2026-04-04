@@ -108,5 +108,19 @@
     "sidebar.wallet": "Wallet",
     "sidebar.profile": "Profile",
     "sidebar.settings": "Settings",
-    "sidebar.logout": "Logout"
+    "sidebar.logout": "Logout",
+
+    "profile.title": "Profile",
+    "profile.changeProfilePicture": "Change profile picture",
+    "profile.bioPlaceholder": "Bio",
+    "profile.bio": "Bio",
+    "profile.firstName": "First Name",
+    "profile.lastName": "Last Name",
+    "profile.dateOfBirth": "Date of Birth",
+    "profile.email": "Email",
+    "profile.serviceProvider": "Service Provider",
+    "profile.allowMessages": "Allow Messages",
+    "profile.publicProfile": "Public Profile",
+    "profile.save": "Save",
+    "profile.editAccountInfo": "Edit Account information"
 }

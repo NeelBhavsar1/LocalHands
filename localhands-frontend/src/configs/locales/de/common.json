@@ -98,5 +98,19 @@
 
     "hero.title": "LocalHands",
     "hero.subtitle": "Verbindet Gemeinschaften durch vertrauenswürdige lokale Dienstleistungen.",
-    "hero.cta": "Jetzt starten"
+    "hero.cta": "Jetzt starten",
+
+    "profile.title": "Profil",
+    "profile.changeProfilePicture": "Profilbild ändern",
+    "profile.bioPlaceholder": "Bio",
+    "profile.bio": "Bio",
+    "profile.firstName": "Vorname",
+    "profile.lastName": "Nachname",
+    "profile.dateOfBirth": "Geburtsdatum",
+    "profile.email": "E-Mail",
+    "profile.serviceProvider": "Dienstleister",
+    "profile.allowMessages": "Nachrichten erlauben",
+    "profile.publicProfile": "Öffentliches Profil",
+    "profile.save": "Speichern",
+    "profile.editAccountInfo": "Kontoinformationen bearbeiten"
 }

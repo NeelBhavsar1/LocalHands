@@ -82,7 +82,7 @@ export default function Sidebar() {
           </Link>
 
           <Link
-            href="/profile"
+            href="/dashboard/profile"
             className={styles.navItem}
             title={isCollapsed ? t("sidebar.profile") : undefined}
           >
