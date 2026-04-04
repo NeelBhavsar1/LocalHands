@@ -9,13 +9,15 @@ import java.util.List;
 public interface ListingService {
     public ListingResponseDTO createListing(Long userId, ListingRequestDTO requestDTO, List<MultipartFile> photoFiles, List<String> altTexts);
 
-    public ListingResponseDTO getListing(long id);
+    public List<ListingResponseDTO> getListingsByUserId(Long userId);
+
+    public ListingResponseDTO getListingById(long id);
 
     public List<ListingResponseDTO> getListingsWithinRadius(double lat, double lon, double radius);
 
     public ListingResponseDTO updateListing(Long userId, long listingId, ListingRequestDTO requestDTO, List<MultipartFile> photoFiles, List<String> altTexts);
 
-    public void deleteListing(long userId, long listingId);
+    public void deleteListingById(long userId, long listingId);
 
     public void deleteListingsByUserId(Long userId);
 }

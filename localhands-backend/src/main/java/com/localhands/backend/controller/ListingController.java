@@ -30,9 +30,15 @@ public class ListingController {
         return ResponseEntity.ok(listingResponseDTO);
     }
 
-    @GetMapping
+    @GetMapping("/me")
+    public ResponseEntity<List<ListingResponseDTO>> getListingsBelongingToUser(@AuthenticationPrincipal UserPrincipal user) {
+        List<ListingResponseDTO> listingResponseDTOs = listingService.getListingsByUserId(user.getId());
+        return ResponseEntity.ok(listingResponseDTOs);
+    }
+
+    @GetMapping("/id")
     public ResponseEntity<ListingResponseDTO> getListingById(@RequestParam Long listingId) {
-        ListingResponseDTO listingResponseDTO = listingService.getListing(listingId);
+        ListingResponseDTO listingResponseDTO = listingService.getListingById(listingId);
         return ResponseEntity.ok(listingResponseDTO);
     }
 
@@ -42,17 +48,17 @@ public class ListingController {
             @RequestParam double longitude,
             @RequestParam double radius
     ) {
-        List<ListingResponseDTO> listingResponseDTO = listingService.getListingsWithinRadius(latitude, longitude, radius);
-        return ResponseEntity.ok(listingResponseDTO);
+        List<ListingResponseDTO> listingResponseDTOs = listingService.getListingsWithinRadius(latitude, longitude, radius);
+        return ResponseEntity.ok(listingResponseDTOs);
     }
 
     @PutMapping(consumes = "multipart/form-data")
     public ResponseEntity<ListingResponseDTO> updateListing (
             @AuthenticationPrincipal UserPrincipal user,
+            @RequestParam("listingId") Long listingId,
             @RequestPart("listing") ListingRequestDTO listingRequestDTO,
             @RequestPart("photos") List<MultipartFile> photos,
-            @RequestParam("altTexts") List<String> altTexts,
-            @RequestParam("listingId") Long listingId
+            @RequestParam("altTexts") List<String> altTexts
     ) {
         ListingResponseDTO listingResponseDTO = listingService.updateListing(user.getId(), listingId, listingRequestDTO, photos, altTexts);
         return ResponseEntity.ok(listingResponseDTO);
@@ -60,7 +66,7 @@ public class ListingController {
 
     @DeleteMapping
     public ResponseEntity<String> deleteListingById(@AuthenticationPrincipal UserPrincipal user, @RequestParam Long listingId) {
-        listingService.deleteListing(user.getId(), listingId);
-        return ResponseEntity.ok("Listing deleted successfully");
+        listingService.deleteListingById(user.getId(), listingId);
+        return ResponseEntity.ok("Listing deleted successfully.");
     }
 }

@@ -4,7 +4,6 @@ import com.localhands.backend.security.JwtAuthFilter;
 import com.localhands.backend.security.UserAuthProvider;
 import com.localhands.backend.security.UserAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,6 +39,7 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/api/users/login",
                                 "/api/users/register"
+                                // Make logout restricted later.
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

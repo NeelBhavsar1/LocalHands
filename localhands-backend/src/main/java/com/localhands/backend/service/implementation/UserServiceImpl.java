@@ -1,47 +1,80 @@
 package com.localhands.backend.service.implementation;
 
 import com.localhands.backend.dto.request.UserLoginRequestDTO;
+import com.localhands.backend.dto.request.UserProfileUpdateRequestDTO;
 import com.localhands.backend.dto.request.UserRegisterRequestDTO;
-import com.localhands.backend.dto.request.UserUpdateRequestDTO;
+import com.localhands.backend.dto.request.UserAccountUpdateRequestDTO;
 import com.localhands.backend.dto.response.CookieResponseDTO;
 import com.localhands.backend.dto.response.UserInfoResponseDTO;
-import com.localhands.backend.entity.RefreshToken;
-import com.localhands.backend.entity.Role;
-import com.localhands.backend.entity.RoleName;
-import com.localhands.backend.entity.User;
+import com.localhands.backend.entity.*;
 import com.localhands.backend.exception.AppException;
 import com.localhands.backend.mapper.UserMapper;
+import com.localhands.backend.repository.NewEmailTokenRepository;
 import com.localhands.backend.repository.RefreshTokenRepository;
 import com.localhands.backend.repository.RoleRepository;
 import com.localhands.backend.repository.UserRepository;
 import com.localhands.backend.security.UserAuthProvider;
+import com.localhands.backend.service.EmailSenderService;
+import com.localhands.backend.service.FileStorageService;
 import com.localhands.backend.service.ListingService;
 import com.localhands.backend.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HexFormat;
+import java.util.UUID;
 
 @Service
-@AllArgsConstructor
 @Transactional
 public class UserServiceImpl implements UserService {
 
     private final RefreshTokenRepository refreshTokenRepository;
-    UserRepository userRepository;
-    RoleRepository roleRepository;
-    PasswordEncoder passwordEncoder;
-    ListingService listingService;
-    UserAuthProvider userAuthProvider;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final ListingService listingService;
+    private final UserAuthProvider userAuthProvider;
+    private final FileStorageService fileStorageService;
+    private final EmailSenderService emailSenderService;
+    private final NewEmailTokenRepository newEmailTokenRepository;
+
+    private final String baseUrl;
+
+    public UserServiceImpl(
+            RefreshTokenRepository refreshTokenRepository,
+            UserRepository userRepository,
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder,
+            ListingService listingService,
+            UserAuthProvider userAuthProvider,
+            FileStorageService fileStorageService,
+            EmailSenderService emailSenderService,
+            NewEmailTokenRepository newEmailTokenRepository,
+            @Value("${app.cors.allowed-origin}") String baseUrl
+    ) {
+        this.refreshTokenRepository = refreshTokenRepository;
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.listingService = listingService;
+        this.userAuthProvider = userAuthProvider;
+        this.fileStorageService = fileStorageService;
+        this.emailSenderService = emailSenderService;
+        this.newEmailTokenRepository = newEmailTokenRepository;
+        this.baseUrl = baseUrl;
+    }
 
     private ResponseCookie generateRefreshTokenCookie(String token, Instant now, Instant expiration) {
         long maxAge = Duration.between(now, expiration).getSeconds();
@@ -85,7 +118,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException("Invalid refresh token.", HttpStatus.UNAUTHORIZED));
 
         if (tokenEntity.getExpiryDate().isBefore(Instant.now())) {
-            throw new AppException("Refresh token expired", HttpStatus.UNAUTHORIZED);
+            throw new AppException("Refresh token expired.", HttpStatus.UNAUTHORIZED);
         }
 
         refreshTokenRepository.delete(tokenEntity);
@@ -118,7 +151,12 @@ public class UserServiceImpl implements UserService {
             throw new AppException("Account already exists.", HttpStatus.BAD_REQUEST);
         }
 
+        if (registerDTO.getDateOfBirth() == null || registerDTO.getDateOfBirth().isAfter(LocalDate.now().minusYears(18))) {
+            throw new AppException("You must be 18 or older.", HttpStatus.BAD_REQUEST);
+        }
+
         User user = UserMapper.mapToUser(registerDTO);
+
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
 
         Role customerRole = roleRepository.findByRoleName(RoleName.BUYER)
@@ -198,7 +236,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CookieResponseDTO updateUser(Long userId, UserUpdateRequestDTO updateDTO) {
+    public CookieResponseDTO updateUserAccount(Long userId, UserAccountUpdateRequestDTO updateDTO) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException("User not found with id: " + userId, HttpStatus.NOT_FOUND));
@@ -207,58 +245,171 @@ public class UserServiceImpl implements UserService {
             throw new AppException("Account with updated email already exists.", HttpStatus.BAD_REQUEST);
         }
 
-        if (passwordEncoder.matches(updateDTO.getExistingPassword(), user.getPassword())) {
-            user.setFirstName(updateDTO.getFirstName());
-            user.setLastName(updateDTO.getLastName());
-            user.setEmail(updateDTO.getEmail());
-            if (updateDTO.getNewPassword() != null && !updateDTO.getNewPassword().isEmpty()) {
-                user.setPassword(passwordEncoder.encode(updateDTO.getNewPassword()));
+        if (updateDTO.getDateOfBirth() == null || updateDTO.getDateOfBirth().isAfter(LocalDate.now().minusYears(18))) {
+            throw new AppException("You must be 18 or older.", HttpStatus.BAD_REQUEST);
+        }
+
+        if (!passwordEncoder.matches(updateDTO.getExistingPassword(), user.getPassword())) {
+            throw new AppException("Invalid password.", HttpStatus.UNAUTHORIZED);
+        }
+
+        user.setFirstName(updateDTO.getFirstName());
+        user.setLastName(updateDTO.getLastName());
+        user.setDateOfBirth(updateDTO.getDateOfBirth());
+
+        if (!user.getEmail().equals(updateDTO.getEmail())) {
+
+            NewEmailToken emailToken = new NewEmailToken();
+
+            String token = UUID.randomUUID().toString();
+
+            emailToken.setEmailToken(hashToken(token));
+            emailToken.setNewEmail(updateDTO.getEmail());
+            emailToken.setExpiryDate(Instant.now().plus(Duration.ofMinutes(10)));
+            emailToken.setUser(user);
+
+            user.getNewEmailTokens().clear();
+            user.getNewEmailTokens().add(emailToken);
+
+            String message = """
+                <html>
+                    <body>
+                        <p>Hello %s,</p>
+            
+                        <p>Please confirm your new email address by clicking on the button below:</p>
+            
+                        <p><a href="%s">Confirm Email</a></p>
+            
+                        <p>It expires in 10 minutes.</p>
+            
+                        <p>After confirming, your new email will replace your old one.</p>
+            
+                        <p>If this was not you, please ignore this email.</p>
+            
+                        <p>Thanks,<br/>The LocalHands Team</p>
+                    </body>
+                </html>
+            """.formatted(user.getFirstName(), baseUrl + "/confirm-email?token=" + token);
+
+            emailSenderService.sendEmail(
+                    updateDTO.getEmail(),"LocalHands Confirmation of New Email", message);
+        }
+
+        if (updateDTO.getNewPassword() != null && !updateDTO.getNewPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(updateDTO.getNewPassword()));
+        }
+
+        Role buyerRole = roleRepository.findByRoleName(RoleName.BUYER)
+                .orElseThrow(() -> new AppException("Buyer role not found.", HttpStatus.INTERNAL_SERVER_ERROR));
+
+        Role sellerRole = roleRepository.findByRoleName(RoleName.SELLER)
+                .orElseThrow(() -> new AppException("Seller role not found.", HttpStatus.INTERNAL_SERVER_ERROR));
+
+        user.getRoles().clear();
+        user.getRoles().add(buyerRole);
+
+        if (updateDTO.isServiceProvider()) {
+            user.getRoles().add(sellerRole);
+        } else {
+            user.getRoles().removeIf(role -> role.getRoleName() == RoleName.SELLER);
+
+            listingService.deleteListingsByUserId(user.getId());
+        }
+
+        Instant now = Instant.now();
+
+        String newRefreshToken = userAuthProvider.createRefreshToken();
+        String accessToken = userAuthProvider.createAccessToken(user.getId(), user.getRoles(), now);
+
+        RefreshToken refreshTokenEntity = new RefreshToken();
+        refreshTokenEntity.setToken(hashToken(newRefreshToken));
+        refreshTokenEntity.setUser(user);
+        refreshTokenEntity.setExpiryDate(now.plus(Duration.ofDays(1)));
+
+        user.getRefreshTokens().clear();
+        user.getRefreshTokens().add(refreshTokenEntity);
+
+        userRepository.save(user);
+
+        ResponseCookie refreshCookie = generateRefreshTokenCookie(newRefreshToken, now, refreshTokenEntity.getExpiryDate());
+        ResponseCookie accessCookie = generateAccessTokenCookie(accessToken, now);
+
+        return new CookieResponseDTO(refreshCookie, accessCookie);
+    }
+
+    @Override
+    @Transactional
+    public void confirmEmail(String token) {
+
+        NewEmailToken emailToken = newEmailTokenRepository.findByEmailToken(hashToken(token))
+                .orElseThrow(() -> new AppException("Invalid or expired token.", HttpStatus.UNAUTHORIZED));
+
+        if (emailToken.getExpiryDate().isBefore(Instant.now())) {
+            throw new AppException("Token has expired.", HttpStatus.UNAUTHORIZED);
+        }
+
+        if (userRepository.existsByEmail(emailToken.getNewEmail())) {
+            throw new AppException("The new email has now been taken.", HttpStatus.UNAUTHORIZED);
+        }
+
+        User user = emailToken.getUser();
+
+        user.setEmail(emailToken.getNewEmail());
+
+        newEmailTokenRepository.delete(emailToken);
+
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void updateUserProfile(Long userId, UserProfileUpdateRequestDTO updateDTO, MultipartFile photo) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found with id: " + userId, HttpStatus.NOT_FOUND));
+
+        String savedFileUrl = null;
+
+        try {
+            user.setBio(updateDTO.getBio());
+
+            for (ProfilePhoto existingPhoto : user.getProfilePhotos()) {
+                fileStorageService.delete(existingPhoto.getUrl());
             }
 
-            Role buyerRole = roleRepository.findByRoleName(RoleName.BUYER)
-                    .orElseThrow(() -> new AppException("Buyer role not found.", HttpStatus.INTERNAL_SERVER_ERROR));
+            user.getProfilePhotos().clear();
 
-            Role sellerRole = roleRepository.findByRoleName(RoleName.SELLER)
-                    .orElseThrow(() -> new AppException("Seller role not found.", HttpStatus.INTERNAL_SERVER_ERROR));
+            if (photo != null && !photo.isEmpty()) {
+                savedFileUrl = fileStorageService.save(photo, "uploads/profile-pictures/");
 
-            user.getRoles().clear();
-            user.getRoles().add(buyerRole);
+                ProfilePhoto profilePhoto = new ProfilePhoto();
 
-            if (updateDTO.isServiceProvider()) {
-                user.getRoles().add(sellerRole);
-            } else {
-                user.getRoles().removeIf(role -> role.getRoleName() == RoleName.SELLER);
+                profilePhoto.setUrl(savedFileUrl);
+                profilePhoto.setAltText("Image of " + user.getFirstName() + ".");
+                profilePhoto.setUser(user);
 
-                listingService.deleteListingsByUserId(user.getId());
+                user.getProfilePhotos().add(profilePhoto);
             }
-
-            Instant now = Instant.now();
-
-            String newRefreshToken = userAuthProvider.createRefreshToken();
-            String accessToken = userAuthProvider.createAccessToken(user.getId(), user.getRoles(), now);
-
-            RefreshToken refreshTokenEntity = new RefreshToken();
-            refreshTokenEntity.setToken(hashToken(newRefreshToken));
-            refreshTokenEntity.setUser(user);
-            refreshTokenEntity.setExpiryDate(now.plus(Duration.ofDays(1)));
-
-            user.getRefreshTokens().add(refreshTokenEntity);
 
             userRepository.save(user);
 
-            ResponseCookie refreshCookie = generateRefreshTokenCookie(newRefreshToken, now, refreshTokenEntity.getExpiryDate());
-            ResponseCookie accessCookie = generateAccessTokenCookie(accessToken, now);
+        } catch (Exception e) {
 
-            return new CookieResponseDTO(refreshCookie, accessCookie);
-        } else {
-            throw new AppException("Invalid password.", HttpStatus.UNAUTHORIZED);
+            if (savedFileUrl != null) {
+                fileStorageService.delete(savedFileUrl);
+            }
+
+            throw new AppException("Failed to update user profile.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
     public void deleteUser(Long userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new AppException("User not found with id: " + userId, HttpStatus.NOT_FOUND);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found with id: " + userId, HttpStatus.NOT_FOUND));
+
+        for (ProfilePhoto photo : user.getProfilePhotos()) {
+            fileStorageService.delete(photo.getUrl());
         }
 
         listingService.deleteListingsByUserId(userId);

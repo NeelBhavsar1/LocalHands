@@ -1,7 +1,27 @@
-Placeholder file to track this directory on git for api testing.
+localhost:8080/api:
+	
+	/users:
+		GET /me - get all info related to the current user signed in.
+		PUT /account - update account info (make sure to pass in all existing fields - newPassword can be left null or empty). Research how to pass in bio JSON in the form { "bio": "ifpjwopijwepo" } and a file as the pfp.
+		PUT /profile - update profile info (make sure to pass in existing bio and pfp)
+		DELETE - deletes user account.
 
-localhost:8080/api/users/register (firstName, lastName, email, password, isServiceProvider)
-localhost:8080/api/users/login (email, password)
-localhost:8080/api/users/
+	/auth:
+		POST /register - register account.
+		POST /login - login.
+		POST /logout - logout.
+		POST /refresh - refresh access token using refresh token - gets rid of cookies if expired.
+		GET  /confirm-email?{code} - Check code is correct and set the new email to the account it is associated with.
+		POST /forgot-password - send forgot password code.
+		POST /verify-password-reset-code - verify code sent is correct and return a special token to reset password.
+		POST /reset-password - reset password using special token.
 
-rocco create one for updateUserProfile
+	/listings:
+		POST        - creates new listing. Find out how to input this data.
+		GET /me	    - obtains all of the user's listings.
+		GET /id	    - obtains a listing by its id.
+		GET /radius - obtains listings based on location and radius.
+		PUT	    - edits a listing. Find out how to input this data.
+		DELETE	    - deletes a listing.
+
+All routes are not protected based on roles at the moment.

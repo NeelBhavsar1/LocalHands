@@ -12,6 +12,7 @@ public class UserMapper {
 
         user.setFirstName(requestDTO.getFirstName());
         user.setLastName(requestDTO.getLastName());
+        user.setDateOfBirth(requestDTO.getDateOfBirth());
         user.setEmail(requestDTO.getEmail());
 
         return user;
@@ -22,10 +23,16 @@ public class UserMapper {
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
+                user.getDateOfBirth(),
                 user.getEmail(),
+                user.getBio(),
                 user.getRoles()
                         .stream()
                         .map(role -> role.getRoleName().name())
-                        .toList());
+                        .toList(),
+                user.getProfilePhotos().isEmpty()
+                        ? null
+                        : ProfilePhotoMapper.mapToProfilePhotoResponseDTO(user.getProfilePhotos().get(0))
+        );
     }
 }

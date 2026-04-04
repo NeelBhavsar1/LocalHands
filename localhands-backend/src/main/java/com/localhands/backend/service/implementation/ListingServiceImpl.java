@@ -53,7 +53,7 @@ public class ListingServiceImpl implements ListingService {
                 MultipartFile photoFile = photoFiles.get(i);
                 String altText = altTexts.get(i);
 
-                String url = fileStorageService.save(photoFile);
+                String url = fileStorageService.save(photoFile, "uploads/listing-images/");
                 savedFileUrls.add(url);
 
                 ListingPhoto photo = new ListingPhoto();
@@ -80,7 +80,15 @@ public class ListingServiceImpl implements ListingService {
     }
 
     @Override
-    public ListingResponseDTO getListing(long id) {
+    public List<ListingResponseDTO> getListingsByUserId(Long userId) {
+        return listingRepository.findByUserId(userId)
+                .stream()
+                .map(ListingMapper::mapToListingResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ListingResponseDTO getListingById(long id) {
         Listing listing = listingRepository.findById(id)
                 .orElseThrow(() -> new AppException("Listing not found with id: " + id, HttpStatus.NOT_FOUND));
 
@@ -129,7 +137,7 @@ public class ListingServiceImpl implements ListingService {
                 MultipartFile photoFile = photoFiles.get(i);
                 String altText = altTexts.get(i);
 
-                String url = fileStorageService.save(photoFile);
+                String url = fileStorageService.save(photoFile, "uploads/listing-images/");
                 savedFileUrls.add(url);
 
                 ListingPhoto photo = new ListingPhoto();
@@ -154,7 +162,7 @@ public class ListingServiceImpl implements ListingService {
     }
 
     @Override
-    public void deleteListing(long userId, long listingId) {
+    public void deleteListingById(long userId, long listingId) {
         Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new AppException("Listing not found with id: " + listingId, HttpStatus.NOT_FOUND));
 
