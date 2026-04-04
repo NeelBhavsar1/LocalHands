@@ -6,97 +6,103 @@ import { useTranslation } from "react-i18next";
 import styles from "./page.module.css";
 import HomeNavBar from "@/components/HomeNavBar/HomeNavBar";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+import { sendPasswordResetEmail, verifyPasswordResetCode, resetPassword } from "@/api/passwordResetApi";
+import { validateForgotPasswordEmail, validateForgotPasswordPin, validatePasswordReset } from "@/utils/validateForgotPassword";
 
 
 export default function page() {
-  const { t } = useTranslation();
-  const PIN_LENGTH = 6;
-  const [step, setStep] = useState("email");
-  const [email, setEmail] = useState("");
-  const [pin, setPin] = useState("");
-  const [errors, setErrors] = useState({});
-  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+  const { t } = useTranslation()
+  const PIN_LENGTH = 6
+  const [step, setStep] = useState("email")
+  const [email, setEmail] = useState("")
+  const [pin, setPin] = useState("")
+  const [errors, setErrors] = useState({})
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false)
+  const [isVerifyingPin, setIsVerifyingPin] = useState(false)
+  const [isResettingPassword, setIsResettingPassword] = useState(false)
+  const [resetToken, setResetToken] = useState("")
+  const [newPassword, setNewPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [successMessage, setSuccessMessage] = useState("")
 
-  const validateEmail = (value) => {
-    const trimmedValue = value.trim();
-
-    if (!trimmedValue) {
-      return t("forgotPassword.errors.emailRequired");
-    }
-
-    if (!/\S+@\S+\.\S+/.test(trimmedValue)) {
-      return t("forgotPassword.errors.invalidEmail");
-    }
-
-    return "";
-  };
-
-  const validatePin = (value) => {
-    if (!value.trim()) {
-      return t("forgotPassword.errors.pinRequired");
-    }
-
-    if (!new RegExp(`^\\d{${PIN_LENGTH}}$`).test(value)) {
-      return t("forgotPassword.errors.pinLength");
-    }
-
-    return "";
-  };
-
-  const checkEmailExists = async (_emailAddress) => {
-    //tODO: Implement backend call to verify whether this email exists
-    //expected behavior:
-    // - return: { exists: true } when the email is registered
-    // - return: { exists: false } when the email is not registered
-    // - throw an error if the request fails (network/server issue)
-    throw new Error("checkEmailExists is not implemented yet.");
-  };
-
-  //rewrite later properly
   const submitEmailStep = async (e) => {
-    e.preventDefault();
-    const emailError = validateEmail(email);
+    e.preventDefault()
+    const emailErrors = validateForgotPasswordEmail(email, t)
 
-    if (emailError) {
-      setErrors({ email: emailError });
-      return;
+    if (Object.keys(emailErrors).length > 0) {
+      setErrors(emailErrors)
+      return
     }
 
-    setErrors({});
-    setIsCheckingEmail(true);
+    setErrors({})
+    setIsCheckingEmail(true)
 
     try {
-      //this is where we will check with the backend if the email exists
-      //uf the backend says it does not exist, we show a specific error
-      const result = await checkEmailExists(email.trim());
-
-      if (!result.exists) {
-        setErrors({ email: t("forgotPassword.errors.emailNotFound") });
-        return;
-      }
-
-      setStep("pin");
-    } catch {
-      //temporary fallback while email existence api is not wired up yet
-      //remove me aftre implementing checkemailexists
-      setStep("pin");
+      await sendPasswordResetEmail(email.trim())
+      setStep("pin")
+    } catch (error) {
+      setErrors({ email: error.message || t("forgotPassword.errors.emailNotFound") })
     } finally {
       setIsCheckingEmail(false);
     }
   };
 
-  const submitPinStep = (e) => {
+  const submitPinStep = async (e) => {
     e.preventDefault();
-    const pinError = validatePin(pin);
+    const pinErrors = validateForgotPasswordPin(pin, PIN_LENGTH, t);
 
-    if (pinError) {
-      setErrors({ pin: pinError });
-      return;
+    if (Object.keys(pinErrors).length > 0) {
+      setErrors(pinErrors)
+      return
     }
 
-    setErrors({});
-    console.log("PIN submitted for email:", email.trim(), "PIN:", pin);
+    setErrors({})
+    setIsVerifyingPin(true)
+
+    try {
+      const token = await verifyPasswordResetCode(email.trim(), pin);
+      setResetToken(token)
+      setStep("password")
+    } catch (error) {
+      setErrors({ pin: error.message || t("forgotPassword.errors.pinLength") })
+    } finally {
+      setIsVerifyingPin(false)
+    }
   };
+
+  const submitPasswordStep = async (e) => {
+    e.preventDefault()
+    const passwordErrors = validatePasswordReset(newPassword, confirmPassword, t)
+
+    if (Object.keys(passwordErrors).length > 0) {
+      setErrors(passwordErrors);
+      return
+    }
+
+    setErrors({})
+    setIsResettingPassword(true)
+
+    try {
+      await resetPassword(email.trim(), resetToken, newPassword);
+      setSuccessMessage(t("forgotPassword.passwordStep.successMessage"));
+      
+      //reset form after successful password reset + 3 second delay
+      setTimeout(() => {
+        setStep("email");
+        setEmail("");
+        setPin("");
+        setNewPassword("");
+        setConfirmPassword("");
+        setResetToken("");
+        setSuccessMessage("");
+      }, 3000)
+
+    } catch (error) {
+      setErrors({ password: error.message || t("forgotPassword.errors.passwordMismatch") });
+    } finally {
+      setIsResettingPassword(false);
+    }
+  }
 
   return (
     <div className={styles.container}>
@@ -107,19 +113,22 @@ export default function page() {
           {step === "email" ? (
             <>
               <div className={styles.header}>
+
                 <h1>{t("forgotPassword.emailStep.title")}</h1>
                 <p>{t("forgotPassword.emailStep.subtitle")}</p>
+
               </div>
 
               <form className={styles.form} onSubmit={submitEmailStep} autoComplete="off">
+                
                 <label htmlFor="email">
                   {t("forgotPassword.emailStep.emailLabel")}
-                  <input id="email" name="email" type="email" value={email} placeholder={t("forgotPassword.emailStep.emailPlaceholder")} onChange={(e) => setEmail(e.target.value)} required />
+                  <input id="email" name="email" type="email" value={email} placeholder={t("forgotPassword.emailStep.emailPlaceholder")} onChange={(e) => setEmail(e.target.value)} required disabled={isCheckingEmail} />
                   {errors.email && <span className={styles.error}>{errors.email}</span>}
                 </label>
 
                 <button type="submit" className={styles.submitButton} disabled={isCheckingEmail}>
-                  {isCheckingEmail ? t("forgotPassword.emailStep.checkingButton") : t("forgotPassword.emailStep.continueButton")}
+                  {isCheckingEmail ? <LoadingSpinner size="small" /> : t("forgotPassword.emailStep.continueButton")}
                 </button>
 
                 <p className={styles.switchAuth}>
@@ -127,7 +136,8 @@ export default function page() {
                 </p>
               </form>
             </>
-          ) : (
+
+          ) : step === "pin" ? (
             <>
               <div className={styles.header}>
                 <h1>{t("forgotPassword.pinStep.title")}</h1>
@@ -139,22 +149,75 @@ export default function page() {
               <form className={styles.form} onSubmit={submitPinStep} autoComplete="off">
                 <label htmlFor="pin">
                   {t("forgotPassword.pinStep.pinLabel")}
-                  <input id="pin" name="pin" type="text" pattern="\d*" maxLength={PIN_LENGTH} value={pin} placeholder="123456" onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))} required />
+                  <input id="pin" name="pin" type="text" pattern="\d*" maxLength={PIN_LENGTH} value={pin} placeholder="123456" onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))} required disabled={isVerifyingPin} />
                   {errors.pin && <span className={styles.error}>{errors.pin}</span>}
                 </label>
 
-                <button type="submit" className={styles.submitButton}>
-                  {t("forgotPassword.pinStep.verifyButton")}
+                <button type="submit" className={styles.submitButton} disabled={isVerifyingPin}>
+                  {isVerifyingPin ? <LoadingSpinner size="small" /> : t("forgotPassword.pinStep.verifyButton")}
                 </button>
 
-                <button type="button" className={styles.backButton} onClick={() => setStep("email")}>
+                <button type="button" className={styles.backButton} onClick={() => setStep("email")} disabled={isVerifyingPin}>
                   {t("forgotPassword.pinStep.useDifferentEmail")}
                 </button>
               </form>
+            </>
+          ) : (
+            <>
+              <div className={styles.header}>
+                <h1>{t("forgotPassword.passwordStep.title")}</h1>
+                <p>{t("forgotPassword.passwordStep.subtitle")} <strong>{email.trim()}</strong></p>
+              </div>
+
+              {successMessage ? (
+                <div className={styles.successMessage}>
+                  {successMessage}
+                </div>
+              ) : (
+                <form className={styles.form} onSubmit={submitPasswordStep} autoComplete="off">
+                  <label htmlFor="newPassword">
+                    {t("forgotPassword.passwordStep.newPasswordLabel")}
+                    <input 
+                      id="newPassword" 
+                      name="newPassword" 
+                      type="password" 
+                      value={newPassword} 
+                      placeholder={t("forgotPassword.passwordStep.newPasswordPlaceholder")} 
+                      onChange={(e) => setNewPassword(e.target.value)} 
+                      required 
+                      disabled={isResettingPassword}
+                    />
+                    {errors.password && <span className={styles.error}>{errors.password}</span>}
+                  </label>
+
+                  <label htmlFor="confirmPassword">
+                    {t("forgotPassword.passwordStep.confirmPasswordLabel")}
+                    <input 
+                      id="confirmPassword" 
+                      name="confirmPassword" 
+                      type="password" 
+                      value={confirmPassword} 
+                      placeholder={t("forgotPassword.passwordStep.confirmPasswordPlaceholder")} 
+                      onChange={(e) => setConfirmPassword(e.target.value)} 
+                      required 
+                      disabled={isResettingPassword}
+                    />
+                    {errors.confirmPassword && <span className={styles.error}>{errors.confirmPassword}</span>}
+                  </label>
+
+                  <button type="submit" className={styles.submitButton} disabled={isResettingPassword}>
+                    {isResettingPassword ? <LoadingSpinner size="small" /> : t("forgotPassword.passwordStep.resetButton")}
+                  </button>
+
+                  <button type="button" className={styles.backButton} onClick={() => setStep("pin")} disabled={isResettingPassword}>
+                    {t("forgotPassword.passwordStep.backToPin")}
+                  </button>
+                </form>
+              )}
             </>
           )}
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -159,8 +159,8 @@
     gap: 12px;
     
     width: min(40vw, 130px);
-    background: rgba(255, 255, 255, 0.98);
-    border: 1px solid rgba(0,0,0,0.12);
+    background: var(--navbarbackgroundcolor);
+    border: 1px solid var(--border);
     border-radius: 12px;
     padding: 1rem;
 
@@ -169,9 +169,8 @@
   }
 
   .mobileMenu a {
-    color: black;
+    color: var(--navbartext);
     text-decoration: none;
-
   }
 
   .hamburgerIcon {
@@ -185,8 +184,8 @@
   }
 
   :global(html.dark) .hamburgerButton {
-  filter: invert(1);
-}
+    filter: invert(1);
+  }
 
   .actionButton {
     display: flex;
@@ -194,8 +193,4 @@
     align-items: center;
     gap: 10px;
   }
-
-  
-
-
 }

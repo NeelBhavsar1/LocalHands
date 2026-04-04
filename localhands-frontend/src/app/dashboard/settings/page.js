@@ -1,10 +1,12 @@
 "use client"
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styles from './page.module.css'
 import ToggleSwitch from '@/components/ToggleSwitch/ToggleSwitch'
 
 
 export default function page() {
+    const { t } = useTranslation();
 
     const [isEnabled, setIsEnabled] = useState(false);
     const [isProfilePublic, setIsProfilePublic] = useState(true);
@@ -12,38 +14,38 @@ export default function page() {
 
   return (
     <div className={styles.container}>
-        <div className={styles.header}>Settings</div>
+        <div className={styles.header}>{t("settings.title")}</div>
         <div className={styles.settingsListContainer}>
 
             <div className={styles.section}>
-                <p className={styles.sectionHeader}>Account</p>
+                <p className={styles.sectionHeader}>{t("settings.accountSection")}</p>
 
                 <div className={styles.settingItem}>
-                    <span>Email</span>
-                    <button className={styles.actionBtn}>Change</button>
+                    <span>{t("settings.email")}</span>
+                    <button className={styles.actionBtn}>{t("settings.change")}</button>
                 </div>
 
                 <div className={styles.settingItem}>
-                    <span>Password</span>
-                    <button className={styles.actionBtn}>Update</button>
+                    <span>{t("settings.password")}</span>
+                    <button className={styles.actionBtn}>{t("settings.update")}</button>
                 </div>
 
                 <div className={styles.settingItem}>
-                    <span>Delete Account</span>
-                    <button className={styles.dangerBtn}>Delete</button>
+                    <span>{t("settings.deleteAccount")}</span>
+                    <button className={styles.dangerBtn}>{t("settings.delete")}</button>
                 </div>
             </div>
 
             <div className={styles.section}>
-                <p className={styles.sectionHeader}>Privacy & Security</p>
+                <p className={styles.sectionHeader}>{t("settings.privacySection")}</p>
 
                 <div className={styles.settingItem}>
-                    <span>Public Profile</span>
+                    <span>{t("settings.publicProfile")}</span>
                     <ToggleSwitch isOn={isProfilePublic} setIsOn={setIsProfilePublic} />
                 </div>
 
                 <div className={styles.settingItem}>
-                    <span>Allow Messages</span>
+                    <span>{t("settings.allowMessages")}</span>
                     <ToggleSwitch isOn={allowMessages} setIsOn={setAllowMessages} />
                 </div>
             </div>
