@@ -2,8 +2,11 @@ localhost:8080/api:
 	
 	/users:
 		GET /me - get all info related to the current user signed in.
+		GET /id - get info about a public user (will return an error if the user is private).
+		GET /search - get all public users as if you were searching on a search bar.
 		PUT /account - update account info (make sure to pass in all existing fields - newPassword can be left null or empty). Research how to pass in bio JSON in the form { "bio": "ifpjwopijwepo" } and a file as the pfp.
 		PUT /profile - update profile info (make sure to pass in existing bio and pfp)
+		PUT /privacy - update privacy info (make sure to pass in existing settings)
 		DELETE - deletes user account.
 
 	/auth:
@@ -21,7 +24,15 @@ localhost:8080/api:
 		GET /me	    - obtains all of the user's listings.
 		GET /id	    - obtains a listing by its id.
 		GET /radius - obtains listings based on location and radius.
+		GET /search - obtains listings based on user input of the name (like a search bar - no filters yet). Can supply longitude or latitude parameters to search and return based on distance.
 		PUT	    - edits a listing. Find out how to input this data.
 		DELETE	    - deletes a listing.
+		(When getting listings using id, radius or search, this only returns those who have a public seller profile)
+
+	/messages:
+		POST - sends a message.
+		GET /conversation - gets all messages of a convo related between two users and a listing they are talking about.
+		GET /inbox - gets an inbox of all available conversations.
+
 
 All routes are not protected based on roles at the moment.

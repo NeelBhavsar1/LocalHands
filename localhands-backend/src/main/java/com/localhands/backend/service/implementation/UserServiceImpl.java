@@ -1,10 +1,8 @@
 package com.localhands.backend.service.implementation;
 
-import com.localhands.backend.dto.request.UserLoginRequestDTO;
-import com.localhands.backend.dto.request.UserProfileUpdateRequestDTO;
-import com.localhands.backend.dto.request.UserRegisterRequestDTO;
-import com.localhands.backend.dto.request.UserAccountUpdateRequestDTO;
+import com.localhands.backend.dto.request.*;
 import com.localhands.backend.dto.response.CookieResponseDTO;
+import com.localhands.backend.dto.response.PublicProfileResponseDTO;
 import com.localhands.backend.dto.response.UserInfoResponseDTO;
 import com.localhands.backend.entity.*;
 import com.localhands.backend.exception.AppException;
@@ -19,7 +17,6 @@ import com.localhands.backend.service.FileStorageService;
 import com.localhands.backend.service.ListingService;
 import com.localhands.backend.service.UserService;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -34,6 +31,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HexFormat;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -236,6 +234,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public PublicProfileResponseDTO getPublicProfileById(Long requesterId, Long targetUserId) {
+        User user = userRepository.findById(targetUserId)
+                .orElseThrow(() -> new AppException("User not found with id: " + targetUserId, HttpStatus.NOT_FOUND));
+
+        if (!user.isPublicProfile() && !targetUserId.equals(requesterId)) {
+            throw new AppException("This profile is private.", HttpStatus.FORBIDDEN);
+        }
+
+        return UserMapper.mapToPublicProfileResponseDTO(user);
+    }
+
+    @Override
+    public List<PublicProfileResponseDTO> searchForPublicProfiles(Long requesterId, String searchInput) {
+
+        if (searchInput == null || searchInput.trim().length() < 3) {
+            return List.of();
+        }
+
+        return userRepository.searchPublicProfiles(requesterId, searchInput)
+                .stream()
+                .map(UserMapper::mapToPublicProfileResponseDTO)
+                .toList();
+    }
+
+    @Override
     public CookieResponseDTO updateUserAccount(Long userId, UserAccountUpdateRequestDTO updateDTO) {
 
         User user = userRepository.findById(userId)
@@ -401,6 +424,17 @@ public class UserServiceImpl implements UserService {
 
             throw new AppException("Failed to update user profile.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public void updateUserPrivacy(Long userId, UserPrivacyUpdateRequestDTO updateDTO) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found with id: " + userId, HttpStatus.NOT_FOUND));
+
+        user.setPublicProfile(updateDTO.isPublicProfile());
+        user.setMessagesEnabled(updateDTO.isMessagesAllowed());
+
+        userRepository.save(user);
     }
 
     @Override

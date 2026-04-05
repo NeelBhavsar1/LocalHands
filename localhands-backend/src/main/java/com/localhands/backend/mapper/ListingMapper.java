@@ -29,7 +29,6 @@ public class ListingMapper {
 
         return new ListingResponseDTO (
                 listing.getId(),
-                listing.getUser().getId(),
                 listing.getName(),
                 listing.getDescription(),
                 point.getY(),
@@ -39,7 +38,8 @@ public class ListingMapper {
                 listing.getPhotos()
                         .stream()
                         .map(ListingPhotoMapper::mapToListingPhotoResponseDTO)
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toList()),
+                UserMapper.mapToListingSellerResponseDTO(listing.getUser())
         );
     }
 

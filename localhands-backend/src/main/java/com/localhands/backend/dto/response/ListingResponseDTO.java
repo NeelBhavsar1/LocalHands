@@ -14,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ListingResponseDTO {
     private Long listingId;
-    private Long sellerId;
     private String name;
     private String description;
     private double latitude;
@@ -22,4 +21,5 @@ public class ListingResponseDTO {
     private Instant creationTime;
     private Instant updatedTime;
     private List<ListingPhotoResponseDTO> photos;
+    private ListingSellerResponseDTO seller;
 }

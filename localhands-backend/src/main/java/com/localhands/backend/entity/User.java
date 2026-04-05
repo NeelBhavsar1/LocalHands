@@ -60,6 +60,7 @@ public class User {
     private List<ProfilePhoto> profilePhotos = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("creationTime DESC")
     private List<Listing> listings;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

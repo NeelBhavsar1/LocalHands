@@ -37,18 +37,37 @@ public class ListingController {
     }
 
     @GetMapping("/id")
-    public ResponseEntity<ListingResponseDTO> getListingById(@RequestParam Long listingId) {
-        ListingResponseDTO listingResponseDTO = listingService.getListingById(listingId);
+    public ResponseEntity<ListingResponseDTO> getPublicListingById(@AuthenticationPrincipal UserPrincipal user, @RequestParam Long listingId) {
+        ListingResponseDTO listingResponseDTO = listingService.getListingById(user.getId(), listingId);
         return ResponseEntity.ok(listingResponseDTO);
     }
 
     @GetMapping("/radius")
-    public ResponseEntity<List<ListingResponseDTO>> getListingsWithinRadius(
+    public ResponseEntity<List<ListingResponseDTO>> getPublicListingsWithinRadius(
+            @AuthenticationPrincipal UserPrincipal user,
             @RequestParam double latitude,
             @RequestParam double longitude,
             @RequestParam double radius
     ) {
-        List<ListingResponseDTO> listingResponseDTOs = listingService.getListingsWithinRadius(latitude, longitude, radius);
+        List<ListingResponseDTO> listingResponseDTOs = listingService.getListingsWithinRadius(user.getId(), latitude, longitude, radius);
+        return ResponseEntity.ok(listingResponseDTOs);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ListingResponseDTO>> searchPublicListings(
+            @AuthenticationPrincipal UserPrincipal user,
+            @RequestParam String searchInput,
+            @RequestParam(required = false) Double latitude,
+            @RequestParam(required = false) Double longitude
+    ) {
+        List<ListingResponseDTO> listingResponseDTOs;
+
+        if (latitude != null && longitude != null) {
+            listingResponseDTOs = listingService.searchForListingsWithLocation(user.getId(), searchInput, latitude, longitude);
+        } else {
+            listingResponseDTOs = listingService.searchForListings(user.getId(), searchInput);
+        }
+
         return ResponseEntity.ok(listingResponseDTOs);
     }
 

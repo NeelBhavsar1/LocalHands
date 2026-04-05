@@ -6,13 +6,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import java.time.Instant;
 
 public interface CleanupServices {
-    void cleanupExpiredTokens();
+    public void cleanupExpiredTokens();
 
-    void cleanupExpiredPasswordResetCodes();
+    public void cleanupExpiredPasswordResetCodes();
 
     public void cleanupNewEmailTokens();
 
     public void cleanupUnusedProfilePhotos();
 
-    void cleanupUnusedListingImages();
+    public void cleanupUnusedListingImages();
 }

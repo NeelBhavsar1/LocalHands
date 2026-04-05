@@ -81,26 +81,59 @@ public class ListingServiceImpl implements ListingService {
 
     @Override
     public List<ListingResponseDTO> getListingsByUserId(Long userId) {
-        return listingRepository.findByUserId(userId)
+        return listingRepository.findByUserIdOrderByCreationTimeDesc(userId)
                 .stream()
                 .map(ListingMapper::mapToListingResponseDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ListingResponseDTO getListingById(long id) {
-        Listing listing = listingRepository.findById(id)
-                .orElseThrow(() -> new AppException("Listing not found with id: " + id, HttpStatus.NOT_FOUND));
+    public ListingResponseDTO getListingById(long requesterId, long listingId) {
+        Listing listing = listingRepository.findById(listingId)
+                .orElseThrow(() -> new AppException("Listing not found with id: " + listingId, HttpStatus.NOT_FOUND));
+
+        Long ownerId = listing.getUser().getId();
+        boolean isPublic = listing.getUser().isPublicProfile();
+
+        if (!isPublic && !ownerId.equals(requesterId)) {
+            throw new AppException("This listing is private.", HttpStatus.FORBIDDEN);
+        }
 
         return ListingMapper.mapToListingResponseDTO(listing);
     }
 
     @Override
-    public List<ListingResponseDTO> getListingsWithinRadius(double lat, double lon, double radius) {
-        return listingRepository.findListingsWithinRadiusOrderByDistance(lat, lon, radius)
+    public List<ListingResponseDTO> getListingsWithinRadius(Long requesterId, double lat, double lon, double radius) {
+        return listingRepository.findPublicListingsWithinRadiusOrderByDistance(requesterId, lat, lon, radius)
                 .stream()
                 .map(ListingMapper::mapToListingResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ListingResponseDTO> searchForListingsWithLocation(Long requesterId, String searchInput, double latitude, double longitude) {
+
+        if (searchInput == null || searchInput.trim().length() < 3) {
+            return List.of();
+        }
+
+        return listingRepository.searchPublicListingsWithLocation(requesterId, searchInput, latitude, longitude)
+                .stream()
+                .map(ListingMapper::mapToListingResponseDTO)
+                .toList();
+    }
+
+    @Override
+    public List<ListingResponseDTO> searchForListings(Long requesterId, String searchInput) {
+
+        if (searchInput == null || searchInput.trim().length() < 3) {
+            return List.of();
+        }
+
+        return listingRepository.searchPublicListings(requesterId, searchInput)
+                .stream()
+                .map(ListingMapper::mapToListingResponseDTO)
+                .toList();
     }
 
     @Override
@@ -179,7 +212,7 @@ public class ListingServiceImpl implements ListingService {
 
     @Override
     public void deleteListingsByUserId(Long userId) {
-        List<Listing> listings = listingRepository.findByUserId(userId);
+        List<Listing> listings = listingRepository.findByUserIdOrderByCreationTimeDesc(userId);
 
         for (Listing listing : listings) {
             for (ListingPhoto photo : listing.getPhotos()) {

@@ -1,29 +1,35 @@
 package com.localhands.backend.service;
 
-import com.localhands.backend.dto.request.UserLoginRequestDTO;
-import com.localhands.backend.dto.request.UserProfileUpdateRequestDTO;
-import com.localhands.backend.dto.request.UserRegisterRequestDTO;
-import com.localhands.backend.dto.request.UserAccountUpdateRequestDTO;
+import com.localhands.backend.dto.request.*;
 import com.localhands.backend.dto.response.CookieResponseDTO;
+import com.localhands.backend.dto.response.PublicProfileResponseDTO;
 import com.localhands.backend.dto.response.UserInfoResponseDTO;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface UserService {
-    CookieResponseDTO generateNewTokenCookies(String refreshToken);
+    public CookieResponseDTO generateNewTokenCookies(String refreshToken);
 
-    CookieResponseDTO registerUser(UserRegisterRequestDTO registerDTO);
+    public CookieResponseDTO registerUser(UserRegisterRequestDTO registerDTO);
 
-    CookieResponseDTO loginUser (UserLoginRequestDTO loginDto);
+    public CookieResponseDTO loginUser (UserLoginRequestDTO loginDto);
 
-    void logout(String refreshToken);
+    public void logout(String refreshToken);
 
-    UserInfoResponseDTO getUserInfoById(Long userId);
+    public UserInfoResponseDTO getUserInfoById(Long userId);
 
-    CookieResponseDTO updateUserAccount(Long userId, UserAccountUpdateRequestDTO updateDTO);
+    public PublicProfileResponseDTO getPublicProfileById(Long requesterId, Long targetUserId);
 
-    void confirmEmail(String token);
+    public List<PublicProfileResponseDTO> searchForPublicProfiles(Long requesterId, String searchInput);
 
-    void updateUserProfile(Long userId, UserProfileUpdateRequestDTO updateDTO, MultipartFile photo);
+    public CookieResponseDTO updateUserAccount(Long userId, UserAccountUpdateRequestDTO updateDTO);
 
-    void deleteUser(Long userId);
+    public void confirmEmail(String token);
+
+    public void updateUserProfile(Long userId, UserProfileUpdateRequestDTO updateDTO, MultipartFile photo);
+
+    public void updateUserPrivacy(Long userId, UserPrivacyUpdateRequestDTO updateDTO);
+
+    public void deleteUser(Long userId);
 }

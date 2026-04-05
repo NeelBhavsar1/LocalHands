@@ -1,8 +1,11 @@
 package com.localhands.backend.mapper;
 
 import com.localhands.backend.dto.request.UserRegisterRequestDTO;
-import com.localhands.backend.dto.response.UserInfoResponseDTO;
+import com.localhands.backend.dto.response.*;
 import com.localhands.backend.entity.User;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserMapper {
 
@@ -30,6 +33,39 @@ public class UserMapper {
                         .stream()
                         .map(role -> role.getRoleName().name())
                         .toList(),
+                user.getProfilePhotos().isEmpty()
+                        ? null
+                        : ProfilePhotoMapper.mapToProfilePhotoResponseDTO(user.getProfilePhotos().get(0)),
+                user.isPublicProfile(),
+                user.isMessagesEnabled()
+        );
+    }
+
+    public static PublicProfileResponseDTO mapToPublicProfileResponseDTO(User user) {
+        return new PublicProfileResponseDTO(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getBio(),
+                user.getRoles()
+                        .stream()
+                        .map(role -> role.getRoleName().name())
+                        .toList(),
+                user.getProfilePhotos().isEmpty()
+                        ? null
+                        : ProfilePhotoMapper.mapToProfilePhotoResponseDTO(user.getProfilePhotos().get(0)),
+                user.getListings()
+                        .stream()
+                        .map(ListingMapper::mapToListingResponseDTO)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    public static ListingSellerResponseDTO mapToListingSellerResponseDTO(User user) {
+        return new ListingSellerResponseDTO(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
                 user.getProfilePhotos().isEmpty()
                         ? null
                         : ProfilePhotoMapper.mapToProfilePhotoResponseDTO(user.getProfilePhotos().get(0))
