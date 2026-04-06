@@ -1,5 +1,6 @@
 package com.localhands.backend.config;
 
+import com.localhands.backend.repository.UserRepository;
 import com.localhands.backend.security.JwtAuthFilter;
 import com.localhands.backend.security.UserAuthProvider;
 import com.localhands.backend.security.UserAuthenticationEntryPoint;
@@ -20,6 +21,7 @@ public class SecurityConfig {
 
     private final UserAuthenticationEntryPoint userAuthenticationEntryPoint;
     private final UserAuthProvider userAuthProvider;
+    private final UserRepository userRepository;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -29,7 +31,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .addFilterBefore(new JwtAuthFilter(userAuthProvider), BasicAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthFilter(userAuthProvider, userRepository), BasicAuthenticationFilter.class)
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(userAuthenticationEntryPoint)
                 )

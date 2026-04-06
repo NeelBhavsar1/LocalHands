@@ -25,6 +25,7 @@ public class CleanupServicesImpl implements CleanupServices {
     private final PasswordResetCodeRepository passwordResetCodeRepository;
     private final NewEmailTokenRepository newEmailTokenRepository;
     private final ProfilePhotoRepository profilePhotoRepository;
+    private final UserRepository userRepository;
 
     @Scheduled(fixedRate = 3600000)
     @Transactional
@@ -44,6 +45,11 @@ public class CleanupServicesImpl implements CleanupServices {
     @Transactional
     @Override
     public void cleanupNewEmailTokens() { newEmailTokenRepository.deleteAllExpiredSince(Instant.now()); }
+
+    @Scheduled(fixedRate = 3600000)
+    @Transactional
+    @Override
+    public void deleteUsersWithExpiredActivationTokens() { userRepository.deleteUsersWithExpiredActivationTokens(Instant.now()); }
 
     @Scheduled(fixedRate = 86400000)
     @Override

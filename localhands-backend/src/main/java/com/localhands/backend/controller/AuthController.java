@@ -100,6 +100,21 @@ public class AuthController {
         return ResponseEntity.ok("Email confirmed successfully.");
     }
 
+    @GetMapping("/activate-account")
+    public ResponseEntity<String> activateAccount(@RequestParam String token) {
+        userService.activateAccount(token);
+        return ResponseEntity.ok("Account activated successfully.");
+    }
+
+    @GetMapping("/deactivate-account")
+    public ResponseEntity<String> deactivateAccount(@RequestParam String token) {
+        userService.deactivateAccount(token);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, CookieUtil.clearCookie("refreshToken").toString())
+                .header(HttpHeaders.SET_COOKIE, CookieUtil.clearCookie("accessToken").toString())
+                .body("Account deactivated successfully.");
+    }
+
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {
         authService.sendPasswordResetEmail(email);

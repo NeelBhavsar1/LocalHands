@@ -7,10 +7,7 @@ import com.localhands.backend.dto.response.UserInfoResponseDTO;
 import com.localhands.backend.entity.*;
 import com.localhands.backend.exception.AppException;
 import com.localhands.backend.mapper.UserMapper;
-import com.localhands.backend.repository.NewEmailTokenRepository;
-import com.localhands.backend.repository.RefreshTokenRepository;
-import com.localhands.backend.repository.RoleRepository;
-import com.localhands.backend.repository.UserRepository;
+import com.localhands.backend.repository.*;
 import com.localhands.backend.security.UserAuthProvider;
 import com.localhands.backend.service.EmailSenderService;
 import com.localhands.backend.service.FileStorageService;
@@ -47,6 +44,7 @@ public class UserServiceImpl implements UserService {
     private final FileStorageService fileStorageService;
     private final EmailSenderService emailSenderService;
     private final NewEmailTokenRepository newEmailTokenRepository;
+    private final ActivateAccountTokenRepository activateAccountTokenRepository;
 
     private final String baseUrl;
 
@@ -60,8 +58,8 @@ public class UserServiceImpl implements UserService {
             FileStorageService fileStorageService,
             EmailSenderService emailSenderService,
             NewEmailTokenRepository newEmailTokenRepository,
-            @Value("${app.cors.allowed-origin}") String baseUrl
-    ) {
+            @Value("${app.cors.allowed-origin}") String baseUrl,
+            ActivateAccountTokenRepository activateAccountTokenRepository) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -72,6 +70,7 @@ public class UserServiceImpl implements UserService {
         this.emailSenderService = emailSenderService;
         this.newEmailTokenRepository = newEmailTokenRepository;
         this.baseUrl = baseUrl;
+        this.activateAccountTokenRepository = activateAccountTokenRepository;
     }
 
     private ResponseCookie generateRefreshTokenCookie(String token, Instant now, Instant expiration) {
@@ -190,6 +189,37 @@ public class UserServiceImpl implements UserService {
         refreshTokenEntity.setExpiryDate(now.plus(Duration.ofDays(registerDTO.isRememberMe() ? 30 : 1)));
 
         savedUser.getRefreshTokens().add(refreshTokenEntity);
+
+        ActivateAccountToken activationToken = new ActivateAccountToken();
+
+        String token = UUID.randomUUID().toString();
+
+        activationToken.setActivationToken(hashToken(token));
+        activationToken.setExpiryDate(Instant.now().plus(Duration.ofDays(7)));
+        activationToken.setUser(savedUser);
+
+        savedUser.getActivationTokens().add(activationToken);
+
+        String message = """
+            <html>
+                <body>
+                    <p>Hello %s, welcome to LocalHands!</p>
+        
+                    <p>Please confirm your email address by clicking the button below:</p>
+        
+                    <p><a href="%s">Confirm Email</a></p>
+        
+                    <p>This link will expire in 7 days. If you don’t confirm your email, your account will be automatically removed.</p>
+        
+                    <p>If this was not you, please click <a href="%s">here</a>.</p>
+        
+                    <p>Thanks,<br/>The LocalHands Team</p>
+                </body>
+            </html>
+        """.formatted(savedUser.getFirstName(), baseUrl + "/activate-account?token=" + token, baseUrl + "/deactivate-account?token=" + token);
+
+        emailSenderService.sendEmail(
+                savedUser.getEmail(),"LocalHands Account Activation Confirmation", message);
 
         userRepository.save(savedUser);
 
@@ -410,6 +440,33 @@ public class UserServiceImpl implements UserService {
         newEmailTokenRepository.delete(emailToken);
 
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void activateAccount(String token) {
+
+        ActivateAccountToken activationToken = activateAccountTokenRepository.findByActivationToken(hashToken(token))
+                .orElseThrow(() -> new AppException("Invalid or expired token.", HttpStatus.UNAUTHORIZED));
+
+        if (activationToken.getExpiryDate().isBefore(Instant.now())) {
+            throw new AppException("Token has expired.", HttpStatus.UNAUTHORIZED);
+        }
+
+        activateAccountTokenRepository.delete(activationToken);
+    }
+
+    @Override
+    @Transactional
+    public void deactivateAccount(String token) {
+        ActivateAccountToken activationToken = activateAccountTokenRepository.findByActivationToken(hashToken(token))
+                .orElseThrow(() -> new AppException("Invalid or expired token.", HttpStatus.UNAUTHORIZED));
+
+        User user = activationToken.getUser();
+
+        activateAccountTokenRepository.delete(activationToken);
+
+        deleteUser(user.getId());
     }
 
     @Override

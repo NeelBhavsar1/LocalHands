@@ -12,6 +12,8 @@ public interface CleanupServices {
 
     public void cleanupNewEmailTokens();
 
+    public void deleteUsersWithExpiredActivationTokens();
+
     public void cleanupUnusedProfilePhotos();
 
     public void cleanupUnusedListingImages();

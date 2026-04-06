@@ -81,6 +81,11 @@ public class ListingServiceImpl implements ListingService {
 
     @Override
     public List<ListingResponseDTO> getListingsByUserId(Long userId) {
+
+        if (!userRepository.existsById(userId)) {
+            throw new AppException("User not found.", HttpStatus.NOT_FOUND);
+        }
+
         return listingRepository.findByUserIdOrderByCreationTimeDesc(userId)
                 .stream()
                 .map(ListingMapper::mapToListingResponseDTO)

@@ -14,17 +14,14 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "new_email_tokens")
-public class NewEmailToken {
+@Table(name = "activate_account_tokens")
+public class ActivateAccountToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "email_token", nullable = false)
-    private String emailToken;
-
-    @Column(name = "new_email", nullable = false)
-    private String newEmail;
+    @Column(name = "activation_token", nullable = false)
+    private String activationToken;
 
     @Column(name = "expiry_date", nullable = false)
     private Instant expiryDate;

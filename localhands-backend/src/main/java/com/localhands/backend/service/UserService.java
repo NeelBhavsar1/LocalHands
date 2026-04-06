@@ -27,6 +27,10 @@ public interface UserService {
 
     public void confirmEmail(String token);
 
+    public void activateAccount(String token);
+
+    public void deactivateAccount(String token);
+
     public void updateUserProfile(Long userId, UserProfileUpdateRequestDTO updateDTO, MultipartFile photo);
 
     public void updateUserPrivacy(Long userId, UserPrivacyUpdateRequestDTO updateDTO);

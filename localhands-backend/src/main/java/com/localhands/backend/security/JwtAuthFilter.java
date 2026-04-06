@@ -1,6 +1,7 @@
 package com.localhands.backend.security;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.localhands.backend.repository.UserRepository;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -17,6 +18,7 @@ import java.io.IOException;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final UserAuthProvider userAuthProvider;
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(
@@ -36,10 +38,24 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if (token != null) {
             try {
-                SecurityContextHolder.getContext().setAuthentication(userAuthProvider.validateToken(token));
+                var auth = userAuthProvider.validateToken(token);
+
+                Object principalObj = auth.getPrincipal();
+
+                if (!(principalObj instanceof UserPrincipal principal)) {
+                    SecurityContextHolder.clearContext();
+                    request.setAttribute("error", "INVALID_TOKEN");
+                } else if (!userRepository.existsById(principal.getId())) {
+                    SecurityContextHolder.clearContext();
+                    request.setAttribute("error", "USER_NOT_FOUND");
+                } else {
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
+
             } catch (TokenExpiredException e) {
                 SecurityContextHolder.clearContext();
                 request.setAttribute("error", "TOKEN_EXPIRED");
+
             } catch (Exception e) {
                 SecurityContextHolder.clearContext();
                 request.setAttribute("error", "INVALID_TOKEN");
