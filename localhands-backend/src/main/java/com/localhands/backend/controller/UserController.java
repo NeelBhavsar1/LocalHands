@@ -42,8 +42,12 @@ public class UserController {
     }
 
     @PutMapping("/account")
-    public ResponseEntity<String> updateUserAccountInfo(@AuthenticationPrincipal UserPrincipal user, @RequestBody UserAccountUpdateRequestDTO requestDTO) {
-        CookieResponseDTO cookies = userService.updateUserAccount(user.getId(), requestDTO);
+    public ResponseEntity<String> updateUserAccountInfo(
+            @AuthenticationPrincipal UserPrincipal user,
+            @CookieValue(value = "refreshToken", required = false) String refreshToken,
+            @RequestBody UserAccountUpdateRequestDTO requestDTO
+    ) {
+        CookieResponseDTO cookies = userService.updateUserAccount(user.getId(), refreshToken, requestDTO);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookies.getRefreshCookie().toString())

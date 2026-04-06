@@ -23,7 +23,7 @@ public interface UserService {
 
     public List<PublicProfileResponseDTO> searchForPublicProfiles(Long requesterId, String searchInput);
 
-    public CookieResponseDTO updateUserAccount(Long userId, UserAccountUpdateRequestDTO updateDTO);
+    public CookieResponseDTO updateUserAccount(Long userId, String refreshToken, UserAccountUpdateRequestDTO updateDTO);
 
     public void confirmEmail(String token);
 

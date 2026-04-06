@@ -18,4 +18,5 @@ public class UserRegisterRequestDTO {
     private String email;
     private String password;
     private boolean isServiceProvider;
+    private boolean rememberMe;
 }

@@ -119,8 +119,6 @@ public class UserServiceImpl implements UserService {
             throw new AppException("Refresh token expired.", HttpStatus.UNAUTHORIZED);
         }
 
-        refreshTokenRepository.delete(tokenEntity);
-
         User user = tokenEntity.getUser();
 
         Instant now = Instant.now();
@@ -128,10 +126,20 @@ public class UserServiceImpl implements UserService {
         String newRefreshToken = userAuthProvider.createRefreshToken();
         String accessToken = userAuthProvider.createAccessToken(user.getId(), user.getRoles(), now);
 
+        Duration remainingDuration = Duration.between(now, tokenEntity.getExpiryDate());
+
+        if (remainingDuration.isNegative() || remainingDuration.isZero()) {
+            throw new AppException("Refresh token expired.", HttpStatus.UNAUTHORIZED);
+        }
+
         RefreshToken refreshTokenEntity = new RefreshToken();
         refreshTokenEntity.setToken(hashToken(newRefreshToken));
         refreshTokenEntity.setUser(user);
-        refreshTokenEntity.setExpiryDate(now.plus(Duration.ofDays(1)));
+        refreshTokenEntity.setExpiryDate(now.plus(remainingDuration));
+
+        user.getRefreshTokens().removeIf(t ->
+                t.getToken().equals(tokenEntity.getToken())
+        );
 
         user.getRefreshTokens().add(refreshTokenEntity);
 
@@ -179,7 +187,7 @@ public class UserServiceImpl implements UserService {
         RefreshToken refreshTokenEntity = new RefreshToken();
         refreshTokenEntity.setToken(hashToken(newRefreshToken));
         refreshTokenEntity.setUser(savedUser);
-        refreshTokenEntity.setExpiryDate(now.plus(Duration.ofDays(1)));
+        refreshTokenEntity.setExpiryDate(now.plus(Duration.ofDays(registerDTO.isRememberMe() ? 30 : 1)));
 
         savedUser.getRefreshTokens().add(refreshTokenEntity);
 
@@ -192,11 +200,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CookieResponseDTO loginUser(UserLoginRequestDTO loginDto) {
-        User user = userRepository.findByEmail(loginDto.getEmail())
+    public CookieResponseDTO loginUser(UserLoginRequestDTO loginDTO) {
+        User user = userRepository.findByEmail(loginDTO.getEmail())
                 .orElseThrow(() -> new AppException("Account does not exist. Consider signing up.", HttpStatus.NOT_FOUND));
 
-        if (passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
+        if (passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
             Instant now = Instant.now();
 
             String newRefreshToken = userAuthProvider.createRefreshToken();
@@ -205,7 +213,7 @@ public class UserServiceImpl implements UserService {
             RefreshToken refreshTokenEntity = new RefreshToken();
             refreshTokenEntity.setToken(hashToken(newRefreshToken));
             refreshTokenEntity.setUser(user);
-            refreshTokenEntity.setExpiryDate(now.plus(Duration.ofDays(1)));
+            refreshTokenEntity.setExpiryDate(now.plus(Duration.ofDays(loginDTO.isRememberMe() ? 30 : 1)));
 
             user.getRefreshTokens().add(refreshTokenEntity);
 
@@ -259,10 +267,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CookieResponseDTO updateUserAccount(Long userId, UserAccountUpdateRequestDTO updateDTO) {
+    public CookieResponseDTO updateUserAccount(Long userId, String refreshToken, UserAccountUpdateRequestDTO updateDTO) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException("User not found with id: " + userId, HttpStatus.NOT_FOUND));
+
+        if (refreshToken == null) {
+            throw new AppException("Missing refresh token.", HttpStatus.UNAUTHORIZED);
+        }
 
         if (userRepository.existsByEmail(updateDTO.getEmail()) && !updateDTO.getEmail().equals(user.getEmail())) {
             throw new AppException("Account with updated email already exists.", HttpStatus.BAD_REQUEST);
@@ -344,12 +356,28 @@ public class UserServiceImpl implements UserService {
         String newRefreshToken = userAuthProvider.createRefreshToken();
         String accessToken = userAuthProvider.createAccessToken(user.getId(), user.getRoles(), now);
 
+        String hashed = hashToken(refreshToken);
+
+        RefreshToken currentToken = user.getRefreshTokens().stream()
+                .filter(t -> t.getToken().equals(hashed))
+                .findFirst()
+                .orElseThrow(() -> new AppException("Session not found.", HttpStatus.UNAUTHORIZED));
+
+        Instant oldExpiry = currentToken.getExpiryDate();
+
+        if (oldExpiry.isBefore(now)) {
+            throw new AppException("Session expired.", HttpStatus.UNAUTHORIZED);
+        }
+
         RefreshToken refreshTokenEntity = new RefreshToken();
         refreshTokenEntity.setToken(hashToken(newRefreshToken));
         refreshTokenEntity.setUser(user);
-        refreshTokenEntity.setExpiryDate(now.plus(Duration.ofDays(1)));
+        refreshTokenEntity.setExpiryDate(oldExpiry);
 
-        user.getRefreshTokens().clear();
+        user.getRefreshTokens().removeIf(token ->
+                token.getToken().equals(hashed)
+        );
+
         user.getRefreshTokens().add(refreshTokenEntity);
 
         userRepository.save(user);
