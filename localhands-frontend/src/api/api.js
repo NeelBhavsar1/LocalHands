@@ -63,7 +63,7 @@ api.interceptors.response.use(
         }
 
         // only refresh if backend explicitly says token expired, if another type of 401, don't refresh
-        if (backendError !== "TOKEN_EXPIRED") {
+        if (backendError !== "TOKEN_EXPIRED" && backendError !== "NO_TOKEN") {
             return Promise.reject(error);
         }
 

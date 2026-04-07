@@ -314,11 +314,17 @@ public class UserServiceImpl implements UserService {
             throw new AppException("You must be 18 or older.", HttpStatus.BAD_REQUEST);
         }
 
-        //ROCCO CHECK THIS
         if (updateDTO.getNewPassword() != null && !updateDTO.getNewPassword().isEmpty()) {
-            if (updateDTO.getExistingPassword() == null || !passwordEncoder.matches(updateDTO.getExistingPassword(), user.getPassword())) {
-                throw new AppException("Invalid existing password.", HttpStatus.UNAUTHORIZED);
+
+            if (updateDTO.getExistingPassword() == null || updateDTO.getExistingPassword().isEmpty()) {
+                throw new AppException("Current password is required to set a new password.", HttpStatus.BAD_REQUEST);
             }
+
+            if (!passwordEncoder.matches(updateDTO.getExistingPassword(), user.getPassword())) {
+                throw new AppException("Invalid current password.", HttpStatus.UNAUTHORIZED);
+            }
+
+            user.setPassword(passwordEncoder.encode(updateDTO.getNewPassword()));
         }
 
         user.setFirstName(updateDTO.getFirstName());
@@ -361,10 +367,6 @@ public class UserServiceImpl implements UserService {
 
             emailSenderService.sendEmail(
                     updateDTO.getEmail(),"LocalHands Confirmation of New Email", message);
-        }
-
-        if (updateDTO.getNewPassword() != null && !updateDTO.getNewPassword().isEmpty()) {
-            user.setPassword(passwordEncoder.encode(updateDTO.getNewPassword()));
         }
 
         Role buyerRole = roleRepository.findByRoleName(RoleName.BUYER)

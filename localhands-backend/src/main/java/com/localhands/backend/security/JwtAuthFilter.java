@@ -36,7 +36,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         }
 
-        if (token != null) {
+        if (token == null) {
+            request.setAttribute("error", "NO_TOKEN");
+        } else {
             try {
                 var auth = userAuthProvider.validateToken(token);
 

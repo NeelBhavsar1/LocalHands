@@ -38,9 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/uploads/**",
-                                "/api/auth/**",
-                                "/api/users/login",
-                                "/api/users/register"
+                                "/api/auth/**"
                                 // Make logout restricted later.
                         ).permitAll()
                         .anyRequest().authenticated()
