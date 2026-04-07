@@ -19,6 +19,10 @@ export const validateSignupForm = (formData) => {
         errors.email = 'Enter a valid email address';
     }
 
+    if (!formData.dateOfBirth) {
+        errors.dateOfBirth = 'Date of birth is required';
+    }
+
 
     if (!formData.password) {
         errors.password = 'Password is required';

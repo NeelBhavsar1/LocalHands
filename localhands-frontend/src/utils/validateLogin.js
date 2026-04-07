@@ -1,6 +1,3 @@
-
-
-
 export const validateLoginForm = (formData) => {
 
     const errors = {};

@@ -4,7 +4,7 @@ import api from "./api";
 export const registerUser = async (userData) => {
     try {
         const response = await api.post(
-            '/api/users/register', userData, 
+            '/api/auth/register', userData, 
             {headers: { 'Content-Type': 'application/json' }, withCredentials: true }
         );
         return response.data;

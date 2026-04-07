@@ -37,7 +37,7 @@ export default function page() {
     }
 
     try {
-      await loginUser({email: formData.email, password: formData.password});
+      await loginUser({email: formData.email, password: formData.password, rememberMe: false});
       alert("Logged in successfully!");
       window.location.href="/dashboard";
     } catch (error) {

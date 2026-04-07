@@ -17,7 +17,8 @@ export default function page() {
         email: '',
         password: '',
         confirmPassword: '',
-        accountType: ''
+        accountType: '',
+        dateOfBirth: ''
     });
 
     const [errors, setErrors] = useState({});
@@ -46,7 +47,9 @@ export default function page() {
             lastName: formData.lastName,
             email: formData.email,
             password: formData.password,
-            isServiceProvider: formData.accountType === "provider"
+            dateOfBirth: formData.dateOfBirth || null,
+            isServiceProvider: formData.accountType === "provider",
+            rememberMe: false // Default to false for now
         }
 
         try {
@@ -102,6 +105,11 @@ export default function page() {
                             <label htmlFor='email'>{t("signup.email")}
                                 <input type='email' id='email' name='email' required placeholder={t("signup.emailExample")} value={formData.email} onChange={handleChange}/>
                                 {errors.email && <span className={styles.error}>{errors.email}</span>}
+                            </label>
+
+                            <label htmlFor='dateOfBirth'>{t("signup.dateOfBirth")}
+                                <input type='date' id='dateOfBirth' name='dateOfBirth' value={formData.dateOfBirth} onChange={handleChange}/>
+                                {errors.dateOfBirth && <span className={styles.error}>{errors.dateOfBirth}</span>}
                             </label>
                         </div>
 

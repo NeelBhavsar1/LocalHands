@@ -5,7 +5,7 @@ import api from "./api"
 //user login
 export const loginUser = async (userData) => {
     try {
-        const res = await api.post("/api/users/login", userData);
+        const res = await api.post("/api/auth/login", userData);
         return res.data
     } catch (error) {
         console.error("Login error: ", error)
@@ -17,7 +17,7 @@ export const loginUser = async (userData) => {
 //fetch user infor (dashboard section)
 export const getUserInfo = async () => {
     try {
-        const res = await api.get("/api/users")
+        const res = await api.get("/api/users/me")
         return res.data;
     } catch (error) {
         console.error("Fetch user info failed: ", error)
@@ -28,7 +28,7 @@ export const getUserInfo = async () => {
 //function to log user out (check backend code)
 export const logoutUser = async () => {
     try {
-        const res = await api.post("/api/users/logout")
+        const res = await api.post("/api/auth/logout")
         return res.data
     } catch (error) {
         console.error("Logout error: ", error)
