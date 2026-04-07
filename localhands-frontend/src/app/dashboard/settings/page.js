@@ -1,56 +1,147 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styles from './page.module.css'
-import ToggleSwitch from '@/components/ToggleSwitch/ToggleSwitch'
+import { getUserInfo } from '@/api/userApi'
+import { updateAccountInfo, deleteUserAccount } from '@/api/userApi'
+import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
+import { handleUpdateAccount, handleDeleteAccount } from '@/utils/settingsUtils'
 
 
 export default function page() {
     const { t } = useTranslation();
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        dateOfBirth: '',
+        email: '',
+        existingPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+    })
 
-    const [isEnabled, setIsEnabled] = useState(false);
-    const [isProfilePublic, setIsProfilePublic] = useState(true);
-    const [allowMessages, setAllowMessages] = useState(true);
+    const [errors, setErrors] = useState({})
 
-  return (
-    <div className={styles.container}>
-        <div className={styles.header}>{t("settings.title")}</div>
-        <div className={styles.settingsListContainer}>
+    useEffect(() => {
+        const loadUserData = async () => {
+            try {
+                const userData = await getUserInfo()
+                setUser(userData)
+                
+                setFormData({
+                    firstName: userData.firstName || '',
+                    lastName: userData.lastName || '',
+                    dateOfBirth: userData.dateOfBirth || '',
+                    email: userData.email || '',
+                    existingPassword: '',
+                    newPassword: '',
+                    confirmPassword: ''
+                })
 
-            <div className={styles.section}>
-                <p className={styles.sectionHeader}>{t("settings.accountSection")}</p>
+            } catch (error) {
+                console.error('Failed to load user data:', error)
+            } 
+            finally {
+                setLoading(false)
+            }
+        }
 
-                <div className={styles.settingItem}>
-                    <span>{t("settings.email")}</span>
-                    <button className={styles.actionBtn}>{t("settings.change")}</button>
-                </div>
+        loadUserData();
+        
+    }, [])
 
-                <div className={styles.settingItem}>
-                    <span>{t("settings.password")}</span>
-                    <button className={styles.actionBtn}>{t("settings.update")}</button>
-                </div>
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
 
-                <div className={styles.settingItem}>
-                    <span>{t("settings.deleteAccount")}</span>
-                    <button className={styles.dangerBtn}>{t("settings.delete")}</button>
+    const onSubmit = (e) => {
+        e.preventDefault()
+        handleUpdateAccount(formData, setErrors, setFormData, updateAccountInfo)
+    };
+
+    const onDelete = () => {
+        handleDeleteAccount(deleteUserAccount)
+    };
+
+    if (loading) {
+        return <LoadingSpinner />;
+    }
+
+    return (
+        <div className={styles.container}>
+            <div className={styles.settingsContainer}>
+                <h1 className={styles.title}>{t("settings.title")}</h1>
+
+                <form onSubmit={onSubmit} className={styles.form}>
+                    <div className={styles.section}>
+                        <h2 className={styles.sectionTitle}>{t("settings.accountInfo")}</h2>
+                        
+                        <div className={styles.formGroup}>
+                            <label htmlFor="firstName">{t("settings.firstName")}</label>
+                            <input type="text" id="firstName" name="firstName" value={formData.firstName} onChange={handleChange} className={styles.input} required />
+                        </div>
+
+                        <div className={styles.formGroup}>
+                            <label htmlFor="lastName">{t("settings.lastName")}</label>
+                            <input type="text" id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} className={styles.input} required />
+                        </div>
+
+                        <div className={styles.formGroup}>
+                            <label htmlFor="dateOfBirth">{t("settings.dateOfBirth")}</label>
+                            <input type="date" id="dateOfBirth" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} className={styles.input} required />
+                        </div>
+
+                        <div className={styles.formGroup}>
+                            <label htmlFor="email">{t("settings.email")}</label>
+                            <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className={styles.input} required />
+                        </div>
+                    </div>
+
+                    <div className={styles.section}>
+                        <h2 className={styles.sectionTitle}>{t("settings.changePassword")}</h2>
+                        
+                        <div className={styles.formGroup}>
+                            <label htmlFor="existingPassword">{t("settings.existingPassword")}</label>
+                            <input type="password" id="existingPassword" name="existingPassword" value={formData.existingPassword} onChange={handleChange} className={styles.input} placeholder={t("settings.enterExistingPassword")} />
+                        </div>
+
+                        <div className={styles.formGroup}>
+                            <label htmlFor="newPassword">{t("settings.newPassword")}</label>
+                            <input type="password" id="newPassword" name="newPassword" value={formData.newPassword} onChange={handleChange} className={styles.input} placeholder={t("settings.enterNewPassword")} />
+                        </div>
+
+                        <div className={styles.formGroup}>
+                            <label htmlFor="confirmPassword">{t("settings.confirmPassword")}</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} className={styles.input} placeholder={t("settings.confirmNewPassword")} />
+                            {errors.confirmPassword && (
+                                <span className={styles.error}>{errors.confirmPassword}</span>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className={styles.buttonContainer}>
+                        <button type="submit" className={styles.saveButton}>
+                            {t("settings.saveAccount")}
+                        </button>
+                    </div>
+                </form>
+
+                <div className={styles.dangerSection}>
+                    <h2 className={styles.sectionTitle}>{t("settings.dangerZone")}</h2>
+                    <p className={styles.dangerText}>
+                        {t("settings.deleteWarning")}
+                    </p>
+                    <button 
+                        onClick={onDelete} 
+                        className={styles.deleteButton}
+                    >
+                        {t("settings.deleteAccount")}
+                    </button>
                 </div>
             </div>
-
-            <div className={styles.section}>
-                <p className={styles.sectionHeader}>{t("settings.privacySection")}</p>
-
-                <div className={styles.settingItem}>
-                    <span>{t("settings.publicProfile")}</span>
-                    <ToggleSwitch isOn={isProfilePublic} setIsOn={setIsProfilePublic} />
-                </div>
-
-                <div className={styles.settingItem}>
-                    <span>{t("settings.allowMessages")}</span>
-                    <ToggleSwitch isOn={allowMessages} setIsOn={setAllowMessages} />
-                </div>
-            </div>
-            
         </div>
-    </div>
-  )
+    )
 }

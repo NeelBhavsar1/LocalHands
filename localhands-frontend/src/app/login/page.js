@@ -4,12 +4,14 @@ import React, { useState } from "react";
 import styles from "./page.module.css";
 import HomeNavBar from "@/components/HomeNavBar/HomeNavBar";
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
+import { useRouter } from "next/navigation";
 import { validateLoginForm } from "@/utils/validateLogin";
 import { loginUser } from "@/api/authApi";
+import { useTranslation } from "react-i18next";
 
 export default function page() {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -37,9 +39,9 @@ export default function page() {
     }
 
     try {
-      await loginUser({email: formData.email, password: formData.password, rememberMe: false});
+      await loginUser({email: formData.email, password: formData.password, rememberMe: false})
       alert("Logged in successfully!");
-      window.location.href="/dashboard";
+      router.push("/dashboard");
     } catch (error) {
       alert("Error: " + error);
     }

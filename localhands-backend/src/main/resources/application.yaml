@@ -26,10 +26,13 @@ spring:
           auth: true
           starttls:
             enable: true
-security:
-  jwt:
-    token:
-      secret-key: ${JWT_KEY}
+  jackson:
+    deserialization:
+      fail-on-null-for-primitives: false
+  security:
+    jwt:
+      token:
+        secret-key: ${JWT_KEY}
 app:
   cors:
     allowed-origin: ${CORS_ALLOWED_ORIGIN}

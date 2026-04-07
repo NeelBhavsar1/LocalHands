@@ -3,23 +3,25 @@
 import { useEffect, useState } from 'react';
 import styles from './page.module.css'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
-import { getUserInfo } from '@/api/authApi';
+import { getUserInfo } from '@/api/userApi';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
 export default function page({ children }) {
 
+  const { t } = useTranslation();
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect (() => {
+  useEffect(() => {
     const loadUser = async () => {
       try {
         const userData = await getUserInfo()
-        setUser(userData);
+        setUser(userData)
 
       } catch (error) {
-        //unauthenticated user attempts to gain access to dashboard, sending them to login page
+        console.error(error)
         router.push("/login")
 
       } finally {
@@ -27,8 +29,8 @@ export default function page({ children }) {
       }
     }
 
-    loadUser();
-  }, [router])
+    loadUser()
+  }, [])
 
 
   if (loading) return <div><LoadingSpinner /></div>

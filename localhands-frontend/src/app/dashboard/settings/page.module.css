@@ -1,91 +1,147 @@
 .container {
     display: flex;
     flex-direction: column;
+    padding: 2rem;
+    color: var(--text);
 }
 
-.header {
-    font-size: 1.5rem;
-    font-weight: 600;
+.title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: var(--text);
+}
+
+.settingsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
     width: 100%;
-    text-align: center;
-}
-
-.sectionHeader {
-    text-align: center;
-    font-size: 1.3rem;
-    font-weight: 450;
-    margin-bottom: 5px;
-}
-
-.sectionItem span {
-    font-weight: 500;
+    max-width: 1200px;
+    color: var(--text);
 }
 
 .section {
     display: flex;
     flex-direction: column;
+    gap: 1.5rem;
 }
 
-.settingItem {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    border: 1.5px solid var(--border);
-
-    width: 100%;
-    padding: 14px 16px;
-
-    border-radius: 10px;
-    margin-bottom: 10px;
-
-    background: var(--settingsbackground);
+.sectionTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 1rem;
+    color: var(--text);
 }
 
-.settingsListContainer {
-    margin-top: 30px;
+.form {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 1.5rem;
 }
 
-.actionBtn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--surface-strong);
-  border: 1px solid var(--border);
-  padding: 8px 12px;
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-  cursor: pointer;
-  transition: all 140ms ease-in-out;
-  color: var(--text);
-  font-weight: 500;
-  
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-.actionBtn:hover {
-  transform: translateY(-2px);
-  border-color: rgba(99,102,241,0.35);
+.formGroup label {
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.875rem;
+    color: var(--text);
 }
 
-.dangerBtn {
+.input {
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    transition: all 120ms ease-in-out;
+    color: var(--text);
+    background-color: transparent;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    color: var(--text);
+}
+
+.checkboxGroup {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.checkboxGroup label {
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.875rem;
+    color: var(--text);
+}
+
+.buttonContainer {
+    display: flex;
+    gap: 1rem;
+}
+
+.saveButton {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.88);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: all 140ms ease-in-out;
+    color: white;
+    font-weight: 600;
+}
+
+.saveButton:hover {
+    transform: translateY(-2px);
+    border-color: rgba(99, 102, 241, 0.35);
+}
+
+.deleteButton {
     display: flex;
     align-items: center;
     gap: 8px;
     background: red;
-    border: 1px solid var(--border);
-    padding: 8px 12px;
-    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
     box-shadow: var(--shadow);
     cursor: pointer;
     transition: all 140ms ease-in-out;
-    font-size: 15px;
+    font-size: 1rem;
+    color: white;
+    font-weight: 600;
+    margin-top: 20px;
 }
 
-
-.dangerBtn:hover {
+.deleteButton:hover {
     transform: translateY(-2px);
-    border-color: rgba(99,102,241,0.35);
+    border-color: rgba(99, 102, 241, 0.35);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .settingsContainer {
+        gap: 1.5rem;
+    }
+    
+    .section {
+        gap: 1rem;
+    }
 }

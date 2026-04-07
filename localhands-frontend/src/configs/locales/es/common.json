@@ -111,6 +111,7 @@
     "profile.serviceProvider": "Proveedor de Servicios",
     "profile.allowMessages": "Permitir Mensajes",
     "profile.publicProfile": "Perfil Público",
-    "profile.save": "Guardar",
-    "profile.editAccountInfo": "Editar información de la cuenta"
+    "profile.saveProfile": "Guardar perfil",
+    "profile.savePrivacy": "Guardar configuración de privacidad",
+    "profile.editAccountInfo": "Información de la cuenta"
 }

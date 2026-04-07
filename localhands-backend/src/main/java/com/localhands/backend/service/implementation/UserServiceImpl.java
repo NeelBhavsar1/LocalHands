@@ -314,8 +314,11 @@ public class UserServiceImpl implements UserService {
             throw new AppException("You must be 18 or older.", HttpStatus.BAD_REQUEST);
         }
 
-        if (!passwordEncoder.matches(updateDTO.getExistingPassword(), user.getPassword())) {
-            throw new AppException("Invalid password.", HttpStatus.UNAUTHORIZED);
+        //ROCCO CHECK THIS
+        if (updateDTO.getNewPassword() != null && !updateDTO.getNewPassword().isEmpty()) {
+            if (updateDTO.getExistingPassword() == null || !passwordEncoder.matches(updateDTO.getExistingPassword(), user.getPassword())) {
+                throw new AppException("Invalid existing password.", HttpStatus.UNAUTHORIZED);
+            }
         }
 
         user.setFirstName(updateDTO.getFirstName());

@@ -90,12 +90,15 @@ api.interceptors.response.use(
          * in the catch block, refresh failed and we reject all queued requests, and send user back to the login page
          */
         try {
-            await api.post("/api/auth/refresh");
-            processQueue(); //refresh succeeded, so we retry all queued requests
-            return api(originalRequest); //retry original failed req
+            await api.post("/api/auth/refresh")
+            processQueue() //refresh succeeded, so we retry all queued requests
+            return api(originalRequest) //retry original failed req
         } catch (refreshError) {
-            processQueue(refreshError);
-            window.location.href = "/login";
+            processQueue(refreshError)
+            // Use window.location as fallback, but check if not already on login page
+            if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
+                window.location.href = "/login";
+            }
             return Promise.reject(refreshError);
         } finally {
             isRefreshing = false;
