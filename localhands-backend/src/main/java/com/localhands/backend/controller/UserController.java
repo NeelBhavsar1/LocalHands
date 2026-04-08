@@ -4,6 +4,7 @@ import com.localhands.backend.dto.request.*;
 import com.localhands.backend.dto.response.CookieResponseDTO;
 import com.localhands.backend.dto.response.PublicProfileResponseDTO;
 import com.localhands.backend.dto.response.UserInfoResponseDTO;
+import com.localhands.backend.dto.response.UserProfileUpdateResponseDTO;
 import com.localhands.backend.security.UserPrincipal;
 import com.localhands.backend.service.UserService;
 import lombok.AllArgsConstructor;
@@ -56,13 +57,13 @@ public class UserController {
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<String> updateUserProfileInfo (
+    public ResponseEntity<UserProfileUpdateResponseDTO> updateUserProfileInfo (
             @AuthenticationPrincipal UserPrincipal user,
             @RequestPart("bio") UserProfileUpdateRequestDTO requestDTO,
             @RequestPart(value = "photo", required = false) MultipartFile photo
     ) {
-        userService.updateUserProfile(user.getId(), requestDTO, photo);
-        return ResponseEntity.ok("Updated user profile successfully.");
+        UserProfileUpdateResponseDTO userProfileUpdateResponseDTO = userService.updateUserProfile(user.getId(), requestDTO, photo);
+        return ResponseEntity.ok(userProfileUpdateResponseDTO);
     }
 
     @PutMapping("/privacy")

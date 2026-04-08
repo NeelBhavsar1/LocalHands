@@ -4,6 +4,7 @@ import com.localhands.backend.dto.request.*;
 import com.localhands.backend.dto.response.CookieResponseDTO;
 import com.localhands.backend.dto.response.PublicProfileResponseDTO;
 import com.localhands.backend.dto.response.UserInfoResponseDTO;
+import com.localhands.backend.dto.response.UserProfileUpdateResponseDTO;
 import com.localhands.backend.entity.*;
 import com.localhands.backend.exception.AppException;
 import com.localhands.backend.mapper.UserMapper;
@@ -476,7 +477,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUserProfile(Long userId, UserProfileUpdateRequestDTO updateDTO, MultipartFile photo) {
+    public UserProfileUpdateResponseDTO updateUserProfile(Long userId, UserProfileUpdateRequestDTO updateDTO, MultipartFile photo) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException("User not found with id: " + userId, HttpStatus.NOT_FOUND));
@@ -505,6 +506,8 @@ public class UserServiceImpl implements UserService {
             }
 
             userRepository.save(user);
+
+            return new UserProfileUpdateResponseDTO(savedFileUrl, updateDTO.getBio());
 
         } catch (Exception e) {
 

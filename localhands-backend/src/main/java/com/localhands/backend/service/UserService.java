@@ -4,6 +4,7 @@ import com.localhands.backend.dto.request.*;
 import com.localhands.backend.dto.response.CookieResponseDTO;
 import com.localhands.backend.dto.response.PublicProfileResponseDTO;
 import com.localhands.backend.dto.response.UserInfoResponseDTO;
+import com.localhands.backend.dto.response.UserProfileUpdateResponseDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public interface UserService {
 
     public void deactivateAccount(String token);
 
-    public void updateUserProfile(Long userId, UserProfileUpdateRequestDTO updateDTO, MultipartFile photo);
+    public UserProfileUpdateResponseDTO updateUserProfile(Long userId, UserProfileUpdateRequestDTO updateDTO, MultipartFile photo);
 
     public void updateUserPrivacy(Long userId, UserPrivacyUpdateRequestDTO updateDTO);
 
