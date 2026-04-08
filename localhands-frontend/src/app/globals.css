@@ -7,10 +7,8 @@
   --surface: rgba(255, 255, 255, 1);
   --surface-strong: rgba(255, 255, 255, 0.92);
   --s-bg: rgba(255, 255, 255, 0.95);
-
   --border: rgba(15, 23, 42, 0.10);
   --shadow: 0 8px 30px rgba(15, 23, 42, 0.10);
-
   --background: var(--bg);
   --foreground: var(--text);
   --navbarbackgroundcolor: var(--surface);
@@ -18,12 +16,12 @@
   --linkshover: var(--text);
   --togglebackground: var(--surface); 
   --settingsbackground: var(--s-bg);
-
   --linkTextColorHover: #0f172a;
   --footerBackgroundColor: rgba(255, 255, 255, 0.644);
-
   --toggle-active: #3b82f6;
   --toggle-inactive: #cbd5f5;
+  --listingcard-bg: #ffffff;
+  --text2: #0f172a;
 }
 
 .dark {
@@ -43,12 +41,12 @@
   --linkshover: #ffffff;
   --togglebackground: var(--surface);
   --settingsbackground: var(--s-bg);
-
   --linkTextColorHover: #94a3b8;
   --footerBackgroundColor: rgba(41, 51, 74, 0.55);
-
   --toggle-active: #60a5fa;   
   --toggle-inactive: #334155;
+  --listingcard-bg: #1f2937;
+  --text2: #9ca3af;
 
 
 }
