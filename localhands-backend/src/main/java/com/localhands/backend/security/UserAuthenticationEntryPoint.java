@@ -44,6 +44,12 @@ public class UserAuthenticationEntryPoint implements AuthenticationEntryPoint {
                     response.getOutputStream(),
                     new ErrorDTO("USER_NOT_FOUND", "Account no longer exists.")
             );
+        }
+        else if ("NO_TOKEN".equals(error)) {
+            OBJECT_MAPPER.writeValue(
+                    response.getOutputStream(),
+                    new ErrorDTO("NO_TOKEN", "Access token cookie missing.")
+            );
         } else {
             OBJECT_MAPPER.writeValue(
                     response.getOutputStream(),

@@ -4,6 +4,7 @@ import com.localhands.backend.dto.request.*;
 import com.localhands.backend.dto.response.CookieResponseDTO;
 import com.localhands.backend.dto.response.PublicProfileResponseDTO;
 import com.localhands.backend.dto.response.UserInfoResponseDTO;
+import com.localhands.backend.dto.response.UserProfileUpdateResponseDTO;
 import com.localhands.backend.entity.*;
 import com.localhands.backend.exception.AppException;
 import com.localhands.backend.mapper.UserMapper;
@@ -314,11 +315,17 @@ public class UserServiceImpl implements UserService {
             throw new AppException("You must be 18 or older.", HttpStatus.BAD_REQUEST);
         }
 
-        //ROCCO CHECK THIS
         if (updateDTO.getNewPassword() != null && !updateDTO.getNewPassword().isEmpty()) {
-            if (updateDTO.getExistingPassword() == null || !passwordEncoder.matches(updateDTO.getExistingPassword(), user.getPassword())) {
-                throw new AppException("Invalid existing password.", HttpStatus.UNAUTHORIZED);
+
+            if (updateDTO.getExistingPassword() == null || updateDTO.getExistingPassword().isEmpty()) {
+                throw new AppException("Current password is required to set a new password.", HttpStatus.BAD_REQUEST);
             }
+
+            if (!passwordEncoder.matches(updateDTO.getExistingPassword(), user.getPassword())) {
+                throw new AppException("Invalid current password.", HttpStatus.UNAUTHORIZED);
+            }
+
+            user.setPassword(passwordEncoder.encode(updateDTO.getNewPassword()));
         }
 
         user.setFirstName(updateDTO.getFirstName());
@@ -361,10 +368,6 @@ public class UserServiceImpl implements UserService {
 
             emailSenderService.sendEmail(
                     updateDTO.getEmail(),"LocalHands Confirmation of New Email", message);
-        }
-
-        if (updateDTO.getNewPassword() != null && !updateDTO.getNewPassword().isEmpty()) {
-            user.setPassword(passwordEncoder.encode(updateDTO.getNewPassword()));
         }
 
         Role buyerRole = roleRepository.findByRoleName(RoleName.BUYER)
@@ -474,7 +477,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUserProfile(Long userId, UserProfileUpdateRequestDTO updateDTO, MultipartFile photo) {
+    public UserProfileUpdateResponseDTO updateUserProfile(Long userId, UserProfileUpdateRequestDTO updateDTO, MultipartFile photo) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException("User not found with id: " + userId, HttpStatus.NOT_FOUND));
@@ -503,6 +506,8 @@ public class UserServiceImpl implements UserService {
             }
 
             userRepository.save(user);
+
+            return new UserProfileUpdateResponseDTO(savedFileUrl, updateDTO.getBio());
 
         } catch (Exception e) {
 
