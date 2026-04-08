@@ -5,7 +5,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 
-// Fix default marker icon - must be done after import
+//this is a default icon for the marker
 const DefaultIcon = L.icon({
     iconUrl: '/marker-icon.png',
     iconRetinaUrl: '/marker-icon-2x.png',
@@ -16,6 +16,7 @@ const DefaultIcon = L.icon({
     shadowSize: [41, 41]
 })
 
+//this is a marker that shows the location on the map
 function LocationMarker({ onLocationSelect, icon }) {
     const [position, setPosition] = useState(null)
     
@@ -32,6 +33,7 @@ function LocationMarker({ onLocationSelect, icon }) {
     )
 }
 
+//this is the main component that shows the map and allows the user to select a location
 export default function LocationPicker({ onLocationSelect }) {
     const defaultPosition = [53.4084, -2.9916]; // home of the champions
     const [mounted, setMounted] = useState(false)
@@ -45,16 +47,8 @@ export default function LocationPicker({ onLocationSelect }) {
     }
 
     return (
-        <MapContainer
-            center={defaultPosition}
-            zoom={13}
-            scrollWheelZoom={false}
-            style={{ height: '300px', width: '100%', borderRadius: '8px' }}
-        >
-            <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+        <MapContainer center={defaultPosition} zoom={13} scrollWheelZoom={false} style={{ height: '300px', width: '100%', borderRadius: '8px' }}>
+            <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             <LocationMarker onLocationSelect={onLocationSelect} icon={DefaultIcon} />
         </MapContainer>
     )

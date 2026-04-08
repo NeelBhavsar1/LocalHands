@@ -1,3 +1,8 @@
+/**
+ * Validates login form data
+ * @param {Object} formData - The form data to validate
+ * @returns {Object} - Object containing validation errors
+ */
 export const validateLoginForm = (formData) => {
 
     const errors = {};

@@ -83,6 +83,8 @@
     "forgotPassword.errors.passwordLength": "La contraseña debe tener al menos 8 caracteres",
     "forgotPassword.errors.confirmPasswordRequired": "Por favor confirma tu contraseña",
     "forgotPassword.errors.passwordMismatch": "Las contraseñas no coinciden",
+    "forgotPassword.errors.pinNumeric": "El PIN debe contener solo números",
+    "forgotPassword.errors.invalidPin": "PIN inválido",
 
     "settings.title": "Configuración",
     "settings.accountSection": "Cuenta",

@@ -1,5 +1,9 @@
-//frontend validation only, helper file to reduce code on signup page
 
+/**
+ * Validates signup form data
+ * @param {Object} formData - The form data to validate
+ * @returns {Object} - Object containing validation errors
+ */
 export const validateSignupForm = (formData) => {
     const errors = {};
 

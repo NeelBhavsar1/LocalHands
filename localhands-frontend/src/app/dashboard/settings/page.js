@@ -5,7 +5,7 @@ import styles from './page.module.css'
 import { getUserInfo } from '@/api/userApi'
 import { updateAccountInfo, deleteUserAccount } from '@/api/userApi'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
-import { handleUpdateAccount, handleDeleteAccount } from '@/utils/settingsUtils'
+import { handleUpdateAccount, handleDeleteAccount, createChangeHandler, createLoadUserData } from '@/utils/settingsUtils'
 
 
 export default function page() {
@@ -24,38 +24,13 @@ export default function page() {
 
     const [errors, setErrors] = useState({})
 
+    const handleChange = createChangeHandler(setFormData)
+
     useEffect(() => {
-        const loadUserData = async () => {
-            try {
-                const userData = await getUserInfo()
-                setUser(userData)
-                
-                setFormData({
-                    firstName: userData.firstName || '',
-                    lastName: userData.lastName || '',
-                    dateOfBirth: userData.dateOfBirth || '',
-                    email: userData.email || '',
-                    existingPassword: '',
-                    newPassword: '',
-                    confirmPassword: ''
-                })
-
-            } catch (error) {
-                console.error('Failed to load user data:', error)
-            } 
-            finally {
-                setLoading(false)
-            }
-        }
-
-        loadUserData();
-        
+        const loadUserData = createLoadUserData(setUser, setFormData, setLoading, getUserInfo)
+        loadUserData()
     }, [])
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -134,10 +109,7 @@ export default function page() {
                     <p className={styles.dangerText}>
                         {t("settings.deleteWarning")}
                     </p>
-                    <button 
-                        onClick={onDelete} 
-                        className={styles.deleteButton}
-                    >
+                    <button onClick={onDelete} className={styles.deleteButton}>
                         {t("settings.deleteAccount")}
                     </button>
                 </div>

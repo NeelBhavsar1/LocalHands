@@ -83,6 +83,8 @@
     "forgotPassword.errors.passwordLength": "Le mot de passe doit contenir au moins 8 caractères",
     "forgotPassword.errors.confirmPasswordRequired": "Veuillez confirmer votre mot de passe",
     "forgotPassword.errors.passwordMismatch": "Les mots de passe ne correspondent pas",
+    "forgotPassword.errors.pinNumeric": "Le PIN doit contenir uniquement des chiffres",
+    "forgotPassword.errors.invalidPin": "PIN invalide",
 
     "settings.title": "Paramètres",
     "settings.accountInfo": "Informations du compte",
@@ -128,4 +130,7 @@
     "profile.saveProfile": "Enregistrer le profil",
     "profile.savePrivacy": "Enregistrer les paramètres de confidentialité",
     "profile.editAccountInfo": "Informations du compte"
+
+    
+
 }

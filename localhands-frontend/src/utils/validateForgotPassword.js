@@ -1,5 +1,9 @@
-//frontend validation utility for forgot password functionality
-
+/**
+ * Validates email for forgot password functionality
+ * @param {string} email - The email to validate
+ * @param {function} t - Translation function
+ * @returns {Object} - Object containing validation errors
+ */
 export const validateForgotPasswordEmail = (email, t) => {
     const errors = {}
     
@@ -12,18 +16,34 @@ export const validateForgotPasswordEmail = (email, t) => {
     return errors
 };
 
+/**
+ * Validates PIN for forgot password functionality
+ * @param {string} pin - The PIN to validate
+ * @param {number} PIN_LENGTH - The length of the PIN (default: 6)
+ * @param {function} t - Translation function
+ * @returns {Object} - Object containing validation errors
+ */
 export const validateForgotPasswordPin = (pin, PIN_LENGTH = 6, t) => {
     const errors = {}
-    
+
     if (!pin.trim()) {
         errors.pin = t ? t("forgotPassword.errors.pinRequired") : 'PIN is required'
-    } else if (!new RegExp(`^\\d{${PIN_LENGTH}}$`).test(pin)) {
+    } else if (!/^\d+$/.test(pin)) {
+        errors.pin = t ? t("forgotPassword.errors.pinNumeric") : 'PIN must contain only numbers'
+    } else if (pin.length !== PIN_LENGTH) {
         errors.pin = t ? t("forgotPassword.errors.pinLength") : `PIN must be exactly ${PIN_LENGTH} digits`
     }
-    
+
     return errors
 };
 
+/**
+ * Validates password reset functionality
+ * @param {string} password - The password to validate
+ * @param {string} confirmPassword - The confirmed password to validate
+ * @param {function} t - Translation function
+ * @returns {Object} - Object containing validation errors
+ */
 export const validatePasswordReset = (password, confirmPassword, t) => {
     const errors = {}
     

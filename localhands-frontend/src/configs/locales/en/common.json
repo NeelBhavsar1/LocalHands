@@ -84,6 +84,8 @@
     "forgotPassword.errors.passwordLength": "Password must be at least 8 characters",
     "forgotPassword.errors.confirmPasswordRequired": "Please confirm your password",
     "forgotPassword.errors.passwordMismatch": "Passwords do not match",
+    "forgotPassword.errors.pinNumeric": "PIN must contain only numbers",
+    "forgotPassword.errors.invalidPin": "Invalid PIN",
 
     "settings.title": "Settings",
     "settings.accountInfo": "Account Information",

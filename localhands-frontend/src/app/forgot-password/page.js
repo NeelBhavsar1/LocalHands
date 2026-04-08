@@ -64,7 +64,7 @@ export default function page() {
       setResetToken(token)
       setStep("password")
     } catch (error) {
-      setErrors({ pin: error.message || t("forgotPassword.errors.pinLength") })
+      setErrors({ pin: error.message || t("forgotPassword.errors.invalidPin") })
     } finally {
       setIsVerifyingPin(false)
     }

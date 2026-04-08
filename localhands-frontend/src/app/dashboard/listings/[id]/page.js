@@ -2,16 +2,16 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import Image from 'next/image'
 import dynamic from 'next/dynamic'
+import { MapContainer, TileLayer, Marker } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css'
 import styles from './page.module.css'
 import { getListingById, updateListing, deleteListing } from '@/api/listingApi'
 import { getUserInfo } from '@/api/userApi'
+import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
+import { BACKEND_URL, DefaultIcon, createEditChangeHandler, createPhotoChangeHandler, createMapLocationHandler, validateListingForm, generateAltTexts } from '@/utils/listingUtils'
 
-const MapWithNoSSR = dynamic(
-  () => import('@/components/LocationPicker/LocationPicker'),
-  { ssr: false }
-)
+const MapWithNoSSR = dynamic(() => import('@/components/LocationPicker/LocationPicker'), { ssr: false })
 
 export default function ListingDetailPage() {
     const params = useParams()
@@ -22,22 +22,21 @@ export default function ListingDetailPage() {
     const [currentUser, setCurrentUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const [isEditing, setIsEditing] = useState(false)
+    const [newPhotos, setNewPhotos] = useState([])
+    const [saving, setSaving] = useState(false)
+
     const [editForm, setEditForm] = useState({
         name: '',
         description: '',
         latitude: '',
         longitude: ''
     })
-    const [newPhotos, setNewPhotos] = useState([])
-    const [saving, setSaving] = useState(false)
+    
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [listingData, userData] = await Promise.all([
-                    getListingById(listingId),
-                    getUserInfo()
-                ])
+                const [listingData, userData] = await Promise.all([getListingById(listingId), getUserInfo()])
                 setListing(listingData)
                 setCurrentUser(userData)
                 setEditForm({
@@ -46,10 +45,12 @@ export default function ListingDetailPage() {
                     latitude: listingData.latitude,
                     longitude: listingData.longitude
                 })
+
             } catch (error) {
                 console.error('Error fetching listing:', error)
                 alert('Failed to load listing')
                 router.push('/dashboard')
+
             } finally {
                 setLoading(false)
             }
@@ -60,50 +61,33 @@ export default function ListingDetailPage() {
 
     const isOwner = currentUser && listing && currentUser.id === listing.seller?.id
 
-    const handleEditChange = (e) => {
-        const { name, value } = e.target
-        setEditForm(prev => ({ ...prev, [name]: value }))
-    }
+    const handleEditChange = createEditChangeHandler(setEditForm)
 
-    const handlePhotoChange = (e) => {
-        const files = Array.from(e.target.files)
-        setNewPhotos(files)
-    }
+    const handlePhotoChange = createPhotoChangeHandler(setNewPhotos)
 
-    const handleMapLocationSelect = (lat, lng) => {
-        setEditForm(prev => ({
-            ...prev,
-            latitude: lat.toFixed(6),
-            longitude: lng.toFixed(6)
-        }))
-    }
+    const handleMapLocationSelect = createMapLocationHandler(setEditForm)
 
     const handleUpdate = async (e) => {
         e.preventDefault()
-        
-        if (newPhotos.length === 0) {
-            alert('Please select at least one photo')
+
+        const validation = validateListingForm(editForm, newPhotos)
+        if (!validation.valid) {
+            alert(validation.error)
             return
         }
 
         setSaving(true)
         try {
-            const altTexts = newPhotos.map((_, index) => `Photo ${index + 1} of ${editForm.name}`)
-            
-            const listingData = {
-                name: editForm.name,
-                description: editForm.description,
-                latitude: parseFloat(editForm.latitude),
-                longitude: parseFloat(editForm.longitude)
-            }
-
-            const updated = await updateListing(listingId, listingData, newPhotos, altTexts)
+            const altTexts = generateAltTexts(newPhotos, editForm.name)
+            const updated = await updateListing(listingId, validation.data, newPhotos, altTexts)
             setListing(updated)
             setIsEditing(false)
             setNewPhotos([])
             alert('Listing updated successfully!')
+
         } catch (error) {
             alert('Error updating listing: ' + error)
+
         } finally {
             setSaving(false)
         }
@@ -118,13 +102,14 @@ export default function ListingDetailPage() {
             await deleteListing(listingId)
             alert('Listing deleted successfully!')
             router.push('/dashboard')
+
         } catch (error) {
             alert('Error deleting listing: ' + error)
         }
     }
 
     if (loading) {
-        return <div className={styles.container}>Loading...</div>
+        return <div className={styles.container}><LoadingSpinner /></div>
     }
 
     if (!listing) {
@@ -134,25 +119,16 @@ export default function ListingDetailPage() {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <button 
-                    onClick={() => router.push('/dashboard')}
-                    className={styles.backButton}
-                >
-                    ← Back to Dashboard
+                <button onClick={() => router.push('/dashboard')} className={styles.backButton}>
+                    Back to Dashboard
                 </button>
                 
                 {isOwner && !isEditing && (
                     <div className={styles.actions}>
-                        <button 
-                            onClick={() => setIsEditing(true)}
-                            className={styles.editButton}
-                        >
+                        <button onClick={() => setIsEditing(true)} className={styles.editButton}>
                             Edit Listing
                         </button>
-                        <button 
-                            onClick={handleDelete}
-                            className={styles.deleteButton}
-                        >
+                        <button onClick={handleDelete} className={styles.deleteButton}>
                             Delete Listing
                         </button>
                     </div>
@@ -165,26 +141,12 @@ export default function ListingDetailPage() {
                     
                     <div className={styles.formGroup}>
                         <label htmlFor="name">Service Name</label>
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            value={editForm.name}
-                            onChange={handleEditChange}
-                            required
-                        />
+                        <input type="text" id="name" name="name" value={editForm.name} onChange={handleEditChange} required />
                     </div>
 
                     <div className={styles.formGroup}>
                         <label htmlFor="description">Description</label>
-                        <textarea
-                            id="description"
-                            name="description"
-                            value={editForm.description}
-                            onChange={handleEditChange}
-                            rows={4}
-                            required
-                        />
+                        <textarea id="description" name="description" value={editForm.description} onChange={handleEditChange} rows={4} required />
                     </div>
 
                     <div className={styles.mapSection}>
@@ -207,47 +169,24 @@ export default function ListingDetailPage() {
 
                     <div className={styles.formGroup}>
                         <label htmlFor="photos">New Photos (required)</label>
-                        <input
-                            type="file"
-                            id="photos"
-                            accept="image/*"
-                            multiple
-                            onChange={handlePhotoChange}
-                            required
-                        />
+                        <input type="file" id="photos" accept="image/*" multiple onChange={handlePhotoChange} required />
                         {newPhotos.length > 0 && (
                             <p className={styles.fileInfo}>{newPhotos.length} photo(s) selected</p>
                         )}
                     </div>
 
                     <div className={styles.formActions}>
-                        <button 
-                            type="button" 
-                            onClick={() => setIsEditing(false)}
-                            className={styles.cancelButton}
-                        >
-                            Cancel
-                        </button>
-                        <button 
-                            type="submit" 
-                            className={styles.saveButton}
-                            disabled={saving}
-                        >
-                            {saving ? 'Saving...' : 'Save Changes'}
-                        </button>
+                        <button type="button" onClick={() => setIsEditing(false)} className={styles.cancelButton}>Cancel</button>
+                        <button type="submit" className={styles.saveButton} disabled={saving}> {saving ? 'Saving...' : 'Save Changes'}</button>
                     </div>
                 </form>
+                
             ) : (
                 <div className={styles.listingView}>
                     <div className={styles.photosGrid}>
                         {listing.photos.map((photo, index) => (
                             <div key={index} className={styles.photoContainer}>
-                                <Image
-                                    src={photo.url}
-                                    alt={photo.altText}
-                                    fill
-                                    className={styles.photo}
-                                />
+                                <img src={`${BACKEND_URL}${photo.url}`} alt={photo.altText} className={styles.photo} />
                             </div>
                         ))}
                     </div>
@@ -258,7 +197,7 @@ export default function ListingDetailPage() {
                         
                         <div className={styles.meta}>
                             <span className={styles.location}>
-                                📍 {listing.latitude?.toFixed(4)}, {listing.longitude?.toFixed(4)}
+                                {listing.latitude?.toFixed(4)}, {listing.longitude?.toFixed(4)}
                             </span>
                             <span className={styles.date}>
                                 Posted: {new Date(listing.creationTime).toLocaleDateString()}
@@ -267,9 +206,25 @@ export default function ListingDetailPage() {
                                 By: {listing.seller?.firstName} {listing.seller?.lastName}
                             </span>
                         </div>
+
+                        {listing.latitude && listing.longitude && (
+                            <div className={styles.mapSectionDisplay}>
+
+                                <label>Service Location</label>
+                                <div className={styles.mapContainerDisplay}>
+
+                                    <MapContainer center={[listing.latitude, listing.longitude]} zoom={14} scrollWheelZoom={false} style={{ height: '250px', width: '100%', borderRadius: '0.75rem' }}>
+                                        <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                                        <Marker position={[listing.latitude, listing.longitude]} icon={DefaultIcon} />
+                                    </MapContainer>
+                                </div>
+                            </div>
+                        )}
+
                     </div>
                 </div>
             )}
+
         </div>
     )
 }

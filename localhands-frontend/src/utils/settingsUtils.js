@@ -1,5 +1,48 @@
-//helper functions for settings page
 
+/**
+ * Creates a change handler for form inputs
+ * @param {Function} setFormData - The setter function for form data
+ * @returns {Function} - A change handler function
+ */
+export const createChangeHandler = (setFormData) => (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+}
+
+/**
+ * Creates a function to load user data
+ * @param {*} setUser - The setter function for user data
+ * @param {*} setFormData - The setter function for form data
+ * @param {*} setLoading - The setter function for loading state
+ * @param {*} getUserInfo - The function to get user info
+ * @returns 
+ */
+export const createLoadUserData = (setUser, setFormData, setLoading, getUserInfo) => async () => {
+    try {
+        const userData = await getUserInfo()
+        setUser(userData)
+        
+        setFormData({
+            firstName: userData.firstName || '',
+            lastName: userData.lastName || '',
+            dateOfBirth: userData.dateOfBirth || '',
+            email: userData.email || '',
+            existingPassword: '',
+            newPassword: '',
+            confirmPassword: ''
+        })
+    } catch (error) {
+        console.error('Failed to load user data:', error)
+    } finally {
+        setLoading(false)
+    }
+};
+
+/**
+ * Validates the settings form
+ * @param {*} formData 
+ * @returns 
+ */
 const validateSettingsForm = (formData) => {
     const errors = {};
     
@@ -10,6 +53,11 @@ const validateSettingsForm = (formData) => {
     return errors;
 }
 
+/**
+ * Creates update data for account update
+ * @param {*} formData 
+ * @returns 
+ */
 const createUpdateData = (formData) => {
     const updateData = {
         firstName: formData.firstName,
@@ -30,10 +78,21 @@ const createUpdateData = (formData) => {
     return updateData;
 };
 
+/**
+ * Clears password fields
+ * @param {*} setFormData 
+ */
 const clearPasswordFields = (setFormData) => {
     setFormData(prev => ({ ...prev, existingPassword: '', newPassword: '', confirmPassword: '' }))
 }
 
+/**
+ * Handles account update
+ * @param {*} formData 
+ * @param {*} setErrors 
+ * @param {*} setFormData 
+ * @param {*} updateAccountInfo 
+ */
 export const handleUpdateAccount = async (formData, setErrors, setFormData, updateAccountInfo) => {
     const validationErrors = validateSettingsForm(formData);
     setErrors(validationErrors);
@@ -53,6 +112,10 @@ export const handleUpdateAccount = async (formData, setErrors, setFormData, upda
     }
 };
 
+/**
+ * Handles account deletion
+ * @param {*} deleteUserAccount 
+ */
 export const handleDeleteAccount = async (deleteUserAccount) => {
     if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
         try {
