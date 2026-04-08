@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LocalHands Frontend
 
-## LocalHands
+A Next.js 16 application for connecting local service providers with customers. Built with React 19, Leaflet maps, and i18n internationalization.
 
-LocalHands is a project created by:
+## Features
+
+- **User Authentication** - Login, signup, and forgot password with PIN verification
+- **Service Listings** - Create, edit, delete service listings with photo uploads
+- **Location Picker** - Interactive Leaflet map for setting service locations
+- **Internationalization** - Multi-language support (EN, FR, ES, DE)
+- **Responsive Design** - Mobile-first CSS modules
+
+## Tech Stack
+
+- **Framework:** Next.js 16 with App Router
+- **UI:** React 19, Framer Motion, Lucide React
+- **Maps:** Leaflet + React-Leaflet
+- **HTTP:** Axios
+- **i18n:** i18next + react-i18next
+- **Theming:** next-themes
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- Backend API running (see `../localhands-backend`)
+
+### Installation
+
+```bash
+npm install
+```
+
+### Environment Variables
+
+Create `.env.local`:
+
+```
+NEXT_PUBLIC_BACKEND_URL=http://localhost:8080
+```
+
+### Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
+
+## Project Structure
+
+```
+src/
+├── api/           # API client functions (axios)
+├── app/           # Next.js App Router pages
+├── components/    # React components
+├── configs/       # i18n locales and config
+└── utils/         # Helper utilities
+```
+
+### Key Utilities
+
+- `listingUtils.js` - Form handlers for listing CRUD operations
+- `settingsUtils.js` - User settings form handlers
+- `validateForgotPassword.js` - Forgot password validation
+- `validateSignup.js` - Signup form validation
+- `validateLogin.js` - Login form validation
+
+## API Integration
+
+The frontend communicates with a Spring Boot backend at `NEXT_PUBLIC_BACKEND_URL`:
+
+- **Listings:** `GET /api/listings/me`, `POST /api/listings`, `PUT /api/listings`, `DELETE /api/listings`
+- **Auth:** JWT-based authentication with password reset flow
+- **Files:** Multipart/form-data for photo uploads
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server with webpack |
+| `npm run build` | Production build |
+| `npm start` | Start production server |
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [React Leaflet](https://react-leaflet.js.org/)
+- [i18next](https://www.i18next.com/)
