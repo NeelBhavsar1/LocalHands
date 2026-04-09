@@ -98,9 +98,11 @@
     "settings.publicProfile": "Perfil Público",
     "settings.allowMessages": "Permitir Mensajes",
 
-    "hero.title": "LocalHands",
-    "hero.subtitle": "Conectando comunidades a través de servicios locales de confianza.",
-    "hero.cta": "Comenzar",
+    "hero.title": "Los mejores servicios de tu comunidad",
+    "hero.titleHighlight": "¡Todo en un solo lugar!",
+    "hero.subtitle": "LocalHands te conecta con profesionales de confianza en tu vecindario para cualquier trabajo.",
+    "hero.buttonTry": "¡Pruébalo ahora!",
+    "hero.buttonHow": "Mira cómo funciona",
 
     "profile.title": "Perfil",
     "profile.changeProfilePicture": "Cambiar foto de perfil",
