@@ -49,10 +49,12 @@ export const updatePrivacyInfo = async (privacyData) => {
     }
 };
 
-//updates profile information (bio)
+//updates profile information (bio + profile picture)
 export const updateProfileInfo = async (profileData) => {
     try {
-        const res = await api.put("/api/users/profile", profileData)
+        const res = await api.put("/api/users/profile", profileData, {
+            headers: { 'Content-Type': undefined }  // Let browser set multipart boundary
+        })
         return res.data
     } catch (error) {
         console.error("Update profile info error: ", error)

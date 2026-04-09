@@ -3,7 +3,7 @@
 import styles from './page.module.css'
 import Image from 'next/image'
 import { useTranslation } from 'react-i18next'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import ToggleSwitch from '@/components/ToggleSwitch/ToggleSwitch'
 import { getUserInfo, updatePrivacyInfo, updateProfileInfo } from '@/api/userApi'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
@@ -15,6 +15,9 @@ export default function page() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [bio, setBio] = useState('');
+    const [profileImage, setProfileImage] = useState('/profile.png');
+    const [selectedFile, setSelectedFile] = useState(null);
+    const fileInputRef = useRef(null);
 
     // Fetch user info on mount
     useEffect(() => {
@@ -27,6 +30,9 @@ export default function page() {
                 setAllowMessages(messagesValue === true);
                 setPublicProfile(publicProfileValue === true);
                 setBio(userData.bio || '');
+                if (userData.pfp || userData.photo) {
+                    setProfileImage(userData.pfp || userData.photo);
+                }
             } catch (error) {
                 console.error('Failed to fetch user data:', error);
                 alert('Failed to load profile data');
@@ -37,20 +43,41 @@ export default function page() {
         fetchUserData();
     }, []);
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => setProfileImage(e.target.result);
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleChangePicture = () => {
+        fileInputRef.current?.click();
+    };
+
     const handleSave = async () => {
         setSaving(true);
         try {
-            // Update privacy settings
             await updatePrivacyInfo({
                 messagesAllowed: !!allowMessages,
                 publicProfile: !!publicProfile
             });
 
-            // Update profile (bio)
-            await updateProfileInfo({
-                bio: bio || ''
+            const formData = new FormData();
+            
+            const bioBlob = new Blob([JSON.stringify({ bio: bio || '' })], { 
+                type: 'application/json' 
             });
+            formData.append('bio', bioBlob);
+            if (selectedFile) {
+                formData.append('photo', selectedFile);
+            }
+            await updateProfileInfo(formData);
 
+            setSelectedFile(null);
             alert('Profile updated successfully!');
         } catch (error) {
             alert('Failed to update profile: ' + error);
@@ -75,8 +102,17 @@ export default function page() {
                 <div className={styles.contentWrapper}>
                     <div className={styles.leftSection}>
                         <div className={styles.profileImageContainer}>
-                            <Image src="/profile.png" alt="Profile" width={120} height={120} className={styles.profileImage}   />
-                            <button className={styles.changePictureBtn}>{t("profile.changeProfilePicture")}</button>
+                            <Image src={profileImage} alt="Profile" width={120} height={120} className={styles.profileImage} />
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleFileChange}
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                            />
+                            <button type="button" className={styles.changePictureBtn} onClick={handleChangePicture}>
+                                {t("profile.changeProfilePicture")}
+                            </button>
                         </div>
 
                         <div className={styles.bioContainer}>
@@ -94,6 +130,8 @@ export default function page() {
                     <div className={styles.rightSection}>
                         <div className={styles.formContainer}>
                             <h2 className={styles.editai}>{t("profile.privacySettings")}</h2>
+                            
+
                             
                             <div className={styles.checkboxGroup}>
                                 <label>{t("profile.publicProfile")}</label>
