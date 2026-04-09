@@ -1,0 +1,17 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 500px; 
+}
+
+
+.container:empty::before {
+  content: "No listings found. Create a listing to get started.";
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  color: var(--text2);
+  font-size: 1rem;
+}

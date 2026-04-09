@@ -59,7 +59,7 @@ export default function HomeNavBar({ showLinks = true }) {
                     )}
 
                     <div className={styles.actionButton}>
-                        <LanguageButton/>
+                        <LanguageButton onToggleComplete={closeMobileMenu}/>
                         <ToggleButton onToggleComplete={closeMobileMenu}/>
                         {showLinks && (<Link href="/login"><button className={styles.loginButton}>Login</button></Link>)}
                     </div>

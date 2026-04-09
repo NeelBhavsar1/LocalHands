@@ -5,33 +5,45 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 
-export default function LanguageButton() {
+export default function LanguageButton({ onToggleComplete }) {
     const [isOpen, setIsOpen] = useState(false);
-    // useTranslation gives both:
-    // - t() for translated text
-    // - i18n instance for changeLanguage()
     const { i18n, t } = useTranslation();
+
+    const supportedLangs = ["en", "es", "fr", "de"];
+    const displayByLang = {
+        en: "EN",
+        es: "ES",
+        fr: "FR",
+        de: "DE",
+    };
 
     const [selected, setSelected] = useState("EN");
 
     useEffect(() => {
-        // restores the last selected locale after refresh
-        const savedLanguage = localStorage.getItem("language") || "en";
-        i18n.changeLanguage(savedLanguage);
-        setSelected(savedLanguage.toUpperCase())
+        const savedLanguage = (localStorage.getItem("language") || "en").toLowerCase();
+        const normalized = supportedLangs.includes(savedLanguage) ? savedLanguage : "en";
+
+        i18n.changeLanguage(normalized);
+        setSelected(displayByLang[normalized] ?? normalized.toUpperCase());
     }, [i18n]);
 
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
+
+        
     };
 
     const selectLanguage = (lang) => {
-        // lang must match keys defined in src/i18n.js resources
-        i18n.changeLanguage(lang);
-        localStorage.setItem("language", lang);
-        setSelected(lang.toUpperCase());
+        const normalized = supportedLangs.includes(lang.toLowerCase()) ? lang.toLowerCase() : "en";
+        i18n.changeLanguage(normalized);
+        localStorage.setItem("language", normalized);
+        setSelected(displayByLang[normalized] ?? normalized.toUpperCase());
         setIsOpen(false);
+
+        if (onToggleComplete) {
+            onToggleComplete();
+        }
     };
 
     return (

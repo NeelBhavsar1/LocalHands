@@ -11,13 +11,12 @@ import Link from "next/link";
 
 export default function Home() {
 
-  // use keys that exist in src/locales/<lang>/common.json.
   const { t } = useTranslation();
 
   return (
     <div className={styles.container}>
-      
-      <HomeNavBar showLinks={true}/>
+
+      <HomeNavBar />
 
       <section className={styles.hero}>
         <div className={styles.heroContent}>
@@ -34,8 +33,6 @@ export default function Home() {
             <button className={styles.howButton}>{t("hero.buttonHow")}</button>
           </div>
         </div>
-
-
       </section>
 
       <Footer />

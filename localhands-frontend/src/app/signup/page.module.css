@@ -129,6 +129,27 @@
 
 }
 
+.accountTypeOptions {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    margin-top: 8px;
+    cursor: pointer;
+}
+
+.accountTypeOptionLabel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.accountTypeOptionLabel input:focus {
+    box-shadow: none;
+    outline: none;
+    cursor: pointer;
+}
+
 @media (max-width: 768px) {
     .main {
         padding: 24px 16px 40px;

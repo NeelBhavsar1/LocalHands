@@ -4,32 +4,35 @@
   --bg: #ffffff;
   --text: #0f172a;        
   --muted: #475569;        
-  --surface: rgba(255, 255, 255, 0.70);
+  --surface: rgba(255, 255, 255, 1);
   --surface-strong: rgba(255, 255, 255, 0.92);
-  
-
+  --s-bg: rgba(255, 255, 255, 0.95);
   --border: rgba(15, 23, 42, 0.10);
   --shadow: 0 8px 30px rgba(15, 23, 42, 0.10);
-
   --background: var(--bg);
   --foreground: var(--text);
   --navbarbackgroundcolor: var(--surface);
   --navbartext: var(--text);
   --linkshover: var(--text);
   --togglebackground: var(--surface); 
-
+  --settingsbackground: var(--s-bg);
   --linkTextColorHover: #0f172a;
   --footerBackgroundColor: rgba(255, 255, 255, 0.644);
+  --toggle-active: #3b82f6;
+  --toggle-inactive: #cbd5f5;
+  --listingcard-bg: #ffffff;
+  --text2: #0f172a;
 }
 
 .dark {
   --bg: #0b1220;
   --text: #e5e7eb;
   --muted: #94a3b8;
-  --surface: rgba(15, 23, 42, 0.55);
-  --surface-strong: rgba(15, 23, 42, 0.85);
+  --surface: rgba(15, 23, 42, 1);
+  --surface-strong: rgba(15, 23, 42, 1);
   --border: rgba(148, 163, 184, 0.18);
   --shadow: 0 12px 40px rgba(0,0,0,0.45);
+  --s-bg: #182744;
 
   --background: var(--bg);
   --foreground: var(--text);
@@ -37,9 +40,14 @@
   --navbartext: var(--text);
   --linkshover: #ffffff;
   --togglebackground: var(--surface);
-
+  --settingsbackground: var(--s-bg);
   --linkTextColorHover: #94a3b8;
-  --footerBackgroundColor: rgba(41, 51, 74, 0.55);;
+  --footerBackgroundColor: rgba(41, 51, 74, 0.55);
+  --toggle-active: #60a5fa;   
+  --toggle-inactive: #334155;
+  --listingcard-bg: #1f2937;
+  --text2: #9ca3af;
+
 
 }
 

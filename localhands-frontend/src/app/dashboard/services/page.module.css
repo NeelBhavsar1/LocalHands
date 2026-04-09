@@ -1,0 +1,99 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    width: 100%;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.header p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.nearbySection {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-self: flex-start;
+    width: 100%;
+}
+
+.nearbySection h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.errorText {
+    color: #dc2626;
+    font-size: 0.875rem;
+}
+
+.infoText {
+    color: var(--muted);
+    font-size: 0.875rem;
+    padding: 0.5rem 0;
+}
+
+.noListingsText {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.midPage {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.midPage > *:first-child {
+    flex: 2;
+    max-width: 500px;
+}
+
+.midPage > *:last-child {
+    flex: 0 0 auto;
+    margin-top: 0.375rem;
+}
+
+.listingsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.loadingText {
+    color: var(--muted);
+    font-size: 0.875rem;
+    padding: 1rem 0;
+}
+
+@media (max-width: 767px) {
+    .listingsGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+

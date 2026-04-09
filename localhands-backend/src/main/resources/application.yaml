@@ -1,3 +1,35 @@
 spring:
   application:
     name: localhands-backend
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_SERVICE_FROM_EMAIL}
+    password: ${EMAIL_SERVICE_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+security:
+  jwt:
+    token:
+      secret-key: ${JWT_KEY}
+app:
+  cors:
+    allowed-origin: ${CORS_ALLOWED_ORIGIN}

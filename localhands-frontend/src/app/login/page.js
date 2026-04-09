@@ -4,10 +4,14 @@ import React, { useState } from "react";
 import styles from "./page.module.css";
 import HomeNavBar from "@/components/HomeNavBar/HomeNavBar";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { validateLoginForm } from "@/utils/validateLogin";
+import { loginUser } from "@/api/authApi";
 import { useTranslation } from "react-i18next";
 
 export default function page() {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -22,36 +26,27 @@ export default function page() {
     setFormData((prev) => ({...prev, [name]: value}))
   }
 
-  const validateForm = () => {
+  
 
-    const newErorrs = {};
-
-    if (!formData.email.trim()) {
-      newErorrs.email = "Email is required!"
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErorrs.email = "Enter a valid email!";
-    }
-
-    if (!formData.password) {
-      newErorrs.password = "Password is required!"
-    } else if (formData.password.length < 8) {
-      newErorrs.password = "Password must be at least 8 characters"
-    }
-
-    return newErorrs;
-
-  }
-
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
 
-    const validationErrors = validateForm();
+    const validationErrors = validateLoginForm(formData);
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) {
       return;
     }
 
+    try {
+      await loginUser({email: formData.email, password: formData.password, rememberMe: false})
+      alert("Logged in successfully!");
+      router.push("/dashboard");
+    } catch (error) {
+      alert("Error: " + error);
+    }
+
+    //remove later
     console.log("Form submitted!", formData);
   };
 
