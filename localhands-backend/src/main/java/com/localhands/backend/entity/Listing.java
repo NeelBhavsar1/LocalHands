@@ -11,7 +11,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.locationtech.jts.geom.Point;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -41,11 +44,23 @@ public class Listing {
     @UpdateTimestamp
     private Instant updatedTime;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "listing_categories",
+            joinColumns = @JoinColumn(name = "listing_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "category_id", nullable = false)
+    )
+    private Set<ListingCategory> categories = new HashSet<>();
+
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ListingPhoto> photos;
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages;
+
+    @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("creationTime DESC")
+    private List<Review> reviews = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")

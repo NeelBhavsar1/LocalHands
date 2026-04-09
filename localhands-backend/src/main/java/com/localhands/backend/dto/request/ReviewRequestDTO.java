@@ -5,16 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ListingRequestDTO {
-    private String name;
-    private String description;
-    private double latitude;
-    private double longitude;
-    private List<Long> categoryIds;
+public class ReviewRequestDTO {
+    private Long listingId;
+    private int rating;
+    private String reviewBody;
 }

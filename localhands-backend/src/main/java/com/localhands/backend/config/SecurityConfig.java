@@ -7,6 +7,7 @@ import com.localhands.backend.security.UserAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -39,8 +40,11 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/uploads/**",
                                 "/api/auth/**"
-                                // Make logout restricted later.
                         ).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/listings").hasRole("SELLER")
+                        .requestMatchers(HttpMethod.PUT, "/api/listings").hasRole("SELLER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/listings").hasRole("SELLER")
+                        .requestMatchers(HttpMethod.GET, "/api/listings/me").hasRole("SELLER")
                         .anyRequest().authenticated()
                 )
                 .build();

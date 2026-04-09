@@ -19,4 +19,5 @@ public class PublicProfileResponseDTO {
     private List<String> roles;
     private ProfilePhotoResponseDTO profilePhoto;
     private List<ListingResponseDTO> listings;
+    private List<ReviewResponseDTO> reviews;
 }

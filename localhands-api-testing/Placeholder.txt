@@ -15,6 +15,8 @@ localhost:8080/api:
 		POST /logout - logout.
 		POST /refresh - refresh access token using refresh token - gets rid of cookies if expired.
 		GET  /confirm-email?{code} - Check code is correct and set the new email to the account it is associated with.
+		GET  /activate-account - confirms email so account doesn't delete if not verified within a few days.
+		GET  /deactivate-account - deactivates account if account creation was not the intended user.
 		POST /forgot-password - send forgot password code.
 		POST /verify-password-reset-code - verify code sent is correct and return a special token to reset password.
 		POST /reset-password - reset password using special token.
@@ -25,6 +27,7 @@ localhost:8080/api:
 		GET /id	    - obtains a listing by its id.
 		GET /radius - obtains listings based on location and radius.
 		GET /search - obtains listings based on user input of the name (like a search bar - no filters yet). Can supply longitude or latitude parameters to search and return based on distance.
+		GET /categories - Gets all categories (you can use this to map a dictionary so the id/name can map to a more user friendly category name.
 		PUT	    - edits a listing. Find out how to input this data.
 		DELETE	    - deletes a listing.
 		(When getting listings using id, radius or search, this only returns those who have a public seller profile)
@@ -33,6 +36,11 @@ localhost:8080/api:
 		POST - sends a message.
 		GET /conversation - gets all messages of a convo related between two users and a listing they are talking about.
 		GET /inbox - gets an inbox of all available conversations.
+	/reviews
+		POST - creates a new review for an intended listing. MIN 1 rating and MAX 5 rating (stars)
+		GET /me - gets all reviews made by the user logged in.
+		PUT - updates a specific review.
+		DELETE - deletes a specific review by id.
 
 
 All routes are not protected based on roles at the moment.
