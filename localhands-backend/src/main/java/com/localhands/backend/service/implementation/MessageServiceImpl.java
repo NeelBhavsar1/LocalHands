@@ -120,12 +120,18 @@ public class MessageServiceImpl implements MessageService {
         boolean canAccessListing = currentUserIsOwner || otherUser.isPublicProfile();
 
         return new ConversationResponseDTO(
+                listing.getName(),
+                otherUser.getFirstName() + " " + otherUser.getLastName(),
                 messages
                         .stream()
                         .map(MessageMapper::mapToMessageResponseDTO)
                         .collect(Collectors.toList()),
                 canMessage,
-                canAccessListing
+                canAccessListing,
+                otherUser.getProfilePhotos() != null &&
+                        !otherUser.getProfilePhotos().isEmpty()
+                        ? otherUser.getProfilePhotos().get(0).getUrl()
+                        : null
         );
     }
 
@@ -165,9 +171,13 @@ public class MessageServiceImpl implements MessageService {
                             listing.getId(),
                             listing.getName(),
                             otherUser.getId(),
-                            otherUser.getFirstName(),
+                            otherUser.getFirstName() + " " + otherUser.getLastName(),
                             m.getMessage(),
-                            m.getSentTime()
+                            m.getSentTime(),
+                            otherUser.getProfilePhotos() != null &&
+                                    !otherUser.getProfilePhotos().isEmpty()
+                                    ? otherUser.getProfilePhotos().get(0).getUrl()
+                                    : null
                     );
                 })
                 .sorted((a, b) -> b.getLastMessageTime().compareTo(a.getLastMessageTime()))

@@ -4,7 +4,6 @@ import com.localhands.backend.dto.request.UserRegisterRequestDTO;
 import com.localhands.backend.dto.response.*;
 import com.localhands.backend.entity.User;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserMapper {
@@ -41,7 +40,7 @@ public class UserMapper {
         );
     }
 
-    public static PublicProfileResponseDTO mapToPublicProfileResponseDTO(User user) {
+    public static PublicProfileResponseDTO mapToPublicProfileResponseDTO(User user, Long requesterId) {
         return new PublicProfileResponseDTO(
                 user.getId(),
                 user.getFirstName(),
@@ -56,7 +55,11 @@ public class UserMapper {
                         : ProfilePhotoMapper.mapToProfilePhotoResponseDTO(user.getProfilePhotos().get(0)),
                 user.getListings()
                         .stream()
-                        .map(ListingMapper::mapToListingResponseDTO)
+                        .map(lis -> ListingMapper.mapToListingResponseDTO(lis, requesterId))
+                        .collect(Collectors.toList()),
+                user.getReviews()
+                        .stream()
+                        .map(rev -> ReviewMapper.mapToReviewResponseDTO(rev, requesterId))
                         .collect(Collectors.toList())
         );
     }

@@ -1,6 +1,7 @@
 package com.localhands.backend.controller;
 
 import com.localhands.backend.dto.request.ListingRequestDTO;
+import com.localhands.backend.dto.response.CategoryResponseDTO;
 import com.localhands.backend.dto.response.ListingResponseDTO;
 import com.localhands.backend.security.UserPrincipal;
 import com.localhands.backend.service.ListingService;
@@ -47,9 +48,10 @@ public class ListingController {
             @AuthenticationPrincipal UserPrincipal user,
             @RequestParam double latitude,
             @RequestParam double longitude,
-            @RequestParam double radius
+            @RequestParam double radius,
+            @RequestParam List<Long> categoryIds
     ) {
-        List<ListingResponseDTO> listingResponseDTOs = listingService.getListingsWithinRadius(user.getId(), latitude, longitude, radius);
+        List<ListingResponseDTO> listingResponseDTOs = listingService.getListingsWithinRadius(user.getId(), latitude, longitude, radius, categoryIds);
         return ResponseEntity.ok(listingResponseDTOs);
     }
 
@@ -58,17 +60,24 @@ public class ListingController {
             @AuthenticationPrincipal UserPrincipal user,
             @RequestParam String searchInput,
             @RequestParam(required = false) Double latitude,
-            @RequestParam(required = false) Double longitude
+            @RequestParam(required = false) Double longitude,
+            @RequestParam List<Long> categoryIds
     ) {
         List<ListingResponseDTO> listingResponseDTOs;
 
         if (latitude != null && longitude != null) {
-            listingResponseDTOs = listingService.searchForListingsWithLocation(user.getId(), searchInput, latitude, longitude);
+            listingResponseDTOs = listingService.searchForListingsWithLocation(user.getId(), searchInput, latitude, longitude, categoryIds);
         } else {
-            listingResponseDTOs = listingService.searchForListings(user.getId(), searchInput);
+            listingResponseDTOs = listingService.searchForListings(user.getId(), searchInput, categoryIds);
         }
 
         return ResponseEntity.ok(listingResponseDTOs);
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<CategoryResponseDTO>> getAllCategories() {
+        List<CategoryResponseDTO> categories = listingService.getAllCategories();
+        return ResponseEntity.ok(categories);
     }
 
     @PutMapping(consumes = "multipart/form-data")

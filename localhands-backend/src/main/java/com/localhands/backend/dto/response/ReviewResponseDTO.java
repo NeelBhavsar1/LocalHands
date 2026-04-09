@@ -11,12 +11,15 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConversationPreviewResponseDTO {
+public class ReviewResponseDTO {
+    private Long id;
+    private int rating;
+    private String reviewBody;
+    private Instant creationTime;
+
     private Long listingId;
-    private String listingTitle;
-    private Long otherUserId;
-    private String otherUserName;
-    private String lastMessage;
-    private Instant lastMessageTime;
-    private String otherUserProfilePicture;
+
+    private Long userId;
+    private String userName;
+    private String userProfilePhoto;
 }

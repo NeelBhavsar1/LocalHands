@@ -1,12 +1,15 @@
 package com.localhands.backend.service.implementation;
 
 import com.localhands.backend.dto.request.ListingRequestDTO;
+import com.localhands.backend.dto.response.CategoryResponseDTO;
 import com.localhands.backend.dto.response.ListingResponseDTO;
 import com.localhands.backend.entity.Listing;
+import com.localhands.backend.entity.ListingCategory;
 import com.localhands.backend.entity.ListingPhoto;
 import com.localhands.backend.entity.User;
 import com.localhands.backend.exception.AppException;
 import com.localhands.backend.mapper.ListingMapper;
+import com.localhands.backend.repository.ListingCategoryRepository;
 import com.localhands.backend.repository.ListingRepository;
 import com.localhands.backend.repository.UserRepository;
 import com.localhands.backend.service.FileStorageService;
@@ -19,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +33,7 @@ public class ListingServiceImpl implements ListingService {
     private UserRepository userRepository;
     private ListingRepository listingRepository;
     private FileStorageService fileStorageService;
+    private ListingCategoryRepository listingCategoryRepository;
 
     @Override
     @Transactional
@@ -38,12 +43,24 @@ public class ListingServiceImpl implements ListingService {
             throw new AppException("Mismatch between photos and alt texts.", HttpStatus.BAD_REQUEST);
         }
 
+        if (requestDTO.getCategoryIds() == null || requestDTO.getCategoryIds().isEmpty()) {
+            throw new AppException("At least one category is required.", HttpStatus.BAD_REQUEST);
+        }
+
         Listing listing = ListingMapper.mapToListing(requestDTO);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException("Could not find user with id: " + userId, HttpStatus.NOT_FOUND));
 
         listing.setUser(user);
+
+        List<ListingCategory> categories = listingCategoryRepository.findByIdIn(requestDTO.getCategoryIds());
+
+        if (categories.size() != requestDTO.getCategoryIds().size()) {
+            throw new AppException("One or more categories are invalid.", HttpStatus.BAD_REQUEST);
+        }
+
+        listing.setCategories(new HashSet<>(categories));
 
         List<ListingPhoto> photos = new ArrayList<>();
         List<String> savedFileUrls = new ArrayList<>();
@@ -68,7 +85,7 @@ public class ListingServiceImpl implements ListingService {
 
             Listing savedListing = listingRepository.save(listing);
 
-            return ListingMapper.mapToListingResponseDTO(savedListing);
+            return ListingMapper.mapToListingResponseDTO(savedListing, userId);
 
         } catch (Exception e) {
             for (String url : savedFileUrls) {
@@ -88,7 +105,7 @@ public class ListingServiceImpl implements ListingService {
 
         return listingRepository.findByUserIdOrderByCreationTimeDesc(userId)
                 .stream()
-                .map(ListingMapper::mapToListingResponseDTO)
+                .map(lis -> ListingMapper.mapToListingResponseDTO(lis, userId))
                 .collect(Collectors.toList());
     }
 
@@ -104,40 +121,63 @@ public class ListingServiceImpl implements ListingService {
             throw new AppException("This listing is private.", HttpStatus.FORBIDDEN);
         }
 
-        return ListingMapper.mapToListingResponseDTO(listing);
+        return ListingMapper.mapToListingResponseDTO(listing, requesterId);
     }
 
     @Override
-    public List<ListingResponseDTO> getListingsWithinRadius(Long requesterId, double lat, double lon, double radius) {
-        return listingRepository.findPublicListingsWithinRadiusOrderByDistance(requesterId, lat, lon, radius)
+    public List<ListingResponseDTO> getListingsWithinRadius(Long requesterId, double lat, double lon, double radius, List<Long> categoryIds) {
+        if (categoryIds != null && categoryIds.isEmpty()) {
+            categoryIds = null;
+        }
+
+        return listingRepository.findPublicListingsWithinRadiusOrderByDistance(requesterId, lat, lon, radius, categoryIds)
                 .stream()
-                .map(ListingMapper::mapToListingResponseDTO)
+                .map(lis -> ListingMapper.mapToListingResponseDTO(lis, requesterId))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ListingResponseDTO> searchForListingsWithLocation(Long requesterId, String searchInput, double latitude, double longitude) {
+    public List<ListingResponseDTO> searchForListingsWithLocation(Long requesterId, String searchInput, double latitude, double longitude, List<Long> categoryIds) {
 
         if (searchInput == null || searchInput.trim().length() < 3) {
             return List.of();
         }
 
-        return listingRepository.searchPublicListingsWithLocation(requesterId, searchInput, latitude, longitude)
+        if (categoryIds != null && categoryIds.isEmpty()) {
+            categoryIds = null;
+        }
+
+        return listingRepository.searchPublicListingsWithLocation(requesterId, searchInput, latitude, longitude, categoryIds)
                 .stream()
-                .map(ListingMapper::mapToListingResponseDTO)
+                .map(lis -> ListingMapper.mapToListingResponseDTO(lis, requesterId))
                 .toList();
     }
 
     @Override
-    public List<ListingResponseDTO> searchForListings(Long requesterId, String searchInput) {
+    public List<ListingResponseDTO> searchForListings(Long requesterId, String searchInput, List<Long> categoryIds) {
 
         if (searchInput == null || searchInput.trim().length() < 3) {
             return List.of();
         }
 
-        return listingRepository.searchPublicListings(requesterId, searchInput)
+        if (categoryIds != null && categoryIds.isEmpty()) {
+            categoryIds = null;
+        }
+
+        return listingRepository.searchPublicListings(requesterId, searchInput, categoryIds)
                 .stream()
-                .map(ListingMapper::mapToListingResponseDTO)
+                .map(lis -> ListingMapper.mapToListingResponseDTO(lis, requesterId))
+                .toList();
+    }
+
+    @Override
+    public List<CategoryResponseDTO> getAllCategories() {
+        return listingCategoryRepository.findAll()
+                .stream()
+                .map(cat -> new CategoryResponseDTO(
+                        cat.getId(),
+                        cat.getCategory().name()
+                ))
                 .toList();
     }
 
@@ -149,12 +189,25 @@ public class ListingServiceImpl implements ListingService {
             throw new AppException("Mismatch between photos and alt texts.", HttpStatus.BAD_REQUEST);
         }
 
+        if (requestDTO.getCategoryIds() == null || requestDTO.getCategoryIds().isEmpty()) {
+            throw new AppException("At least one category is required.", HttpStatus.BAD_REQUEST);
+        }
+
         Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new AppException("Listing not found with id: " + listingId, HttpStatus.NOT_FOUND));
 
         if (listing.getUser() == null || !listing.getUser().getId().equals(userId)) {
             throw new AppException("User is not the owner of this listing.", HttpStatus.FORBIDDEN);
         }
+
+        List<ListingCategory> categories = listingCategoryRepository.findByIdIn(requestDTO.getCategoryIds());
+
+        if (categories.size() != requestDTO.getCategoryIds().size()) {
+            throw new AppException("One or more categories are invalid.", HttpStatus.BAD_REQUEST);
+        }
+
+        listing.getCategories().clear();
+        listing.getCategories().addAll(categories);
 
         List<String> savedFileUrls = new ArrayList<>();
 
@@ -188,7 +241,7 @@ public class ListingServiceImpl implements ListingService {
 
             Listing savedListing = listingRepository.save(listing);
 
-            return ListingMapper.mapToListingResponseDTO(savedListing);
+            return ListingMapper.mapToListingResponseDTO(savedListing, userId);
 
         } catch (Exception e) {
             for (String url : savedFileUrls) {

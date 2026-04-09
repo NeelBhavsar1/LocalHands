@@ -20,6 +20,8 @@ public class ListingResponseDTO {
     private double longitude;
     private Instant creationTime;
     private Instant updatedTime;
+    private List<CategoryResponseDTO> categories;
     private List<ListingPhotoResponseDTO> photos;
+    private List<ReviewResponseDTO> reviews;
     private ListingSellerResponseDTO seller;
 }

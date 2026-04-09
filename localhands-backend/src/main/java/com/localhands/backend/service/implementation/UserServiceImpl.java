@@ -161,6 +161,10 @@ public class UserServiceImpl implements UserService {
             throw new AppException("You must be 18 or older.", HttpStatus.BAD_REQUEST);
         }
 
+        if (registerDTO.getPassword() == null || registerDTO.getPassword().length() < 8) {
+            throw new AppException("Password must be at least 8 characters long.", HttpStatus.BAD_REQUEST);
+        }
+
         User user = UserMapper.mapToUser(registerDTO);
 
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
@@ -281,7 +285,7 @@ public class UserServiceImpl implements UserService {
             throw new AppException("This profile is private.", HttpStatus.FORBIDDEN);
         }
 
-        return UserMapper.mapToPublicProfileResponseDTO(user);
+        return UserMapper.mapToPublicProfileResponseDTO(user, requesterId);
     }
 
     @Override
@@ -293,7 +297,7 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.searchPublicProfiles(requesterId, searchInput)
                 .stream()
-                .map(UserMapper::mapToPublicProfileResponseDTO)
+                .map(profile -> UserMapper.mapToPublicProfileResponseDTO(profile, requesterId))
                 .toList();
     }
 
@@ -319,6 +323,10 @@ public class UserServiceImpl implements UserService {
 
             if (updateDTO.getExistingPassword() == null || updateDTO.getExistingPassword().isEmpty()) {
                 throw new AppException("Current password is required to set a new password.", HttpStatus.BAD_REQUEST);
+            }
+
+            if (updateDTO.getNewPassword().length() < 8) {
+                throw new AppException("New password must be at least 8 characters long.", HttpStatus.BAD_REQUEST);
             }
 
             if (!passwordEncoder.matches(updateDTO.getExistingPassword(), user.getPassword())) {

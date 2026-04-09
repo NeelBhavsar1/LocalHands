@@ -12,7 +12,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConversationResponseDTO {
+    private String listingTitle;
+    private String otherUserName;
     private List<MessageResponseDTO> conversation;
     private boolean canSendMessages;
     private boolean canAccessListing;
+    private String otherUserProfilePicture;
 }
