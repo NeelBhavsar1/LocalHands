@@ -5,10 +5,8 @@ import styles from './page.module.css'
 import CreateServiceForm from '@/components/CreateServiceForm/CreateServiceForm'
 import SearchBar from '@/components/searchBar/SearchBar'
 import ListingCard from '@/components/ListingCard/ListingCard'
-import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
 import { getListingsWithinRadius } from '@/api/listingApi'
-
-const LOADING_TIMEOUT = 10000 // 10 seconds
+import { getUserInfo } from '@/api/userApi'
 
 // Convert miles to meters for API
 const milesToMeters = (miles) => Math.round(miles * 1609.34)
@@ -17,11 +15,23 @@ export default function ServicesPage() {
     const [location, setLocation] = useState(null)
     const [nearbyListings, setNearbyListings] = useState([])
     const [listingsLoading, setListingsLoading] = useState(false)
-    const [loadingTimedOut, setLoadingTimedOut] = useState(false)
     const [radius, setRadius] = useState(50) // in miles
+    const [currentUser, setCurrentUser] = useState(null)
 
-    // Get user location on mount
+    // Get user info and location on mount
     useEffect(() => {
+        // Fetch current user info
+        const fetchUserInfo = async () => {
+            try {
+                const userData = await getUserInfo()
+                setCurrentUser(userData)
+            } catch (error) {
+                console.error('Failed to fetch user info:', error)
+            }
+        }
+        fetchUserInfo()
+
+        // Get location
         if (!navigator.geolocation) return
 
         navigator.geolocation.getCurrentPosition(
@@ -37,19 +47,6 @@ export default function ServicesPage() {
         )
     }, [])
 
-    // Timeout effect - shows message after 10 seconds if still loading
-    useEffect(() => {
-        if (!listingsLoading) {
-            setLoadingTimedOut(false)
-            return
-        }
-
-        const timer = setTimeout(() => {
-            setLoadingTimedOut(true)
-        }, LOADING_TIMEOUT)
-
-        return () => clearTimeout(timer)
-    }, [listingsLoading])
 
     // Fetch nearby listings when location or radius changes
     useEffect(() => {
@@ -57,7 +54,6 @@ export default function ServicesPage() {
 
         const fetchNearbyListings = async () => {
             setListingsLoading(true)
-            setLoadingTimedOut(false)
             try {
                 const radiusInMeters = milesToMeters(radius)
                 const listings = await getListingsWithinRadius(
@@ -85,21 +81,18 @@ export default function ServicesPage() {
 
             <div className={styles.midPage}>
                 <SearchBar radius={radius} onRadiusChange={setRadius} />
-                <CreateServiceForm />
+                {currentUser?.roles?.includes("SELLER") && <CreateServiceForm />}
             </div>
 
             <div className={styles.nearbySection}>
                 <h2>Nearby Services</h2>
-                {listingsLoading && !loadingTimedOut ? ( <LoadingSpinner /> ) : nearbyListings.length === 0 ? 
-                (
-                    <>
-                        {loadingTimedOut && <LoadingSpinner />}
-                        <p className={styles.noListingsText}>
-                            There are currently no listings available in your area, either increase your search radius
-                        </p>
-                    </>
-                ) : 
-                (
+                {listingsLoading ? (
+                    <p className={styles.loadingText}>Loading nearby services...</p>
+                ) : nearbyListings.length === 0 ? (
+                    <p className={styles.noListingsText}>
+                        There are currently no listings available in your area, either increase your search radius or check for online work.
+                    </p>
+                ) : (
                     <div className={styles.listingsGrid}>
                         {nearbyListings.map((listing) => (
                             <ListingCard key={listing.listingId} listing={listing} />

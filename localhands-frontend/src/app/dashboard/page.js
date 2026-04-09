@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { getMyListings } from '@/api/listingApi';
 import ListingList from '@/components/ListingList/ListingList';
+import Link from 'next/link';
 
 export default function page({ children }) {
 
@@ -64,10 +65,18 @@ export default function page({ children }) {
           <p className={styles.headerSubTitle}>Here's what's happened today.</p>
         </div> 
 
-        <div className={styles.listingsSection}>
-          <h2>Your Listings</h2>
-          <ListingList listings={listings} />
-        </div>
+        {user?.roles?.includes("SELLER") ? (
+          <div className={styles.listingsSection}>
+            <h2>Your Listings</h2>
+            <ListingList listings={listings} />
+          </div>
+        ) : (
+          <div className={styles.buyerSection}>
+            <h2>Looking for Services?</h2>
+            <p>Browse services from local providers in your area.</p>
+            <button><Link href="/dashboard/services" className={styles.viewServicesBtn}>View Services</Link></button>
+          </div>
+        )}
 
     </div>
   )

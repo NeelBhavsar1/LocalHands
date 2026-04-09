@@ -17,7 +17,8 @@ export default function page() {
         email: '',
         password: '',
         confirmPassword: '',
-        accountType: '',
+        isServiceProvider: false,
+        isConsumer: false,
         dateOfBirth: ''
     });
 
@@ -48,8 +49,9 @@ export default function page() {
             email: formData.email,
             password: formData.password,
             dateOfBirth: formData.dateOfBirth || null,
-            isServiceProvider: formData.accountType === "provider",
-            rememberMe: false // Default to false for now
+            isServiceProvider: formData.isServiceProvider,
+            isConsumer: formData.isConsumer,
+            rememberMe: false //keep for now
         }
 
         try {
@@ -65,15 +67,8 @@ export default function page() {
         console.log("Form submitted!", formData);
     }
 
-    const setAccountTypeFromCheckbox = (type, isChecked) => {
-        // Enforce "one selected": selecting a checkbox sets `accountType`,
-        // unchecking clears it (so validation can show an error)
-        if (!isChecked) {
-            setFormData((prev) => ({ ...prev, accountType: "" }));
-            return;
-        }
-
-        setFormData((prev) => ({ ...prev, accountType: type }));
+    const handleRoleChange = (role, isChecked) => {
+        setFormData((prev) => ({ ...prev, [role]: isChecked }))
     };
 
   return (
@@ -124,20 +119,20 @@ export default function page() {
                                 {errors.confirmPassword && <span className={styles.error}>{errors.confirmPassword}</span>}
                             </label>
 
-                            <label htmlFor='accountType'>{t("signup.accountType")}
+                            <label>{t("signup.accountType")}
                                 <div className={styles.accountTypeOptions}>
-                                    <label className={styles.accountTypeOptionLabel} htmlFor="accountTypeProvider">
-                                        <input type="checkbox" id="accountTypeProvider" name="accountTypeProvider" checked={formData.accountType === "provider"} onChange={(e) => setAccountTypeFromCheckbox("provider", e.target.checked)}/>
+                                    <label className={styles.accountTypeOptionLabel}>
+                                        <input type="checkbox" checked={formData.isServiceProvider} onChange={(e) => handleRoleChange("isServiceProvider", e.target.checked)}/>
                                         {t("signup.provider")}
                                     </label>
 
-                                    <label className={styles.accountTypeOptionLabel} htmlFor="accountTypeCustomer">
-                                        <input type="checkbox" id="accountTypeCustomer" name="accountTypeCustomer" checked={formData.accountType === "customer"} onChange={(e) => setAccountTypeFromCheckbox("customer", e.target.checked)}/>
+                                    <label className={styles.accountTypeOptionLabel}>
+                                        <input type="checkbox" checked={formData.isConsumer} onChange={(e) => handleRoleChange("isConsumer", e.target.checked)}/>
                                         {t("signup.customer")}
                                     </label>
                                 </div>
 
-                                {errors.accountType && <span className={styles.error}>{errors.accountType}</span>}
+                                {(errors.isServiceProvider || errors.isConsumer) && <span className={styles.error}>{errors.isServiceProvider || errors.isConsumer}</span>}
                             </label>
                         </div>
 

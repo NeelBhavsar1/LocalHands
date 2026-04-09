@@ -123,5 +123,6 @@
     "profile.savePrivacy": "Datenschutzeinstellungen speichern",
     "profile.editAccountInfo": "Kontoinformationen",
     "profile.serviceProviderDescription": "Beschreibung des Dienstleisters",
-    "profile.serviceProviderTitle": "Titel des Dienstleisters"
+    "profile.serviceProviderTitle": "Titel des Dienstleisters",
+    "profile.save": "Profil speichern"
 }

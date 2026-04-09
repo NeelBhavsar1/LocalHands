@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styles from './page.module.css'
-import { getUserInfo } from '@/api/userApi'
-import { updateAccountInfo, deleteUserAccount } from '@/api/userApi'
+import { getUserInfo, updateAccountInfo, deleteUserAccount } from '@/api/userApi'
+import ToggleSwitch from '@/components/ToggleSwitch/ToggleSwitch'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
 import { handleUpdateAccount, handleDeleteAccount, createChangeHandler, createLoadUserData } from '@/utils/settingsUtils'
 
@@ -19,7 +19,8 @@ export default function page() {
         email: '',
         existingPassword: '',
         newPassword: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        isServiceProvider: false
     })
 
     const [errors, setErrors] = useState({})
@@ -72,6 +73,14 @@ export default function page() {
                         <div className={styles.formGroup}>
                             <label htmlFor="email">{t("settings.email")}</label>
                             <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className={styles.input} required />
+                        </div>
+
+                        <div className={styles.formGroup}>
+                            <label>{t("settings.serviceProvider")}</label>
+                            <ToggleSwitch 
+                                isOn={formData.isServiceProvider} 
+                                setIsOn={(value) => setFormData(prev => ({ ...prev, isServiceProvider: value }))} 
+                            />
                         </div>
                     </div>
 

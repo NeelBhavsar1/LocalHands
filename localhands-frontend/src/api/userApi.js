@@ -38,12 +38,32 @@ export const deleteUserAccount = async () => {
     }
 };
 
-//IMPLEMENT GET PUBLIC USER PROFILE
+//updates privacy settings
+export const updatePrivacyInfo = async (privacyData) => {
+    try {
+        const res = await api.put("/api/users/privacy", privacyData)
+        return res.data
+    } catch (error) {
+        console.error("Update privacy info error: ", error)
+        throw error.response?.data || "Failed to update privacy settings!"
+    }
+};
 
+//updates profile information (bio)
+export const updateProfileInfo = async (profileData) => {
+    try {
+        const res = await api.put("/api/users/profile", profileData)
+        return res.data
+    } catch (error) {
+        console.error("Update profile info error: ", error)
+        throw error.response?.data || "Failed to update profile information!"
+    }
+};
 
-//IMPLEMENT SEARCH PUBLIC USER
-
-//IMPLEMENTS PROFILE UPDATE
-
-
-//IMPLEMENT PRIVACY SETTINGS
+export const userApi = {
+    getUserInfo,
+    updateAccountInfo,
+    deleteUserAccount,
+    updatePrivacyInfo,
+    updateProfileInfo
+};

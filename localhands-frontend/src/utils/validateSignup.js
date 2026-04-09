@@ -42,8 +42,8 @@ export const validateSignupForm = (formData) => {
     }
 
 
-    if (!formData.accountType) {
-        errors.accountType = 'Please select an account type';
+    if (!formData.isServiceProvider && !formData.isConsumer) {
+        errors.isServiceProvider = 'Please select at least one account type';
     }
 
     return errors;

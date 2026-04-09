@@ -84,6 +84,12 @@
     width: 100%;
 }
 
+.loadingText {
+    color: var(--muted);
+    font-size: 0.875rem;
+    padding: 1rem 0;
+}
+
 @media (max-width: 767px) {
     .listingsGrid {
         grid-template-columns: 1fr;

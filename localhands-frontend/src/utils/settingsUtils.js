@@ -29,7 +29,8 @@ export const createLoadUserData = (setUser, setFormData, setLoading, getUserInfo
             email: userData.email || '',
             existingPassword: '',
             newPassword: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            isServiceProvider: userData.roles?.includes('SELLER') || false
         })
     } catch (error) {
         console.error('Failed to load user data:', error)
@@ -63,7 +64,8 @@ const createUpdateData = (formData) => {
         firstName: formData.firstName,
         lastName: formData.lastName,
         dateOfBirth: formData.dateOfBirth,
-        email: formData.email
+        email: formData.email,
+        isServiceProvider: formData.isServiceProvider
     };
     
     //this is to only include password fields if they are changing
