@@ -19,11 +19,11 @@ export default function Footer() {
             <h2>{t("footer.links")}</h2>
             <div className={styles.linkColumn}>
               <Link href='/'>{t("footer.home")}</Link>
-              <Link href='/'>{t("footer.faq")}</Link>
-              <Link href='/'>{t("footer.contactus")}</Link>
-              <Link href='/'>{t("footer.termsofservice")}</Link>
-              <Link href='/'>{t("footer.privacypolicy")}</Link>
-              <Link href='/'>{t("footer.sitemap")}</Link>
+              <Link href='/faq'>{t("footer.faq")}</Link>
+              <Link href='/contact'>{t("footer.contactus")}</Link>
+              <Link href='/termsofservice'>{t("footer.termsofservice")}</Link>
+              <Link href='/privacypolicy'>{t("footer.privacypolicy")}</Link>
+              <Link href='/sitemap'>{t("footer.sitemap")}</Link>
             </div>
           </div>           
       </div>
