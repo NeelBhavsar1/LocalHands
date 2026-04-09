@@ -11,7 +11,7 @@ export default function About() {
 
     return (
         <div className={styles.container}>
-            <HomeNavBar showLinks={true}/>
+            <HomeNavBar showLinks={false}/>
 
             <Footer />
         </div>
