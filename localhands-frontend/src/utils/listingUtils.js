@@ -1,20 +1,22 @@
-import L from 'leaflet'
-
 // Backend URL configuration for API calls
 // needed because of vercel deployment
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080'
 
-// Leaflet default icon configuration for map markers
-// check yt video for this
-export const DefaultIcon = L.icon({
-    iconUrl: '/marker-icon.png',
-    iconRetinaUrl: '/marker-icon-2x.png',
-    shadowUrl: '/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-})
+// Leaflet default icon configuration for map markers - lazy loaded for SSR compatibility
+// This function creates the icon only when called on the client side
+export const getDefaultIcon = () => {
+    if (typeof window === 'undefined') return null
+    const L = require('leaflet')
+    return L.icon({
+        iconUrl: '/marker-icon.png',
+        iconRetinaUrl: '/marker-icon-2x.png',
+        shadowUrl: '/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    })
+}
 
 /**
  * Creates a change handler for form inputs

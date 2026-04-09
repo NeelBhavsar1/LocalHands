@@ -1,59 +1,80 @@
 "use client"
 
-import { useState } from 'react'
-import dynamic from 'next/dynamic'
+import { useState, useEffect } from 'react'
 import styles from './page.module.css'
-import { createListing } from '@/api/listingApi'
-import { createServiceChangeHandler, createServicePhotoHandler, createMapLocationHandler, createWorkTypeHandler, validateServiceForm, generateAltTexts, resetServiceForm } from '@/utils/listingUtils'
+import CreateServiceForm from '@/components/CreateServiceForm/CreateServiceForm'
+import SearchBar from '@/components/searchBar/SearchBar'
+import ListingCard from '@/components/ListingCard/ListingCard'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
+import { getListingsWithinRadius } from '@/api/listingApi'
 
-// Dynamically import the map component to avoid SSR issues
-// This is necessary because the map component uses window object which is not available on the server
-const MapWithNoSSR = dynamic(
-  () => import('@/components/LocationPicker/LocationPicker'),
-  { ssr: false }
-)
+const LOADING_TIMEOUT = 10000 // 10 seconds
 
-export default function page() {
-    const [showForm, setShowForm] = useState(false)
-    const [photos, setPhotos] = useState([])
-    const [loading, setLoading] = useState(false)
-    const [workType, setWorkType] = useState('online')
+// Convert miles to meters for API
+const milesToMeters = (miles) => Math.round(miles * 1609.34)
 
-    const [formData, setFormData] = useState({
-        name: '',
-        description: '',
-        latitude: '',
-        longitude: ''
-    })
+export default function ServicesPage() {
+    const [location, setLocation] = useState(null)
+    const [nearbyListings, setNearbyListings] = useState([])
+    const [listingsLoading, setListingsLoading] = useState(false)
+    const [loadingTimedOut, setLoadingTimedOut] = useState(false)
+    const [radius, setRadius] = useState(50) // in miles
 
-    const handleChange = createServiceChangeHandler(setFormData)
-    const handlePhotoChange = createServicePhotoHandler(setPhotos)
-    const handleMapLocationSelect = createMapLocationHandler(setFormData)
-    const handleWorkTypeChange = createWorkTypeHandler(setWorkType, setFormData)
+    // Get user location on mount
+    useEffect(() => {
+        if (!navigator.geolocation) return
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        
-        const validation = validateServiceForm(formData, photos, workType)
-        if (!validation.valid) {
-            alert(validation.error)
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude
+                const lon = position.coords.longitude
+                setLocation({ latitude: lat, longitude: lon })
+            },
+            (error) => {
+                console.error('Geolocation error:', error)
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        )
+    }, [])
+
+    // Timeout effect - shows message after 10 seconds if still loading
+    useEffect(() => {
+        if (!listingsLoading) {
+            setLoadingTimedOut(false)
             return
         }
-        
-        setLoading(true)
 
-        try {
-            const altTexts = generateAltTexts(photos, formData.name)
-            await createListing(validation.data, photos, altTexts)
-            alert('Service created successfully!')
-            resetServiceForm(setFormData, setPhotos, setWorkType, setShowForm)
-        } catch (error) {
-            alert('Error creating service: ' + error)
-        } finally {
-            setLoading(false)
+        const timer = setTimeout(() => {
+            setLoadingTimedOut(true)
+        }, LOADING_TIMEOUT)
+
+        return () => clearTimeout(timer)
+    }, [listingsLoading])
+
+    // Fetch nearby listings when location or radius changes
+    useEffect(() => {
+        if (!location) return
+
+        const fetchNearbyListings = async () => {
+            setListingsLoading(true)
+            setLoadingTimedOut(false)
+            try {
+                const radiusInMeters = milesToMeters(radius)
+                const listings = await getListingsWithinRadius(
+                    location.latitude,
+                    location.longitude,
+                    radiusInMeters
+                )
+                setNearbyListings(listings)
+            } catch (error) {
+                console.error('Failed to fetch nearby listings:', error)
+            } finally {
+                setListingsLoading(false)
+            }
         }
-    }
+
+        fetchNearbyListings()
+    }, [location, radius])
 
     return (
         <div className={styles.container}>
@@ -62,70 +83,30 @@ export default function page() {
                 <p>Post your services here, or view services on offer!</p>
             </div>
 
-            <div className={styles.actions}>
-                <button onClick={() => setShowForm(!showForm)} className={styles.createButton}>
-                    {showForm ? 'Cancel' : 'Create Service'}
-                </button>
+            <div className={styles.midPage}>
+                <SearchBar radius={radius} onRadiusChange={setRadius} />
+                <CreateServiceForm />
             </div>
 
-            {showForm && (
-                <form onSubmit={handleSubmit} className={styles.form}>
-                    <h2>Create New Service</h2>
-                    
-                    <div className={styles.formGroup}>
-                        <label>Work Type *</label>
-                        <div className={styles.workTypeButtons}>
-                            <button type="button" className={`${styles.workTypeBtn} ${workType === 'online' ? styles.active : ''}`} onClick={() => handleWorkTypeChange('online')}>Online</button>
-                            <button type="button" className={`${styles.workTypeBtn} ${workType === 'in-person' ? styles.active : ''}`} onClick={() => handleWorkTypeChange('in-person')}>In-Person</button>
-                        </div>
+            <div className={styles.nearbySection}>
+                <h2>Nearby Services</h2>
+                {listingsLoading && !loadingTimedOut ? ( <LoadingSpinner /> ) : nearbyListings.length === 0 ? 
+                (
+                    <>
+                        {loadingTimedOut && <LoadingSpinner />}
+                        <p className={styles.noListingsText}>
+                            There are currently no listings available in your area, either increase your search radius
+                        </p>
+                    </>
+                ) : 
+                (
+                    <div className={styles.listingsGrid}>
+                        {nearbyListings.map((listing) => (
+                            <ListingCard key={listing.listingId} listing={listing} />
+                        ))}
                     </div>
-
-                    <div className={styles.formGroup}>
-                        <label htmlFor="name">Service Name *</label>
-                        <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
-                    </div>
-
-                    <div className={styles.formGroup}>
-                        <label htmlFor="description">Description *</label>
-                        <textarea id="description" name="description" value={formData.description} onChange={handleChange} rows={4} required />
-                    </div>
-
-                    {workType === 'in-person' && (
-                        <>
-                            <div className={styles.mapSection}>
-                                <label>Click on the map to set location *</label>
-                                <div className={styles.mapContainer}>
-                                    <MapWithNoSSR onLocationSelect={handleMapLocationSelect} />
-                                </div>
-                            </div>
-
-                            <div className={styles.formRow}>
-                                <div className={styles.formGroup}>
-                                    <label htmlFor="latitude">Latitude</label>
-                                    <input type="number" step="any" id="latitude" name="latitude" value={formData.latitude} onChange={handleChange} placeholder="Click map to set" readOnly />
-                                </div>
-
-                                <div className={styles.formGroup}>
-                                    <label htmlFor="longitude">Longitude</label>
-                                    <input type="number" step="any" id="longitude" name="longitude" value={formData.longitude} onChange={handleChange} placeholder="Click map to set" readOnly />
-                                </div>
-                            </div>
-                        </>
-                    )}
-
-                    <div className={styles.formGroup}>
-                        <label htmlFor="photos">Photos *</label>
-                        <input type="file" id="photos" name="photos" accept="image/*" multiple onChange={handlePhotoChange} required />
-                        {photos.length > 0 && (
-                            <p className={styles.fileInfo}>{photos.length} photo(s) selected</p>
-                        )}
-                    </div>
-
-                    <button type="submit" className={styles.submitButton} disabled={loading}>
-                        {loading ? <LoadingSpinner /> : 'Create Service'}
-                    </button>
-                </form>
-            )}
+                )}
+            </div>
         </div>
     )
 }

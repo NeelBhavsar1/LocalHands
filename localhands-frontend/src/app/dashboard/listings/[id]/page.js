@@ -9,7 +9,7 @@ import styles from './page.module.css'
 import { getListingById, updateListing, deleteListing } from '@/api/listingApi'
 import { getUserInfo } from '@/api/userApi'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
-import { BACKEND_URL, DefaultIcon, createEditChangeHandler, createPhotoChangeHandler, createMapLocationHandler, validateListingForm, generateAltTexts } from '@/utils/listingUtils'
+import { BACKEND_URL, getDefaultIcon, createEditChangeHandler, createPhotoChangeHandler, createMapLocationHandler, validateListingForm, generateAltTexts } from '@/utils/listingUtils'
 
 const MapWithNoSSR = dynamic(() => import('@/components/LocationPicker/LocationPicker'), { ssr: false })
 
@@ -70,6 +70,11 @@ export default function ListingDetailPage() {
     const handleUpdate = async (e) => {
         e.preventDefault()
 
+        if (!isOwner) {
+            alert('You can only edit your own listings')
+            return
+        }
+
         const validation = validateListingForm(editForm, newPhotos)
         if (!validation.valid) {
             alert(validation.error)
@@ -94,6 +99,11 @@ export default function ListingDetailPage() {
     }
 
     const handleDelete = async () => {
+        if (!isOwner) {
+            alert('You can only delete your own listings')
+            return
+        }
+
         if (!window.confirm('Are you sure you want to delete this listing? This action cannot be undone.')) {
             return
         }
@@ -215,7 +225,7 @@ export default function ListingDetailPage() {
 
                                     <MapContainer center={[listing.latitude, listing.longitude]} zoom={14} scrollWheelZoom={false} style={{ height: '250px', width: '100%', borderRadius: '0.75rem' }}>
                                         <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                                        <Marker position={[listing.latitude, listing.longitude]} icon={DefaultIcon} />
+                                        <Marker position={[listing.latitude, listing.longitude]} icon={getDefaultIcon()} />
                                     </MapContainer>
                                 </div>
                             </div>
