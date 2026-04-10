@@ -38,7 +38,7 @@ function LocationMarker({ onLocationSelect, icon, initialPosition }) {
         }
     }, [initialPosition])
 
-    return position === null ? null : (
+    return (position === null || position === undefined) ? null : (
         <Marker position={position} icon={icon} />
     )
 }
