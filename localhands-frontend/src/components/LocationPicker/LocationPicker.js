@@ -20,8 +20,8 @@ const getDefaultIcon = () => {
 }
 
 //this is a marker that shows the location on the map
-function LocationMarker({ onLocationSelect, icon }) {
-    const [position, setPosition] = useState(null)
+function LocationMarker({ onLocationSelect, icon, initialPosition }) {
+    const [position, setPosition] = useState(initialPosition)
     
     const map = useMapEvents({
         click(e) {
@@ -31,13 +31,20 @@ function LocationMarker({ onLocationSelect, icon }) {
         },
     })
 
+    //sets initial pos on mount if it has been provided
+    useEffect(() => {
+        if (initialPosition && position === null) {
+            setPosition(initialPosition)
+        }
+    }, [initialPosition])
+
     return position === null ? null : (
         <Marker position={position} icon={icon} />
     )
 }
 
 //this is the main component that shows the map and allows the user to select a location
-export default function LocationPicker({ onLocationSelect }) {
+export default function LocationPicker({ onLocationSelect, initialPosition }) {
     const defaultPosition = [53.4084, -2.9916]; // home of the champions
     const [mounted, setMounted] = useState(false)
 
@@ -50,11 +57,12 @@ export default function LocationPicker({ onLocationSelect }) {
     }
 
     const icon = getDefaultIcon()
+    const center = initialPosition || defaultPosition
 
     return (
-        <MapContainer center={defaultPosition} zoom={13} scrollWheelZoom={false} style={{ height: '300px', width: '100%', borderRadius: '8px' }}>
+        <MapContainer center={center} zoom={13} scrollWheelZoom={false} style={{ height: '300px', width: '100%', borderRadius: '8px' }}>
             <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <LocationMarker onLocationSelect={onLocationSelect} icon={icon} />
+            <LocationMarker onLocationSelect={onLocationSelect} icon={icon} initialPosition={initialPosition} />
         </MapContainer>
     )
 }

@@ -129,24 +129,51 @@
 
 }
 
+.accountTypeSection {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.accountTypeLabel {
+    font-size: 0.98rem;
+    font-weight: 600;
+}
+
 .accountTypeOptions {
     display: flex;
-    flex-direction: row;
-    gap: 16px;
-    margin-top: 8px;
-    cursor: pointer;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.accountTypeOptionLabel {
+.accountTypeOption {
     display: flex;
     align-items: center;
-    gap: 10px;
-    cursor: pointer;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--background);
 }
 
-.accountTypeOptionLabel input:focus {
-    box-shadow: none;
-    outline: none;
+.accountTypeText {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.rememberMe {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin: 8px 0;
+}
+
+.rememberMe input {
+    width: auto;
     cursor: pointer;
 }
 

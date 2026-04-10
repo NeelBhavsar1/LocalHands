@@ -16,6 +16,7 @@ export default function ServicesPage() {
     const [nearbyListings, setNearbyListings] = useState([])
     const [listingsLoading, setListingsLoading] = useState(false)
     const [radius, setRadius] = useState(50) // in miles
+    const [selectedCategories, setSelectedCategories] = useState([])
     const [currentUser, setCurrentUser] = useState(null)
 
     // Get user info and location on mount
@@ -48,7 +49,7 @@ export default function ServicesPage() {
     }, [])
 
 
-    // Fetch nearby listings when location or radius changes
+    // Fetch nearby listings when location, radius, or selected categories changes
     useEffect(() => {
         if (!location) return
 
@@ -59,7 +60,8 @@ export default function ServicesPage() {
                 const listings = await getListingsWithinRadius(
                     location.latitude,
                     location.longitude,
-                    radiusInMeters
+                    radiusInMeters,
+                    selectedCategories
                 )
                 setNearbyListings(listings)
             } catch (error) {
@@ -70,7 +72,7 @@ export default function ServicesPage() {
         }
 
         fetchNearbyListings()
-    }, [location, radius])
+    }, [location, radius, selectedCategories])
 
     return (
         <div className={styles.container}>
@@ -80,7 +82,7 @@ export default function ServicesPage() {
             </div>
 
             <div className={styles.midPage}>
-                <SearchBar radius={radius} onRadiusChange={setRadius} />
+                <SearchBar radius={radius} onRadiusChange={setRadius} onCategoriesChange={setSelectedCategories} />
                 {currentUser?.roles?.includes("SELLER") && <CreateServiceForm />}
             </div>
 

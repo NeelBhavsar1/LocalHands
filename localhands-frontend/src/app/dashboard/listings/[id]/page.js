@@ -6,10 +6,11 @@ import dynamic from 'next/dynamic'
 import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import styles from './page.module.css'
-import { getListingById, updateListing, deleteListing } from '@/api/listingApi'
+import { getListingById, updateListing, deleteListing, getCategories } from '@/api/listingApi'
 import { getUserInfo } from '@/api/userApi'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
 import { BACKEND_URL, getDefaultIcon, createEditChangeHandler, createPhotoChangeHandler, createMapLocationHandler, validateListingForm, generateAltTexts } from '@/utils/listingUtils'
+import { useTranslation } from 'react-i18next'
 
 const MapWithNoSSR = dynamic(() => import('@/components/LocationPicker/LocationPicker'), { ssr: false })
 
@@ -24,6 +25,10 @@ export default function ListingDetailPage() {
     const [isEditing, setIsEditing] = useState(false)
     const [newPhotos, setNewPhotos] = useState([])
     const [saving, setSaving] = useState(false)
+    const [categories, setCategories] = useState([])
+    const [selectedCategories, setSelectedCategories] = useState([])
+    const [categoriesLoading, setCategoriesLoading] = useState(false)
+    const { t } = useTranslation()
 
     const [editForm, setEditForm] = useState({
         name: '',
@@ -36,15 +41,21 @@ export default function ListingDetailPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [listingData, userData] = await Promise.all([getListingById(listingId), getUserInfo()])
+                const [listingData, userData, categoriesData] = await Promise.all([getListingById(listingId), getUserInfo(), getCategories()])
+
                 setListing(listingData)
                 setCurrentUser(userData)
+                setCategories(categoriesData)
                 setEditForm({
                     name: listingData.name,
                     description: listingData.description,
                     latitude: listingData.latitude,
                     longitude: listingData.longitude
                 })
+                
+                if (listingData.categories && listingData.categories.length > 0) {
+                    setSelectedCategories(listingData.categories.map(cat => cat.id))
+                }
 
             } catch (error) {
                 console.error('Error fetching listing:', error)
@@ -67,6 +78,16 @@ export default function ListingDetailPage() {
 
     const handleMapLocationSelect = createMapLocationHandler(setEditForm)
 
+    const handleCategoryToggle = (categoryId) => {
+        setSelectedCategories(prev => {
+            if (prev.includes(categoryId)) {
+                return prev.filter(id => id !== categoryId)
+            } else {
+                return [...prev, categoryId]
+            }
+        })
+    }
+
     const handleUpdate = async (e) => {
         e.preventDefault()
 
@@ -75,7 +96,7 @@ export default function ListingDetailPage() {
             return
         }
 
-        const validation = validateListingForm(editForm, newPhotos)
+        const validation = validateListingForm(editForm, newPhotos, selectedCategories)
         if (!validation.valid) {
             alert(validation.error)
             return
@@ -129,17 +150,17 @@ export default function ListingDetailPage() {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <button onClick={() => router.push('/dashboard')} className={styles.backButton}>
-                    Back to Dashboard
+                <button onClick={() => router.back()} className={styles.backButton}>
+                    {t('back')}
                 </button>
                 
                 {isOwner && !isEditing && (
                     <div className={styles.actions}>
                         <button onClick={() => setIsEditing(true)} className={styles.editButton}>
-                            Edit Listing
+                            {t('editListing')}
                         </button>
                         <button onClick={handleDelete} className={styles.deleteButton}>
-                            Delete Listing
+                            {t('deleteListing')}
                         </button>
                     </div>
                 )}
@@ -147,47 +168,69 @@ export default function ListingDetailPage() {
 
             {isEditing ? (
                 <form onSubmit={handleUpdate} className={styles.editForm}>
-                    <h2>Edit Listing</h2>
+                    <h2>{t('editListing')}</h2>
                     
                     <div className={styles.formGroup}>
-                        <label htmlFor="name">Service Name</label>
+                        <label htmlFor="name">{t('serviceName')}</label>
                         <input type="text" id="name" name="name" value={editForm.name} onChange={handleEditChange} required />
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label htmlFor="description">Description</label>
+                        <label htmlFor="description">{t('description')}</label>
                         <textarea id="description" name="description" value={editForm.description} onChange={handleEditChange} rows={4} required />
                     </div>
 
+                    <div className={styles.formGroup}>
+                        <label>{t('categories')}</label>
+                        {categoriesLoading ? (
+                            <LoadingSpinner size="small" />
+                        ) : (
+                            <div className={styles.categoriesGrid}>
+                                {categories.map((category) => (
+                                    <button key={category.id} type="button" className={`${styles.categoryBtn} ${selectedCategories.includes(category.id) ? styles.active : ''}`} onClick={() => handleCategoryToggle(category.id)}>
+                                        {category.category}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                        
+                        {selectedCategories.length > 0 && (
+                            <p className={styles.selectedInfo}>{selectedCategories.length} {t('categoriesSelected')}</p>
+                        )}
+                    </div>
+
                     <div className={styles.mapSection}>
-                        <label>Click on the map if you need to update the existing location</label>
+                        <label>{t('clickOnMapToUpdateLocation')}</label>
                         <div className={styles.mapContainer}>
-                            <MapWithNoSSR onLocationSelect={handleMapLocationSelect} />
+                            <MapWithNoSSR 
+                                onLocationSelect={handleMapLocationSelect} 
+                                initialPosition={listing?.latitude && listing?.longitude ? [listing.latitude, listing.longitude] : null}
+                            />
                         </div>
                     </div>
 
                     <div className={styles.formRow}>
                         <div className={styles.formGroup}>
-                            <label>Latitude</label>
+                            <label>{t('latitude')}</label>
                             <input type="text" value={editForm.latitude} readOnly />
                         </div>
                         <div className={styles.formGroup}>
-                            <label>Longitude</label>
+                            <label>{t('longitude')}</label>
                             <input type="text" value={editForm.longitude} readOnly />
                         </div>
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label htmlFor="photos">New Photos (required)</label>
+                        <label htmlFor="photos">{t('newPhotosRequired')}</label>
                         <input type="file" id="photos" accept="image/*" multiple onChange={handlePhotoChange} required />
                         {newPhotos.length > 0 && (
-                            <p className={styles.fileInfo}>{newPhotos.length} photo(s) selected</p>
+                            <p className={styles.fileInfo}>{newPhotos.length} {t('photosSelected')}</p>
                         )}
                     </div>
 
                     <div className={styles.formActions}>
-                        <button type="button" onClick={() => setIsEditing(false)} className={styles.cancelButton}>Cancel</button>
-                        <button type="submit" className={styles.saveButton} disabled={saving}> {saving ? 'Saving...' : 'Save Changes'}</button>
+                        <button type="button" onClick={() => setIsEditing(false)} className={styles.cancelButton}>{t('cancel')}</button>
+                        <button type="submit" className={styles.saveButton} disabled={saving}> {saving ? t('saving') : t('saveChanges')}</button>
                     </div>
                 </form>
                 
@@ -210,17 +253,17 @@ export default function ListingDetailPage() {
                                 {listing.latitude?.toFixed(4)}, {listing.longitude?.toFixed(4)}
                             </span>
                             <span className={styles.date}>
-                                Posted: {new Date(listing.creationTime).toLocaleDateString()}
+                                {t('posted')}: {new Date(listing.creationTime).toLocaleDateString()}
                             </span>
                             <span className={styles.seller}>
-                                By: {listing.seller?.firstName} {listing.seller?.lastName}
+                                {t('by')}: {listing.seller?.firstName} {listing.seller?.lastName}
                             </span>
                         </div>
 
                         {listing.latitude && listing.longitude && (
                             <div className={styles.mapSectionDisplay}>
 
-                                <label>Service Location</label>
+                                <label>{t('serviceLocation')}</label>
                                 <div className={styles.mapContainerDisplay}>
 
                                     <MapContainer center={[listing.latitude, listing.longitude]} zoom={14} scrollWheelZoom={false} style={{ height: '250px', width: '100%', borderRadius: '0.75rem' }}>

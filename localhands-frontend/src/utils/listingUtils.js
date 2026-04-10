@@ -55,9 +55,10 @@ export const createMapLocationHandler = (setEditForm) => (lat, lng) => {
  * Validates listing form data
  * @param {*} editForm - The edit form data
  * @param {*} newPhotos - The new photos array
+ * @param {*} selectedCategories - Optional array of selected category IDs
  * @returns {Object} - Validation result with valid flag and error message
  */
-export const validateListingForm = (editForm, newPhotos) => {
+export const validateListingForm = (editForm, newPhotos, selectedCategories) => {
     if (newPhotos.length === 0) {
         return { valid: false, error: 'Please select at least one photo' }
     }
@@ -69,14 +70,21 @@ export const validateListingForm = (editForm, newPhotos) => {
         return { valid: false, error: 'Please select a location on the map' }
     }
 
+    const data = {
+        name: editForm.name,
+        description: editForm.description,
+        latitude: lat,
+        longitude: lng
+    }
+
+    // Include categoryIds if provided
+    if (selectedCategories && selectedCategories.length > 0) {
+        data.categoryIds = selectedCategories
+    }
+
     return {
         valid: true,
-        data: {
-            name: editForm.name,
-            description: editForm.description,
-            latitude: lat,
-            longitude: lng
-        }
+        data
     }
 }
 
@@ -128,11 +136,16 @@ export const createWorkTypeHandler = (setWorkType, setFormData) => (type) => {
  * @param {*} formData - The form data
  * @param {*} photos - The photos array
  * @param {*} workType - The work type
+ * @param {*} selectedCategories - The selected category IDs array
  * @returns {Object} - Validation result with valid flag and error message
  */
-export const validateServiceForm = (formData, photos, workType) => {
+export const validateServiceForm = (formData, photos, workType, selectedCategories) => {
     if (photos.length === 0) {
         return { valid: false, error: 'Please add at least one photo' }
+    }
+
+    if (!selectedCategories || selectedCategories.length === 0) {
+        return { valid: false, error: 'Please select at least one category' }
     }
 
     if (workType === 'in-person' && (!formData.latitude || !formData.longitude)) {
@@ -145,7 +158,8 @@ export const validateServiceForm = (formData, photos, workType) => {
             name: formData.name,
             description: formData.description,
             latitude: workType === 'online' ? 0 : parseFloat(formData.latitude),
-            longitude: workType === 'online' ? 0 : parseFloat(formData.longitude)
+            longitude: workType === 'online' ? 0 : parseFloat(formData.longitude),
+            categoryIds: selectedCategories
         }
     }
 }
@@ -156,10 +170,12 @@ export const validateServiceForm = (formData, photos, workType) => {
  * @param {*} setPhotos - The setter function for photos
  * @param {*} setWorkType - The setter function for work type
  * @param {*} setShowForm - The setter function for show form
+ * @param {*} setSelectedCategories - The setter function for selected categories
  */
-export const resetServiceForm = (setFormData, setPhotos, setWorkType, setShowForm) => {
+export const resetServiceForm = (setFormData, setPhotos, setWorkType, setShowForm, setSelectedCategories) => {
     setFormData({ name: '', description: '', latitude: '', longitude: '' })
     setPhotos([])
     setWorkType('online')
+    setSelectedCategories && setSelectedCategories([])
     setShowForm(false)
 }

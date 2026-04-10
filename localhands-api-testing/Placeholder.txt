@@ -27,7 +27,7 @@ localhost:8080/api:
 		GET /id	    - obtains a listing by its id.
 		GET /radius - obtains listings based on location and radius.
 		GET /search - obtains listings based on user input of the name (like a search bar - no filters yet). Can supply longitude or latitude parameters to search and return based on distance.
-		GET /categories - Gets all categories (you can use this to map a dictionary so the id/name can map to a more user friendly category name.
+		GET /categories - Gets all categories (you can use this to map a dictionary so the id/name can map to a more user friendly category name.)
 		PUT	    - edits a listing. Find out how to input this data.
 		DELETE	    - deletes a listing.
 		(When getting listings using id, radius or search, this only returns those who have a public seller profile)

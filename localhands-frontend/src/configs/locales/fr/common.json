@@ -5,6 +5,7 @@
     "language.german": "Allemand",
 
     "nav.login": "Connexion",
+    "nav.dashboard": "Tableau de bord",
     "nav.signup": "Inscription",
     "nav.home": "Accueil",
     "nav.about": "À propos",
@@ -135,8 +136,53 @@
     "profile.saveProfile": "Enregistrer le profil",
     "profile.savePrivacy": "Enregistrer les paramètres de confidentialité",
     "profile.editAccountInfo": "Informations du compte",
-    "profile.save": "Enregistrer le profil"
+    "profile.save": "Enregistrer le profil",
+
+    "dashboard.messages.title": "Messages",
 
     
+    "dashboard.ListingTitle": "Vos Offres",
+    "dashboard.BuyerTitle": "Vous recherchez des services ?",
+    "dashboard.BuyerSubtitle": "Parcourez les services proposés par des prestataires locaux dans votre région.",
+    "dashboard.BuyerButton": "Voir les services",
 
+    "search.radius.label": "Rayon:",
+    "search.radius.5": "5 km",
+    "search.radius.10": "10 km",
+    "search.radius.25": "25 km",
+    "search.radius.50": "50 km",
+    "search.radius.100": "100 km",
+    "search.radius.150": "150 km",
+    "search.radius.200": "200 km",
+    
+    "search.workType.label": "Type de travail:",
+    "search.workType.all": "Tous",
+    "search.workType.online": "En ligne",
+    "search.workType.inPerson": "En personne",
+    
+    "search.categories.label": "Catégories:",
+    "search.categories.clearAll": "Tout effacer",
+
+    "createServiceForm.title": "Créer un service",
+    "createServiceForm.description": "Description",
+    "createServiceForm.price": "Prix",
+    "createServiceForm.workType": "Type de travail",
+    "createServiceForm.online": "En ligne",
+    "createServiceForm.inPerson": "En personne",
+    "createServiceForm.clickMapToSetLocation": "Cliquez sur la carte pour définir l'emplacement",
+    "createServiceForm.latitude": "Latitude",
+    "createServiceForm.longitude": "Longitude",
+    "createServiceForm.photos": "Photos",
+    "createServiceForm.photosSelected": "Photo(s) sélectionnée(s)",
+    "createServiceForm.createService": "Créer un service",
+
+    "createServiceForm.error.titleRequired": "Le titre est requis",
+    "createServiceForm.error.descriptionRequired": "La description est requise",
+    "createServiceForm.error.priceRequired": "Le prix est requis",
+    "createServiceForm.error.workTypeRequired": "Le type de travail est requis",
+    "createServiceForm.error.latitudeRequired": "La latitude est requise",
+    "createServiceForm.error.longitudeRequired": "La longitude est requise",
+    "createServiceForm.error.photosRequired": "Les photos sont requises",
+
+    "back": "Retour"
 }

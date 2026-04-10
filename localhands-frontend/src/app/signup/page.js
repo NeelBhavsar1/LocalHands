@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from 'react-i18next';
 import { registerUser } from '@/api/registrationApi';
 import { validateSignupForm } from '@/utils/validateSignup';
+import ToggleSwitch from '@/components/ToggleSwitch/ToggleSwitch';
 
 export default function page() {
     const {t} = useTranslation();
@@ -124,29 +125,39 @@ export default function page() {
                                 {errors.confirmPassword && <span className={styles.error}>{errors.confirmPassword}</span>}
                             </label>
 
-                            <label>{t("signup.accountType")}
+                            <div className={styles.accountTypeSection}>
+                                <label className={styles.accountTypeLabel}>{t("signup.accountType")}</label>
                                 <div className={styles.accountTypeOptions}>
-                                    <label className={styles.accountTypeOptionLabel}>
-                                        <input type="checkbox" checked={formData.isServiceProvider} onChange={(e) => handleRoleChange("isServiceProvider", e.target.checked)}/>
-                                        {t("signup.customerAndProvider")}
-                                    </label>
+                                    <div className={styles.accountTypeOption}>
+                                        <span className={styles.accountTypeText}>{t("signup.customerOnly")}</span>
+                                        <ToggleSwitch 
+                                            isOn={formData.isConsumer} 
+                                            setIsOn={(isOn) => {
+                                                handleRoleChange("isConsumer", isOn);
+                                                if (isOn) handleRoleChange("isServiceProvider", false);
+                                            }} 
+                                        />
+                                    </div>
 
-                                    <label className={styles.accountTypeOptionLabel}>
-                                        <input type="checkbox" checked={formData.isConsumer} onChange={(e) => handleRoleChange("isConsumer", e.target.checked)}/>
-                                        {t("signup.customerOnly")}
-                                    </label>
+                                    <div className={styles.accountTypeOption}>
+                                        <span className={styles.accountTypeText}>{t("signup.customerAndProvider")}</span>
+                                        <ToggleSwitch 
+                                            isOn={formData.isServiceProvider} 
+                                            setIsOn={(isOn) => {handleRoleChange("isServiceProvider", isOn); if (isOn) handleRoleChange("isConsumer", false);}} 
+                                        />
+                                    </div>
                                 </div>
 
                                 {(errors.isServiceProvider || errors.isConsumer) && <span className={styles.error}>{errors.isServiceProvider || errors.isConsumer}</span>}
-                            </label>
-
-                            <label className={styles.rememberMe}>
-                                <input type="checkbox" name="rememberMe" checked={formData.rememberMe} onChange={handleChange}/>
-                                {t("signup.rememberme")}
-                            </label>
+                            </div>
                         </div>
 
                     </div>
+
+                    <label className={styles.rememberMe}>
+                        <input type="checkbox" name="rememberMe" checked={formData.rememberMe} onChange={handleChange}/>
+                        <span>{t("signup.rememberme")}</span>
+                    </label>
 
                     <button type='submit' className={styles.submitForm}>
                         {t("signup.continue")}

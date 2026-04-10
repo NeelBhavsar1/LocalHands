@@ -5,6 +5,7 @@
     "language.german": "Deutsch",
 
     "nav.login": "Anmelden",
+    "nav.dashboard": "Dashboard",
     "nav.signup": "Registrieren",
     "nav.home": "Startseite",
     "nav.about": "Über uns",
@@ -130,5 +131,73 @@
     "profile.editAccountInfo": "Kontoinformationen",
     "profile.serviceProviderDescription": "Beschreibung des Dienstleisters",
     "profile.serviceProviderTitle": "Titel des Dienstleisters",
-    "profile.save": "Profil speichern"
+    "profile.save": "Profil speichern",
+
+    "dashboard.messages.title": "Nachrichten",
+
+
+
+    "dashboard.ListingTitle": "Ihre Angebote",
+    "dashboard.BuyerTitle": "Suchen Sie nach Dienstleistungen?",
+    "dashboard.BuyerSubtitle": "Durchsuchen Sie Dienstleistungen von lokalen Anbietern in Ihrer Gegend.",
+    "dashboard.BuyerButton": "Dienstleistungen ansehen",
+
+    "search.radius.label": "Radius:",
+    "search.radius.5": "5 km",
+    "search.radius.10": "10 km",
+    "search.radius.25": "25 km",
+    "search.radius.50": "50 km",
+    "search.radius.100": "100 km",
+    "search.radius.150": "150 km",
+    "search.radius.200": "200 km",
+    
+    "search.workType.label": "Arbeitsart:",
+    "search.workType.all": "Alle",
+    "search.workType.online": "Online",
+    "search.workType.inPerson": "In-Person",
+    
+    "search.categories.label": "Kategorien:",
+    "search.categories.clearAll": "Alle löschen",
+
+    "createServiceForm.title": "Service erstellen",
+    "createServiceForm.description": "Beschreibung",
+    "createServiceForm.price": "Preis",
+    "createServiceForm.workType": "Arbeitsart",
+    "createServiceForm.online": "Online",
+    "createServiceForm.inPerson": "In-Person",
+    "createServiceForm.clickMapToSetLocation": "Klicken Sie auf die Karte, um den Standort festzulegen",
+    "createServiceForm.latitude": "Breitengrad",
+    "createServiceForm.longitude": "Längengrad",
+    "createServiceForm.photos": "Fotos",
+    "createServiceForm.photosSelected": "Foto(s) ausgewählt",
+    "createServiceForm.createService": "Service erstellen",
+
+    "editServiceForm.title": "Service bearbeiten",
+    "editServiceForm.description": "Beschreibung",
+    "editServiceForm.price": "Preis",
+    "editServiceForm.workType": "Arbeitsart",
+    "editServiceForm.online": "Online",
+    "editServiceForm.inPerson": "In-Person",
+    "editServiceForm.clickMapToUpdateLocation": "Klicken Sie auf die Karte, um den Standort zu aktualisieren",
+    "editServiceForm.latitude": "Breitengrad",
+    "editServiceForm.longitude": "Längengrad",
+    "editServiceForm.newPhotosRequired": "Neue Fotos (erforderlich)",
+    "editServiceForm.photosSelected": "Foto(s) ausgewählt",
+    "editServiceForm.saveChanges": "Änderungen speichern",
+    "editServiceForm.cancel": "Abbrechen",
+    "editServiceForm.editing": "Bearbeiten",
+    "editServiceForm.editingService": "Service bearbeiten",
+    "editServiceForm.categories": "Kategorien",
+    "editServiceForm.categoriesSelected": "Kategorie(n) ausgewählt",
+    "editServiceForm.clickOnMapToUpdateLocation": "Klicken Sie auf die Karte, um den Standort zu aktualisieren",
+    
+    "editServiceForm.error.titleRequired": "Titel ist erforderlich",
+    "editServiceForm.error.descriptionRequired": "Beschreibung ist erforderlich",
+    "editServiceForm.error.priceRequired": "Preis ist erforderlich",
+    "editServiceForm.error.workTypeRequired": "Arbeitsart ist erforderlich",
+    "editServiceForm.error.latitudeRequired": "Breitengrad ist erforderlich",
+    "editServiceForm.error.longitudeRequired": "Längengrad ist erforderlich",
+    "editServiceForm.error.photosRequired": "Fotos sind erforderlich",
+
+    "back": "Zurück"
 }

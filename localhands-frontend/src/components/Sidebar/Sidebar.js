@@ -55,7 +55,7 @@ export default function Sidebar() {
           </Link>
 
           <Link
-            href="/messages"
+            href="/dashboard/messages"
             className={styles.navItem}
             title={isCollapsed ? t("sidebar.messages") : undefined}
           >

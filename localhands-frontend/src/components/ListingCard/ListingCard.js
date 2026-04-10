@@ -28,6 +28,16 @@ export default function ListingCard({ listing }) {
             <h3 className={styles.name}>{listing.name}</h3>
             <p className={styles.description}>{listing.description}</p>
             
+            {listing.categories && listing.categories.length > 0 && (
+                <div className={styles.categories}>
+                    {listing.categories.map((category) => (
+                        <span key={category.id} className={styles.categoryTag}>
+                            {category.category}
+                        </span>
+                    ))}
+                </div>
+            )}
+
             <div className={styles.footer}>
                 <span className={styles.location}>
                     {listing.latitude?.toFixed(4)}, {listing.longitude?.toFixed(4)}

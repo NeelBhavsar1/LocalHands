@@ -6,6 +6,7 @@
     "language.german": "German",
 
     "nav.login": "Login",
+    "nav.dashboard": "Dashboard",
     "nav.signup": "Sign Up",
     "nav.home": "Home",
     "nav.about": "About us",
@@ -137,5 +138,72 @@
     "profile.saveProfile": "Save Profile",
     "profile.savePrivacy": "Save Privacy Settings",
     "profile.editAccountInfo": "Account Information",
-    "profile.save": "Save profile"
+    "profile.save": "Save profile",
+
+
+    "dashboard.messages.title": "Messages",
+
+    "dashboard.ListingTitle": "Your Listings",
+    "dashboard.BuyerTitle": "Looking for Services?",
+    "dashboard.BuyerSubtitle": "Browse services from local providers in your area.",
+    "dashboard.BuyerButton": "View Services",
+
+    "search.radius.label": "Radius:",
+    "search.radius.5": "5 km",
+    "search.radius.10": "10 km",
+    "search.radius.25": "25 km",
+    "search.radius.50": "50 km",
+    "search.radius.100": "100 km",
+    "search.radius.150": "150 km",
+    "search.radius.200": "200 km",
+    
+    "search.workType.label": "Work Type:",
+    "search.workType.all": "All",
+    "search.workType.online": "Online",
+    "search.workType.inPerson": "In-Person",
+    
+    "search.categories.label": "Categories:",
+    "search.categories.clearAll": "Clear all",
+
+    "createServiceForm.title": "Create Service",
+    "createServiceForm.description": "Description",
+    "createServiceForm.price": "Price",
+    "createServiceForm.workType": "Work Type",
+    "createServiceForm.online": "Online",
+    "createServiceForm.inPerson": "In-Person",
+    "createServiceForm.clickMapToSetLocation": "Click map to set location",
+    "createServiceForm.latitude": "Latitude",
+    "createServiceForm.longitude": "Longitude",
+    "createServiceForm.photos": "Photos",
+    "createServiceForm.photosSelected": "photo(s) selected",
+    "createServiceForm.createService": "Create Service",
+
+    "editServiceForm.title": "Edit Service",
+    "editServiceForm.description": "Description",
+    "editServiceForm.price": "Price",
+    "editServiceForm.workType": "Work Type",
+    "editServiceForm.online": "Online",
+    "editServiceForm.inPerson": "In-Person",
+    "editServiceForm.clickMapToUpdateLocation": "Click map to update location",
+    "editServiceForm.latitude": "Latitude",
+    "editServiceForm.longitude": "Longitude",
+    "editServiceForm.newPhotosRequired": "New Photos (Required)",
+    "editServiceForm.photosSelected": "photo(s) selected",
+    "editServiceForm.saveChanges": "Save Changes",
+    "editServiceForm.cancel": "Cancel",
+    "editServiceForm.editing": "Editing",
+    "editServiceForm.editingService": "Editing Service",
+    "editServiceForm.categories": "Categories",
+    "editServiceForm.categoriesSelected": "category(s) selected",
+    "editServiceForm.clickOnMapToUpdateLocation": "Click on map to update location",
+    
+    "editServiceForm.error.titleRequired": "Title is required",
+    "editServiceForm.error.descriptionRequired": "Description is required",
+    "editServiceForm.error.priceRequired": "Price is required",
+    "editServiceForm.error.workTypeRequired": "Work type is required",
+    "editServiceForm.error.latitudeRequired": "Latitude is required",
+    "editServiceForm.error.longitudeRequired": "Longitude is required",
+    "editServiceForm.error.photosRequired": "Photos are required",
+
+    "back": "Back"
 }

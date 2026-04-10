@@ -95,8 +95,12 @@ api.interceptors.response.use(
             return api(originalRequest) //retry original failed req
         } catch (refreshError) {
             processQueue(refreshError)
-            // Use window.location as fallback, but check if not already on login page
-            if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
+            // Only redirect to login if this was an authenticated page request
+            // Don't redirect for auth check requests (e.g., /api/users/me on public pages)
+            const isAuthCheckRequest = originalRequest?.url === "/api/users/me";
+            if (typeof window !== 'undefined' && 
+                window.location.pathname !== '/login' && 
+                !isAuthCheckRequest) {
                 window.location.href = "/login";
             }
             return Promise.reject(refreshError);

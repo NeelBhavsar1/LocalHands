@@ -3,13 +3,27 @@ import LanguageButton from "../LanguageButton/LanguageButton";
 import ToggleButton from "../ToggleButton/ToggleButton";
 import styles from "./HomeNavBar.module.css";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
+import { getUserInfo } from "@/api/userApi";
 
 export default function HomeNavBar({ showLinks = true }) {
     const { t } = useTranslation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                await getUserInfo();
+                setIsLoggedIn(true);
+            } catch (error) {
+                setIsLoggedIn(false);
+            }
+        };
+        checkAuth();
+    }, []);
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -38,7 +52,13 @@ export default function HomeNavBar({ showLinks = true }) {
             <div className={styles.userActions}>
                 <LanguageButton/>
                 <ToggleButton />
-                {showLinks && (<Link href="/login"><button className={styles.loginButton}>{t("nav.login")}</button></Link>)}
+                {showLinks && (
+                    isLoggedIn ? (
+                        <Link href="/dashboard"><button className={styles.dashboardButton}>{t("nav.dashboard")}</button></Link>
+                    ) : (
+                        <Link href="/login"><button className={styles.loginButton}>{t("nav.login")}</button></Link>
+                    )
+                )}
             </div>
 
             <div className={styles.mobileMenuButton}>
@@ -61,7 +81,13 @@ export default function HomeNavBar({ showLinks = true }) {
                     <div className={styles.actionButton}>
                         <LanguageButton onToggleComplete={closeMobileMenu}/>
                         <ToggleButton onToggleComplete={closeMobileMenu}/>
-                        {showLinks && (<Link href="/login"><button className={styles.loginButton}>Login</button></Link>)}
+                        {showLinks && (
+                            isLoggedIn ? (
+                                <Link href="/dashboard" onClick={closeMobileMenu}><button className={styles.dashboardButton}>{t("nav.dashboard")}</button></Link>
+                            ) : (
+                                <Link href="/login" onClick={closeMobileMenu}><button className={styles.loginButton}>{t("nav.login")}</button></Link>
+                            )
+                        )}
                     </div>
                 </div>
             }
