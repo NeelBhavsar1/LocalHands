@@ -14,17 +14,19 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
             ST_Distance_Sphere(l.location, ST_SRID(POINT(:lon, :lat), 4326)) AS distance
         FROM listings l
         JOIN users u ON l.user_id = u.id
-        LEFT JOIN listing_categories lc ON l.id = lc.listing_id
         WHERE (
             u.public_profile = true OR u.id = :requesterId
         )
-        AND (
-            :categoryIds IS NULL OR lc.category_id IN (:categoryIds)
+        AND EXISTS (
+            SELECT 1
+            FROM listing_categories lc2
+            WHERE lc2.listing_id = l.id
+            AND lc2.category_id IN (:categoryIds)
         )
         HAVING distance <= :radius
         ORDER BY distance
     """, nativeQuery = true)
-    List<Listing> findPublicListingsWithinRadiusOrderByDistance(
+    List<Listing> findWithinRadiusWithCategories(
             @Param("requesterId") Long requesterId,
             @Param("lat") double lat,
             @Param("lon") double lon,
@@ -37,19 +39,39 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
             ST_Distance_Sphere(l.location, ST_SRID(POINT(:lon, :lat), 4326)) AS distance
         FROM listings l
         JOIN users u ON l.user_id = u.id
-        LEFT JOIN listing_categories lc ON l.id = lc.listing_id
+        WHERE (
+            u.public_profile = true OR u.id = :requesterId
+        )
+        HAVING distance <= :radius
+        ORDER BY distance
+    """, nativeQuery = true)
+    List<Listing> findWithinRadiusWithoutCategories(
+            @Param("requesterId") Long requesterId,
+            @Param("lat") double lat,
+            @Param("lon") double lon,
+            @Param("radius") double radius
+    );
+
+    @Query(value = """
+        SELECT DISTINCT l.*, 
+            ST_Distance_Sphere(l.location, ST_SRID(POINT(:lon, :lat), 4326)) AS distance
+        FROM listings l
+        JOIN users u ON l.user_id = u.id
         WHERE LOWER(l.name) LIKE LOWER(CONCAT('%', :searchInput, '%'))
         AND (
             u.public_profile = true
             OR (:requesterId IS NOT NULL AND u.id = :requesterId)
         )
-        AND (
-            :categoryIds IS NULL OR lc.category_id IN (:categoryIds)
+        AND EXISTS (
+            SELECT 1
+            FROM listing_categories lc2
+            WHERE lc2.listing_id = l.id
+            AND lc2.category_id IN (:categoryIds)
         )
         ORDER BY distance
         LIMIT 20
     """, nativeQuery = true)
-    List<Listing> searchPublicListingsWithLocation(
+    List<Listing> searchWithLocationWithCategories(
             @Param("requesterId") Long requesterId,
             @Param("searchInput") String searchInput,
             @Param("lat") double lat,
@@ -58,25 +80,64 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
     );
 
     @Query(value = """
-        SELECT DISTINCT l.*
+        SELECT DISTINCT l.*, 
+            ST_Distance_Sphere(l.location, ST_SRID(POINT(:lon, :lat), 4326)) AS distance
         FROM listings l
         JOIN users u ON l.user_id = u.id
-        LEFT JOIN listing_categories lc ON l.id = lc.listing_id
         WHERE LOWER(l.name) LIKE LOWER(CONCAT('%', :searchInput, '%'))
         AND (
             u.public_profile = true
             OR (:requesterId IS NOT NULL AND u.id = :requesterId)
         )
-        AND (
-            :categoryIds IS NULL OR lc.category_id IN (:categoryIds)
-        )
-        ORDER BY RAND()
+        ORDER BY distance
         LIMIT 20
     """, nativeQuery = true)
-    List<Listing> searchPublicListings(
+    List<Listing> searchWithLocationWithoutCategories(
+            @Param("requesterId") Long requesterId,
+            @Param("searchInput") String searchInput,
+            @Param("lat") double lat,
+            @Param("lon") double lon
+    );
+
+    @Query(value = """
+        SELECT DISTINCT l.*
+        FROM listings l
+        JOIN users u ON l.user_id = u.id
+        WHERE LOWER(l.name) LIKE LOWER(CONCAT('%', :searchInput, '%'))
+        AND (
+            u.public_profile = true
+            OR (:requesterId IS NOT NULL AND u.id = :requesterId)
+        )
+        AND EXISTS (
+            SELECT 1
+            FROM listing_categories lc2
+            WHERE lc2.listing_id = l.id
+            AND lc2.category_id IN (:categoryIds)
+        )
+        ORDER BY l.id DESC
+        LIMIT 20
+    """, nativeQuery = true)
+    List<Listing> searchWithoutLocationWithCategories(
             @Param("requesterId") Long requesterId,
             @Param("searchInput") String searchInput,
             @Param("categoryIds") List<Long> categoryIds
+    );
+
+    @Query(value = """
+        SELECT DISTINCT l.*
+        FROM listings l
+        JOIN users u ON l.user_id = u.id
+        WHERE LOWER(l.name) LIKE LOWER(CONCAT('%', :searchInput, '%'))
+        AND (
+            u.public_profile = true
+            OR (:requesterId IS NOT NULL AND u.id = :requesterId)
+        )
+        ORDER BY l.id DESC
+        LIMIT 20
+    """, nativeQuery = true)
+    List<Listing> searchWithoutLocationWithoutCategories(
+            @Param("requesterId") Long requesterId,
+            @Param("searchInput") String searchInput
     );
 
     List<Listing> findByUserIdOrderByCreationTimeDesc(Long userId);

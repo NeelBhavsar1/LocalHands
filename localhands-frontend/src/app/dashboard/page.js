@@ -20,37 +20,27 @@ export default function page({ children }) {
   
 
   useEffect(() => {
-    const loadUser = async () => {
+    const init = async () => {
       try {
-        const userData = await getUserInfo()
-        setUser(userData)
-        
+        const userData = await getUserInfo();
+        setUser(userData);
+
+        if (userData?.roles?.includes("SELLER")) {
+          const listingsData = await getMyListings();
+          setListings(listingsData);
+        }
 
       } catch (error) {
-        console.error(error)
-        router.push("/login")
-
+        console.error(error);
+        router.push("/login");
+        return;
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    
-
-    const fetchListings = async() => {
-      try {
-        const data = await getMyListings();
-        setListings(data);
-      }
-      catch (error) {
-        console.log(error);
-      }
-    }
-
-    loadUser()
-    fetchListings()
-  }, [])
-
+    init();
+  }, []);
 
   if (loading) return <div><LoadingSpinner /></div>
   //if no user data then user object becoems null and redirect to login page

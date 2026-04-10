@@ -160,7 +160,7 @@ export default function ListingDetailPage() {
                     </div>
 
                     <div className={styles.mapSection}>
-                        <label>Click on the map to update location</label>
+                        <label>Click on the map if you need to update the existing location</label>
                         <div className={styles.mapContainer}>
                             <MapWithNoSSR onLocationSelect={handleMapLocationSelect} />
                         </div>

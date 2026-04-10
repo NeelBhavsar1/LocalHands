@@ -49,7 +49,7 @@ public class ListingController {
             @RequestParam double latitude,
             @RequestParam double longitude,
             @RequestParam double radius,
-            @RequestParam List<Long> categoryIds
+            @RequestParam(required = false) List<Long> categoryIds
     ) {
         List<ListingResponseDTO> listingResponseDTOs = listingService.getListingsWithinRadius(user.getId(), latitude, longitude, radius, categoryIds);
         return ResponseEntity.ok(listingResponseDTOs);
@@ -61,7 +61,7 @@ public class ListingController {
             @RequestParam String searchInput,
             @RequestParam(required = false) Double latitude,
             @RequestParam(required = false) Double longitude,
-            @RequestParam List<Long> categoryIds
+            @RequestParam(required = false) List<Long> categoryIds
     ) {
         List<ListingResponseDTO> listingResponseDTOs;
 

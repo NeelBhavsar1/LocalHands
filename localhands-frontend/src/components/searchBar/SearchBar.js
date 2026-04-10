@@ -26,7 +26,8 @@ export default function SearchBar({ radius, onRadiusChange }) {
                         <option value={25}>25 miles</option>
                         <option value={50}>50 miles</option>
                         <option value={100}>100 miles</option>
-                        <option value={1000000}>All of UK</option>
+                        <option value={150}>150 miles</option>
+                        <option value={200}>200 miles</option>
                     </select>
                 </div>
 

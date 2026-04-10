@@ -126,11 +126,14 @@ public class ListingServiceImpl implements ListingService {
 
     @Override
     public List<ListingResponseDTO> getListingsWithinRadius(Long requesterId, double lat, double lon, double radius, List<Long> categoryIds) {
-        if (categoryIds != null && categoryIds.isEmpty()) {
-            categoryIds = null;
+        if (categoryIds == null || categoryIds.isEmpty()) {
+            return listingRepository.findWithinRadiusWithoutCategories(requesterId, lat, lon, radius)
+                    .stream()
+                    .map(lis -> ListingMapper.mapToListingResponseDTO(lis, requesterId))
+                    .collect(Collectors.toList());
         }
 
-        return listingRepository.findPublicListingsWithinRadiusOrderByDistance(requesterId, lat, lon, radius, categoryIds)
+        return listingRepository.findWithinRadiusWithCategories(requesterId, lat, lon, radius, categoryIds)
                 .stream()
                 .map(lis -> ListingMapper.mapToListingResponseDTO(lis, requesterId))
                 .collect(Collectors.toList());
@@ -143,11 +146,14 @@ public class ListingServiceImpl implements ListingService {
             return List.of();
         }
 
-        if (categoryIds != null && categoryIds.isEmpty()) {
-            categoryIds = null;
+        if (categoryIds == null || categoryIds.isEmpty()) {
+            return listingRepository.searchWithLocationWithoutCategories(requesterId, searchInput, latitude, longitude)
+                    .stream()
+                    .map(lis -> ListingMapper.mapToListingResponseDTO(lis, requesterId))
+                    .toList();
         }
 
-        return listingRepository.searchPublicListingsWithLocation(requesterId, searchInput, latitude, longitude, categoryIds)
+        return listingRepository.searchWithLocationWithCategories(requesterId, searchInput, latitude, longitude, categoryIds)
                 .stream()
                 .map(lis -> ListingMapper.mapToListingResponseDTO(lis, requesterId))
                 .toList();
@@ -160,11 +166,14 @@ public class ListingServiceImpl implements ListingService {
             return List.of();
         }
 
-        if (categoryIds != null && categoryIds.isEmpty()) {
-            categoryIds = null;
+        if (categoryIds == null || categoryIds.isEmpty()) {
+            return listingRepository.searchWithoutLocationWithoutCategories(requesterId, searchInput)
+                    .stream()
+                    .map(lis -> ListingMapper.mapToListingResponseDTO(lis, requesterId))
+                    .toList();
         }
 
-        return listingRepository.searchPublicListings(requesterId, searchInput, categoryIds)
+        return listingRepository.searchWithoutLocationWithCategories(requesterId, searchInput, categoryIds)
                 .stream()
                 .map(lis -> ListingMapper.mapToListingResponseDTO(lis, requesterId))
                 .toList();

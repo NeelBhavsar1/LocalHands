@@ -4,7 +4,7 @@ import styles from "./Sidebar.module.css";
 import Link from "next/link";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ClipboardList, Home, LogOut, Menu, MessageCircle, Settings, User, Wallet, Wrench, X } from "lucide-react";
+import { ClipboardList, Home, LogOut, Menu, MessageCircle, Settings, User, Wrench, X } from "lucide-react";
 import { logoutUser } from "@/api/authApi";
 import { useRouter } from "next/navigation";
 
@@ -55,30 +55,12 @@ export default function Sidebar() {
           </Link>
 
           <Link
-            href="/requests"
-            className={styles.navItem}
-            title={isCollapsed ? t("sidebar.requests") : undefined}
-          >
-            <ClipboardList size={20} className={styles.icon} strokeWidth={2.1} />
-            <span className={styles.label}>{t("sidebar.requests")}</span>
-          </Link>
-
-          <Link
             href="/messages"
             className={styles.navItem}
             title={isCollapsed ? t("sidebar.messages") : undefined}
           >
             <MessageCircle size={20} className={styles.icon} strokeWidth={2.1} />
             <span className={styles.label}>{t("sidebar.messages")}</span>
-          </Link>
-
-          <Link
-            href="/wallet"
-            className={styles.navItem}
-            title={isCollapsed ? t("sidebar.wallet") : undefined}
-          >
-            <Wallet size={20} className={styles.icon} strokeWidth={2.1} />
-            <span className={styles.label}>{t("sidebar.wallet")}</span>
           </Link>
 
           <Link

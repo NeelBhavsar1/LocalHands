@@ -4,12 +4,14 @@ import React, { useState } from 'react'
 import styles from './page.module.css'
 import HomeNavBar from '@/components/HomeNavBar/HomeNavBar'
 import Link from 'next/link';
+import { useRouter } from "next/navigation";
 import { useTranslation } from 'react-i18next';
 import { registerUser } from '@/api/registrationApi';
 import { validateSignupForm } from '@/utils/validateSignup';
 
 export default function page() {
     const {t} = useTranslation();
+    const router = useRouter();
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -19,18 +21,21 @@ export default function page() {
         confirmPassword: '',
         isServiceProvider: false,
         isConsumer: false,
-        dateOfBirth: ''
+        dateOfBirth: '',
+        rememberMe: false
     });
 
     const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
-        const {name, value} = e.target;
+        const { name, value, type, checked } = e.target;
 
-        setFormData((prev) => ({...prev, [name]: value}));
-    }
+        setFormData((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value
+        }));
+    };
 
-   
 
     const submitForm = async (e) => {
         e.preventDefault();
@@ -51,13 +56,13 @@ export default function page() {
             dateOfBirth: formData.dateOfBirth || null,
             isServiceProvider: formData.isServiceProvider,
             isConsumer: formData.isConsumer,
-            rememberMe: false //keep for now
+            rememberMe: formData.rememberMe
         }
 
         try {
             await registerUser(requestBody);
-            alert("Account created successfully!");
-            window.location.href="/login"
+            alert("Account created successfully! Check your email to verify your account.");
+            router.push("/dashboard");
         } catch (error) {
             alert("Error: " + error);
         }
@@ -123,16 +128,21 @@ export default function page() {
                                 <div className={styles.accountTypeOptions}>
                                     <label className={styles.accountTypeOptionLabel}>
                                         <input type="checkbox" checked={formData.isServiceProvider} onChange={(e) => handleRoleChange("isServiceProvider", e.target.checked)}/>
-                                        {t("signup.provider")}
+                                        {t("signup.customerAndProvider")}
                                     </label>
 
                                     <label className={styles.accountTypeOptionLabel}>
                                         <input type="checkbox" checked={formData.isConsumer} onChange={(e) => handleRoleChange("isConsumer", e.target.checked)}/>
-                                        {t("signup.customer")}
+                                        {t("signup.customerOnly")}
                                     </label>
                                 </div>
 
                                 {(errors.isServiceProvider || errors.isConsumer) && <span className={styles.error}>{errors.isServiceProvider || errors.isConsumer}</span>}
+                            </label>
+
+                            <label className={styles.rememberMe}>
+                                <input type="checkbox" name="rememberMe" checked={formData.rememberMe} onChange={handleChange}/>
+                                {t("signup.rememberme")}
                             </label>
                         </div>
 
