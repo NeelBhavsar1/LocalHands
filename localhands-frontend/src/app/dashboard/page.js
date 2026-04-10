@@ -20,37 +20,27 @@ export default function page({ children }) {
   
 
   useEffect(() => {
-    const loadUser = async () => {
+    const init = async () => {
       try {
-        const userData = await getUserInfo()
-        setUser(userData)
-        
+        const userData = await getUserInfo();
+        setUser(userData);
+
+        if (userData?.roles?.includes("SELLER")) {
+          const listingsData = await getMyListings();
+          setListings(listingsData);
+        }
 
       } catch (error) {
-        console.error(error)
-        router.push("/login")
-
+        console.error(error);
+        router.push("/login");
+        return;
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    
-
-    const fetchListings = async() => {
-      try {
-        const data = await getMyListings();
-        setListings(data);
-      }
-      catch (error) {
-        console.log(error);
-      }
-    }
-
-    loadUser()
-    fetchListings()
-  }, [])
-
+    init();
+  }, []);
 
   if (loading) return <div><LoadingSpinner /></div>
   //if no user data then user object becoems null and redirect to login page
@@ -67,17 +57,16 @@ export default function page({ children }) {
 
         {user?.roles?.includes("SELLER") ? (
           <div className={styles.listingsSection}>
-            <h2>Your Listings</h2>
+            <h2>{t("dashboard.ListingTitle")}</h2>
             <ListingList listings={listings} />
           </div>
         ) : (
           <div className={styles.buyerSection}>
-            <h2>Looking for Services?</h2>
-            <p>Browse services from local providers in your area.</p>
-            <button><Link href="/dashboard/services" className={styles.viewServicesBtn}>View Services</Link></button>
+            <h2>{t("dashboard.BuyerTitle")}</h2>
+            <p>{t("dashboard.BuyerSubtitle")}</p>
+            <button><Link href="/dashboard/services" className={styles.viewServicesBtn}>{t("dashboard.BuyerButton")}</Link></button>
           </div>
         )}
-
     </div>
   )
 }

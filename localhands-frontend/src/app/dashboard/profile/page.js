@@ -8,6 +8,9 @@ import ToggleSwitch from '@/components/ToggleSwitch/ToggleSwitch'
 import { getUserInfo, updatePrivacyInfo, updateProfileInfo } from '@/api/userApi'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
 
+// Get backend URL from environment or default to localhost
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080';
+
 export default function page() {
     const { t } = useTranslation();
     const [allowMessages, setAllowMessages] = useState(true);
@@ -16,6 +19,7 @@ export default function page() {
     const [saving, setSaving] = useState(false);
     const [bio, setBio] = useState('');
     const [profileImage, setProfileImage] = useState('/profile.png');
+    const [profileAltText, setProfileAltText] = useState('Profile');
     const [selectedFile, setSelectedFile] = useState(null);
     const fileInputRef = useRef(null);
 
@@ -30,8 +34,15 @@ export default function page() {
                 setAllowMessages(messagesValue === true);
                 setPublicProfile(publicProfileValue === true);
                 setBio(userData.bio || '');
-                if (userData.pfp || userData.photo) {
-                    setProfileImage(userData.pfp || userData.photo);
+                const url = userData.profilePhoto?.url;
+                if (url && url.trim() !== "") {
+                    setProfileImage(BACKEND_URL + url);
+                }
+                const alt = userData.profilePhoto?.altText;
+                if (alt && alt.trim() !== "") {
+                    setProfileAltText(alt);
+                } else if (userData.firstName && userData.firstName.trim() !== "") {
+                    setProfileAltText(`No image of ${userData.firstName}.`);
                 }
             } catch (error) {
                 console.error('Failed to fetch user data:', error);
@@ -102,7 +113,7 @@ export default function page() {
                 <div className={styles.contentWrapper}>
                     <div className={styles.leftSection}>
                         <div className={styles.profileImageContainer}>
-                            <Image src={profileImage} alt="Profile" width={120} height={120} className={styles.profileImage} />
+                            <img src={profileImage} alt={profileAltText} width={120} height={120} className={styles.profileImage} />
                             <input
                                 type="file"
                                 ref={fileInputRef}

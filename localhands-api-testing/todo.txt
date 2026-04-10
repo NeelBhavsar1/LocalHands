@@ -1,0 +1,37 @@
+To Do:
+
+	Frontend
+		(COMPLETED)- Review and message capabilities in sections and listings. 
+		(COMPLETED)- Categories on filters, add and edit listings. 
+		- Touch up on the dashboard home page for service providers (with or without listings already) and customers. Make sure all links work and translations work for each part of the page/pages.
+		- View public profiles feature with all listings, and reviews given. Can be accessible thru a link to their profile on listing/messages etc. And maybe have the pfp in the listing.
+		- Add reviews to all public listings. I've also made it so pfp loads now, but its inverted colours (lol)
+		- Language support of dashboard onwards.
+		- Forgot password resend email button when it asks for the pin. 
+		- Move around profile and (maybe) add a save button for privacy settings, it looks atm that the save button saves all rather than privacy settings being saved on a toggle. Add view public profile too. Maybe invert default pfp because its a bit hard to see.
+		(COMPLETED)- Polish the register page (I have two tick boxes rn and can become a toggle instead and the remember me tickbox is kinda in the wrong place).
+		- Make the following frontend URLs (these are pages that won't be accessed by any other part of the website - only emails):
+			- /activate-account?token=
+			- /deactivate-account?token=
+			- /confirm-email?token=
+			- These will obtain the token URL query parameter and depending on the endpoint will call the right API (see /api/auth on backend for them). Each one should just say a success or fail message.
+		(COMPLETED)- Add a button to go dashboard that only appears if logged in at the very base url of localhost:3000 and polish that page.
+		- Live messaging. 
+		(COMPLETED)- When creating a new service make sure to add location map in it. 
+		(COMPLETED)- When editing a listing, make sure it focuses onto the previous place and already has an existing pin. 
+		(COMPLETED)- Image on the top of the browser tab. 
+		
+		DISCUSS- Let user know if they have verified their email or not using getUserinfo on the home page for both customer and provider let them know the consequence of deactivation within 7 days of creation. This reminds them to check their email and confirm. I'll add an api to resend confirmation email.
+		
+		(COMPLETED)- Edit listing stuck on light mode. 
+		(COMPLETED) (NOTE: wow didn't know router had an method providing back capability)- Maybe make the listing "back to previous" (wherever they were before) click rather than "back to dashboard" - doesn't flow well.
+		(COMPLETED)- Work type in-person cant see in dark mode when creating a listing. 
+
+
+	Backend
+		- Live messaging.
+		- Remove your own listings on searching for public listings esp radius.
+		- Password limit on forgot password and anywhere else.
+		- Work type on backend.
+		- Add a confirmed status to getuserinfo to remind on home page the user needs to verify email. Add an endpoint that resends confirmation email.
+		- Take off requirement to add new photos for each update listing (backend too).

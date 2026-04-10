@@ -73,18 +73,22 @@ export const getListingById = async (listingId) => {
 }
 
 /**
- * Search listings by name with optional location
+ * Search listings by name with optional location and category filter
  * @param {*} searchInput - The search input
  * @param {*} latitude - The latitude of the location
  * @param {*} longitude - The longitude of the location
+ * @param {*} categoryIds - Optional array of category IDs to filter by
  * @returns 
  */
-export const searchListings = async (searchInput, latitude, longitude) => {
+export const searchListings = async (searchInput, latitude, longitude, categoryIds) => {
     try {
         const params = { searchInput };
         if (latitude && longitude) {
             params.latitude = latitude;
             params.longitude = longitude;
+        }
+        if (categoryIds && categoryIds.length > 0) {
+            params.categoryIds = categoryIds.join(',');
         }
         
         const res = await api.get("/api/listings/search", { params })
@@ -96,17 +100,20 @@ export const searchListings = async (searchInput, latitude, longitude) => {
 }
 
 /**
- * Gets listings within radius of location
+ * Gets listings within radius of location with optional category filter
  * @param {*} latitude - The latitude of the location
  * @param {*} longitude - The longitude of the location
  * @param {*} radius - The radius in meters
+ * @param {*} categoryIds - Optional array of category IDs to filter by
  * @returns 
  */
-export const getListingsWithinRadius = async (latitude, longitude, radius) => {
+export const getListingsWithinRadius = async (latitude, longitude, radius, categoryIds) => {
     try {
-        const res = await api.get("/api/listings/radius", {
-            params: { latitude, longitude, radius }
-        })
+        const params = { latitude, longitude, radius };
+        if (categoryIds && categoryIds.length > 0) {
+            params.categoryIds = categoryIds.join(',');
+        }
+        const res = await api.get("/api/listings/radius", { params })
         return res.data
     } catch (error) {
         console.error("Get listings by radius error: ", error)
@@ -171,5 +178,19 @@ export const deleteListing = async (listingId) => {
     } catch (error) {
         console.error("Delete listing error: ", error)
         throw error.response?.data || "Failed to delete listing!"
+    }
+}
+
+/**
+ * Gets all available categories
+ * @returns {Array} - Array of category objects with id and category name
+ */
+export const getCategories = async () => {
+    try {
+        const res = await api.get("/api/listings/categories")
+        return res.data
+    } catch (error) {
+        console.error("Get categories error: ", error)
+        throw error.response?.data || "Failed to fetch categories!"
     }
 }

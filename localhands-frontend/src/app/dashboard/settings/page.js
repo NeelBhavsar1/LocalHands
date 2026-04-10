@@ -77,10 +77,7 @@ export default function page() {
 
                         <div className={styles.formGroup}>
                             <label>{t("settings.serviceProvider")}</label>
-                            <ToggleSwitch 
-                                isOn={formData.isServiceProvider} 
-                                setIsOn={(value) => setFormData(prev => ({ ...prev, isServiceProvider: value }))} 
-                            />
+                            <ToggleSwitch isOn={formData.isServiceProvider} setIsOn={(value) => setFormData(prev => ({ ...prev, isServiceProvider: value }))} />
                         </div>
                     </div>
 

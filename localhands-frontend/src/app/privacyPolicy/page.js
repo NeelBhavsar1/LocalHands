@@ -5,7 +5,7 @@ import Footer from "@/components/Footer/Footer";
 import styles from "./page.module.css";
 import { useTranslation } from "react-i18next";
 
-export default function FAQ() {
+export default function PrivacyPolicy() {
     const { t } = useTranslation();
 
     return (

@@ -15,18 +15,20 @@ export default function page() {
 
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
+    rememberMe: false
   });
 
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
-    const {name, value} = e.target;
+    const { name, value, type, checked } = e.target;
 
-    setFormData((prev) => ({...prev, [name]: value}))
-  }
-
-  
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value
+    }));
+  };
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -39,7 +41,7 @@ export default function page() {
     }
 
     try {
-      await loginUser({email: formData.email, password: formData.password, rememberMe: false})
+      await loginUser({email: formData.email, password: formData.password, rememberMe: formData.rememberMe})
       alert("Logged in successfully!");
       router.push("/dashboard");
     } catch (error) {
@@ -76,7 +78,7 @@ export default function page() {
 
             <div className={styles.optionsRow}>
               <label className={styles.rememberMe}>
-                <input type="checkbox" name="rememberMe" />
+                <input type="checkbox" name="rememberMe" checked={formData.rememberMe} onChange={handleChange}/>
                 {t("login.rememberme")}
               </label>
 
