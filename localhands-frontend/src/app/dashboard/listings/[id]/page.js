@@ -96,7 +96,7 @@ export default function ListingDetailPage() {
             return
         }
 
-        const validation = validateListingForm(editForm, newPhotos, selectedCategories)
+        const validation = validateListingForm(editForm, newPhotos, selectedCategories, listing?.workType || 'ONLINE')
         if (!validation.valid) {
             alert(validation.error)
             return

@@ -30,7 +30,7 @@ public class Listing {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "location", columnDefinition = "POINT SRID 4326", nullable = false)

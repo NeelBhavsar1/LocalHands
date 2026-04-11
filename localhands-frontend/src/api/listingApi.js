@@ -9,34 +9,43 @@ import api from "./api";
  */
 export const createListing = async (listingData, photos, altTexts) => {
     try {
-        // Create form data
+        // DEBUG: Log exactly what we're sending
+        console.log("=== CREATE LISTING DEBUG ===");
+        console.log("listingData:", JSON.stringify(listingData, null, 2));
+        console.log("listingData.categoryIds:", listingData.categoryIds);
+        console.log("listingData.categoryIds types:", listingData.categoryIds?.map(id => `${id} (${typeof id})`));
+        console.log("listingData.workType:", listingData.workType, `(typeof: ${typeof listingData.workType})`);
+        console.log("listingData.latitude:", listingData.latitude, `(typeof: ${typeof listingData.latitude})`);
+        console.log("listingData.longitude:", listingData.longitude, `(typeof: ${typeof listingData.longitude})`);
+        console.log("photos count:", photos?.length);
+        console.log("altTexts:", altTexts);
+        console.log("photos.length === altTexts.length:", photos?.length === altTexts?.length);
+        console.log("===========================");
+
         const formData = new FormData();
         
-        // Convert listing data to JSON blob
-        const listingBlob = new Blob([JSON.stringify(listingData)], { 
-            type: 'application/json' 
-        })
-        formData.append('listing', listingBlob)
+        // Add listing as JSON blob
+        const listingBlob = new Blob([JSON.stringify(listingData)], { type: 'application/json' });
+        formData.append('listing', listingBlob);
         
-        // Add photos to form data
+        // Add photos
         photos.forEach((photo) => {
-            formData.append('photos', photo)
-        })
+            formData.append('photos', photo);
+        });
         
-        // Build query params for altTexts
-        const altTextsParam = altTexts.map(text => encodeURIComponent(text)).join(',')
+        // Build altTexts as query params
+        const altTextsParams = altTexts.map(text => `altTexts=${encodeURIComponent(text)}`).join('&');
         
-        const res = await api.post(`/api/listings?altTexts=${altTextsParam}`, formData, {
-            headers: {
-                'Content-Type': undefined  // Remove default JSON header
-            },
-        })
+        const res = await api.post(`/api/listings?${altTextsParams}`, formData, {
+            headers: { 'Content-Type': undefined }
+        });
         
-        return res.data
-
+        return res.data;
     } catch (error) {
-        console.error("Create listing error: ", error)
-        throw error.response?.data || "Failed to create listing!"
+        console.error("Create listing error:", error);
+        console.error("Error response:", error.response);
+        console.error("Error data:", error.response?.data);
+        throw error.response?.data || "Failed to create listing";
     }
 }
 
@@ -105,15 +114,22 @@ export const searchListings = async (searchInput, latitude, longitude, categoryI
  * @param {*} longitude - The longitude of the location
  * @param {*} radius - The radius in meters
  * @param {*} categoryIds - Optional array of category IDs to filter by
+ * @param {*} workType - The work type ('ONLINE', 'IN_PERSON', or 'BOTH')
  * @returns 
  */
-export const getListingsWithinRadius = async (latitude, longitude, radius, categoryIds) => {
+export const getListingsWithinRadius = async (latitude, longitude, radius, categoryIds, workType = 'BOTH') => {
     try {
-        const params = { latitude, longitude, radius };
+        const params = { 
+            searchInput: '',  // Empty search to get all listings in radius
+            latitude, 
+            longitude, 
+            radius,
+            workType
+        };
         if (categoryIds && categoryIds.length > 0) {
-            params.categoryIds = categoryIds.join(',');
+            params.categoryIds = categoryIds;
         }
-        const res = await api.get("/api/listings/radius", { params })
+        const res = await api.get("/api/listings/search", { params })
         return res.data
     } catch (error) {
         console.error("Get listings by radius error: ", error)
@@ -146,9 +162,9 @@ export const updateListing = async (listingId, listingData, photos, altTexts) =>
             })
         }
         
-        // Build query params for altTexts
-        const altTextsParam = altTexts?.map(text => encodeURIComponent(text)).join(',');
-        const queryParams = altTextsParam ? `&altTexts=${altTextsParam}` : '';
+        // Build query params for altTexts - send as individual params
+        const altTextsParams = altTexts?.map(text => `altTexts=${encodeURIComponent(text)}`).join('&');
+        const queryParams = altTextsParams ? `&${altTextsParams}` : '';
         
         const res = await api.put(`/api/listings?listingId=${listingId}${queryParams}`, formData, {
             headers: {
