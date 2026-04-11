@@ -160,7 +160,7 @@ Headers:
 - Cookie: accessToken=...; refreshToken=...
 
 Body (form-data):
-- bio: { "bio": "I am a test user for LocalHands" }
+- bio: { "bio": "I am a test user for LocalHands", "resetProfilePhoto": [true/false - test combinations] }
 - photo: [select a test image file] (optional)
 
 Expected: 200 OK with profilePhotoUrl and bio
@@ -567,7 +567,6 @@ PUBLIC (No auth needed):
 - /api/auth/forgot-password
 - /api/auth/verify-password-reset-code
 - /api/auth/reset-password
-- /api/listings/categories
 
 AUTHENTICATED (Any logged-in user):
 - /api/users/me
@@ -580,6 +579,7 @@ AUTHENTICATED (Any logged-in user):
 - /api/listings/id
 - /api/listings/radius
 - /api/listings/search
+- /api/listings/categories
 - /api/reviews
 - /api/reviews/me
 - /api/messages

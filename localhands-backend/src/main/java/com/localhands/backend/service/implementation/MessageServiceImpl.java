@@ -13,7 +13,9 @@ import com.localhands.backend.repository.MessageRepository;
 import com.localhands.backend.repository.UserRepository;
 import com.localhands.backend.service.MessageService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -28,6 +30,9 @@ public class MessageServiceImpl implements MessageService {
     private MessageRepository messageRepository;
     private ListingRepository listingRepository;
     private UserRepository userRepository;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @Override
     public MessageResponseDTO sendMessage(Long senderId, Long recipientId, Long listingId, String message) {
@@ -76,9 +81,60 @@ public class MessageServiceImpl implements MessageService {
         messageEntity.setRecipient(recipient);
         messageEntity.setListing(listing);
 
-        messageRepository.save(messageEntity);
+        Message savedMessage = messageRepository.save(messageEntity);
+        MessageResponseDTO savedMessageResponseDTO = MessageMapper.mapToMessageResponseDTO(savedMessage);
 
-        return MessageMapper.mapToMessageResponseDTO(messageEntity);
+        ConversationPreviewResponseDTO recipientPreview = new ConversationPreviewResponseDTO(
+                listing.getId(),
+                listing.getName(),
+                sender.getId(),
+                sender.getFirstName() + " " + sender.getLastName(),
+                savedMessage.getMessage(),
+                savedMessage.getSentTime(),
+                sender.getProfilePhotos() != null &&
+                        !sender.getProfilePhotos().isEmpty()
+                        ? sender.getProfilePhotos().get(0).getUrl()
+                        : null
+        );
+
+        ConversationPreviewResponseDTO senderPreview = new ConversationPreviewResponseDTO(
+                listing.getId(),
+                listing.getName(),
+                recipient.getId(),
+                recipient.getFirstName() + " " + recipient.getLastName(),
+                savedMessage.getMessage(),
+                savedMessage.getSentTime(),
+                recipient.getProfilePhotos() != null &&
+                        !recipient.getProfilePhotos().isEmpty()
+                        ? recipient.getProfilePhotos().get(0).getUrl()
+                        : null
+        );
+
+        messagingTemplate.convertAndSendToUser(
+                recipientId.toString(),
+                "/queue/messages",
+                savedMessageResponseDTO
+        );
+
+        messagingTemplate.convertAndSendToUser(
+                senderId.toString(),
+                "/queue/messages",
+                savedMessageResponseDTO
+        );
+
+        messagingTemplate.convertAndSendToUser(
+                recipientId.toString(),
+                "/queue/inbox",
+                recipientPreview
+        );
+
+        messagingTemplate.convertAndSendToUser(
+                senderId.toString(),
+                "/queue/inbox",
+                senderPreview
+        );
+
+        return savedMessageResponseDTO;
     }
 
     @Override

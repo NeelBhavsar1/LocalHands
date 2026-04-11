@@ -339,7 +339,11 @@ Headers:
 - Content-Type: multipart/form-data
 
 Body (Multipart):
-- bio (JSON): { "bio": "string" }
+- bio (JSON):
+{
+  "bio": "string",
+  "resetProfilePhoto": boolean
+}
 - photo (File, optional): Profile picture file
 
 Success (200):
@@ -347,6 +351,10 @@ Success (200):
   "profilePhotoUrl": "string",
   "bio": "string"
 }
+
+- If you want the pfp to stay the same - don't upload a pfp and resetProfilePhoto false.
+- If you want the pfp to change - upload a new pfp and resetProfilePhoto false.
+- If you want the pfp to go to default - don't upload a pfp and resetProfilePhoto true.
 
 
 PUT /api/users/privacy

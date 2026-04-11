@@ -91,7 +91,7 @@ export const createProfileSaveHandler = ({
 
 //check if user has seller or buyer role
 export const hasListingsRole = (user) => {
-    return user?.roles?.includes("SELLER") || user?.roles?.includes("BUYER")
+    return user?.roles?.includes("SELLER")
 }
 
 //fetch user's reviews

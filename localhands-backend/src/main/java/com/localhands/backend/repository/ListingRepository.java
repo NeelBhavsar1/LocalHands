@@ -20,7 +20,8 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
         JOIN users u ON l.user_id = u.id
         LEFT JOIN listing_categories lc ON l.id = lc.listing_id
         WHERE 
-            (u.public_profile = true OR u.id = :requesterId)
+            (u.public_profile = true
+            AND (:requesterId IS NULL OR l.user_id != :requesterId))
     
             AND (:searchInput IS NULL 
                 OR LOWER(l.name) LIKE LOWER(CONCAT('%', :searchInput, '%'))
