@@ -89,14 +89,11 @@ public class ListingServiceImpl implements ListingService {
             return ListingMapper.mapToListingResponseDTO(savedListing, userId);
 
         } catch (Exception e) {
-            System.err.println("CREATE LISTING ERROR: " + e.getClass().getName() + ": " + e.getMessage());
-            e.printStackTrace();
-            
             for (String url : savedFileUrls) {
                 fileStorageService.delete(url);
             }
 
-            throw new AppException("Failed to create listing: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to create listing.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

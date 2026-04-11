@@ -94,11 +94,15 @@ export const getListingById = async (listingId) => {
 export const searchListings = async (searchInput, latitude, longitude, categoryIds, workType = 'BOTH', radius) => {
     try {
         const params = { searchInput, workType };
-        if (latitude && longitude) {
+        
+        const hasLocation = latitude != null && longitude != null && radius != null;
+
+        if (hasLocation) {
             params.latitude = latitude;
             params.longitude = longitude;
-            params.radius = radius || 50000;
+            params.radius = radius;
         }
+
         if (categoryIds && categoryIds.length > 0) {
             params.categoryIds = categoryIds;
         }

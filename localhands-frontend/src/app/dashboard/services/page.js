@@ -68,11 +68,7 @@ export default function ServicesPage() {
                     radiusInMeters
                 )
                 
-                //filter out current users own listings
-                const otherListings = listings.filter(listing => 
-                    listing.seller?.id !== currentUser?.id
-                )
-                setNearbyListings(otherListings)
+                setNearbyListings(listings)
             } catch (error) {
                 console.error('Failed to fetch listings:', error)
             } finally {

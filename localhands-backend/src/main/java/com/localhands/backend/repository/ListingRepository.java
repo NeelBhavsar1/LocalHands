@@ -35,7 +35,8 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
             )
     
             AND (
-                :lat IS NULL OR :lon IS NULL OR :radius IS NULL
+                l.work_type = 'ONLINE'
+                OR :lat IS NULL OR :lon IS NULL OR :radius IS NULL
                 OR ST_Distance_Sphere(l.location, ST_SRID(POINT(:lon, :lat), 4326)) <= :radius
             )
     
