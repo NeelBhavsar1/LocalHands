@@ -28,6 +28,8 @@ public interface UserService {
 
     public void confirmEmail(String token);
 
+    public void resendActivationEmail(Long userId);
+
     public void activateAccount(String token);
 
     public void deactivateAccount(String token);

@@ -1,0 +1,594 @@
+LOCALHANDS API - POSTMAN TESTING GUIDE
+======================================
+
+BASE URL: http://localhost:8080
+
+
+================================================================================
+ENDPOINTS LIST (30 Total)
+================================================================================
+
+AUTHENTICATION (10 endpoints)
+-----------------------------
+1. POST   /api/auth/register                 - Public
+2. POST   /api/auth/login                    - Public
+3. POST   /api/auth/logout                   - Public
+4. POST   /api/auth/refresh                  - Public (needs refresh cookie)
+5. GET    /api/auth/confirm-email            - Public
+6. GET    /api/auth/activate-account         - Public
+7. GET    /api/auth/deactivate-account       - Public
+8. POST   /api/auth/forgot-password          - Public
+9. POST   /api/auth/verify-password-reset-code - Public
+10. POST  /api/auth/reset-password           - Public
+
+USERS (6 endpoints)
+-------------------
+11. GET   /api/users/me                     - Authenticated
+12. GET   /api/users/id                     - Authenticated
+13. GET   /api/users/search                 - Authenticated
+14. PUT   /api/users/account                - Authenticated
+15. PUT   /api/users/profile                - Authenticated (multipart)
+16. PUT   /api/users/privacy                - Authenticated
+17. DELETE /api/users                        - Authenticated
+
+LISTINGS (7 endpoints)
+----------------------
+18. POST  /api/listings                     - SELLER only (multipart)
+19. GET   /api/listings/me                  - SELLER only
+20. GET   /api/listings/id                  - Authenticated
+21. GET   /api/listings/radius               - Authenticated
+22. GET   /api/listings/search               - Authenticated
+23. GET   /api/listings/categories           - Public
+24. PUT   /api/listings                     - SELLER only (multipart)
+25. DELETE /api/listings                    - SELLER only
+
+REVIEWS (4 endpoints)
+---------------------
+26. POST  /api/reviews                      - Authenticated
+27. GET   /api/reviews/me                   - Authenticated
+28. PUT   /api/reviews                      - Authenticated
+29. DELETE /api/reviews                     - Authenticated
+
+MESSAGES (3 endpoints)
+----------------------
+30. POST  /api/messages                     - Authenticated
+31. GET   /api/messages/conversation        - Authenticated
+32. GET   /api/messages/inbox              - Authenticated
+
+
+================================================================================
+POSTMAN SETUP
+================================================================================
+
+STEP 1: Create Environment
+--------------------------
+1. Click "Environments" in left sidebar
+2. Click "+" to create new environment
+3. Name it "LocalHands Local"
+4. Add these variables:
+
+   Variable              Initial Value
+   -----------------     -----------------
+   baseUrl               http://localhost:8080
+   accessToken           (leave blank)
+   refreshToken          (leave blank)
+   testEmail             test@example.com
+   testPassword          TestPass123!
+   testUserId            (leave blank)
+   testListingId         (leave blank)
+
+5. Click "Save"
+
+
+STEP 2: Configure Cookie Handling
+---------------------------------
+1. Go to File > Settings > General
+2. Ensure "Automatically follow redirects" is ON
+3. In Tests tab, you can capture cookies from responses
+
+
+================================================================================
+TESTING WORKFLOW
+================================================================================
+
+PHASE 1: Setup Test User
+--------------------------
+
+REQUEST 1: Register a new user
+------------------------------
+Method: POST
+URL: {{baseUrl}}/api/auth/register
+
+Body (raw JSON):
+{
+    "firstName": "Test",
+    "lastName": "User",
+    "dateOfBirth": "1995-05-15",
+    "email": "{{testEmail}}",
+    "password": "{{testPassword}}",
+    "serviceProvider": true,
+    "rememberMe": true
+}
+
+Expected: 200 OK with cookies set
+
+Save cookies to environment:
+In Tests tab:
+```javascript
+pm.test("Register successful", function() {
+    pm.response.to.have.status(200);
+});
+```
+
+
+REQUEST 2: Login (alternative to register)
+------------------------------------------
+Method: POST
+URL: {{baseUrl}}/api/auth/login
+
+Body (raw JSON):
+{
+    "email": "{{testEmail}}",
+    "password": "{{testPassword}}",
+    "rememberMe": true
+}
+
+Expected: 200 OK with Set-Cookie headers
+
+
+PHASE 2: User Management
+--------------------------
+
+REQUEST 3: Get my profile
+-------------------------
+Method: GET
+URL: {{baseUrl}}/api/users/me
+
+Headers:
+- Cookie: accessToken=...; refreshToken=...
+
+Expected: 200 OK with user JSON
+
+
+REQUEST 4: Update profile
+-------------------------
+Method: PUT
+URL: {{baseUrl}}/api/users/profile
+
+Headers:
+- Content-Type: multipart/form-data
+- Cookie: accessToken=...; refreshToken=...
+
+Body (form-data):
+- bio: { "bio": "I am a test user for LocalHands" }
+- photo: [select a test image file] (optional)
+
+Expected: 200 OK with profilePhotoUrl and bio
+
+
+REQUEST 5: Update account info
+------------------------------
+Method: PUT
+URL: {{baseUrl}}/api/users/account
+
+Headers:
+- Content-Type: application/json
+- Cookie: accessToken=...; refreshToken=...
+
+Body (raw JSON):
+{
+    "firstName": "Updated",
+    "lastName": "Name",
+    "dateOfBirth": "1995-05-15",
+    "email": "{{testEmail}}",
+    "existingPassword": "{{testPassword}}",
+    "newPassword": "",
+    "serviceProvider": true
+}
+
+Expected: 200 OK
+
+
+PHASE 3: Listings (SELLER only)
+-------------------------------
+
+REQUEST 6: Get all categories
+-----------------------------
+Method: GET
+URL: {{baseUrl}}/api/listings/categories
+
+Expected: 200 OK with list of categories
+Note category IDs for creating listings
+
+
+REQUEST 7: Create a listing
+---------------------------
+Method: POST
+URL: {{baseUrl}}/api/listings
+
+Headers:
+- Content-Type: multipart/form-data
+- Cookie: accessToken=...; refreshToken=...
+
+Body (form-data):
+- listing: 
+  {
+    "name": "Plumbing Services",
+    "description": "Professional plumbing repair and installation",
+    "latitude": 51.5074,
+    "longitude": -0.1278,
+    "categoryIds": [1]
+  }
+- photos: [select image files]
+- altTexts: ["Main photo", "Secondary photo"]
+
+Expected: 200 OK with listing details
+Save the listingId to environment for later use
+
+
+REQUEST 8: Get my listings
+--------------------------
+Method: GET
+URL: {{baseUrl}}/api/listings/me
+
+Headers:
+- Cookie: accessToken=...; refreshToken=...
+
+Expected: 200 OK with array of listings
+
+
+REQUEST 9: Get listing by ID
+----------------------------
+Method: GET
+URL: {{baseUrl}}/api/listings/id?listingId={{testListingId}}
+
+Headers:
+- Cookie: accessToken=...; refreshToken=...
+
+Expected: 200 OK with listing details
+
+
+REQUEST 10: Search listings
+---------------------------
+Method: GET
+URL: {{baseUrl}}/api/listings/search?searchInput=plumbing&latitude=51.5074&longitude=-0.1278
+
+Headers:
+- Cookie: accessToken=...; refreshToken=...
+
+Expected: 200 OK with search results
+
+
+REQUEST 11: Get listings by radius
+----------------------------------
+Method: GET
+URL: {{baseUrl}}/api/listings/radius?latitude=51.5074&longitude=-0.1278&radius=10
+
+Headers:
+- Cookie: accessToken=...; refreshToken=...
+
+Expected: 200 OK with listings within radius
+
+
+REQUEST 12: Update a listing
+----------------------------
+Method: PUT
+URL: {{baseUrl}}/api/listings?listingId={{testListingId}}
+
+Headers:
+- Content-Type: multipart/form-data
+- Cookie: accessToken=...; refreshToken=...
+
+Body (form-data):
+- listing:
+  {
+    "name": "Updated Plumbing Services",
+    "description": "Updated description",
+    "latitude": 51.5074,
+    "longitude": -0.1278,
+    "categoryIds": [1, 2]
+  }
+- photos: [select new images or same images]
+- altTexts: ["Updated main photo"]
+
+Expected: 200 OK with updated listing
+
+
+PHASE 4: Reviews
+----------------
+
+REQUEST 13: Add a review
+------------------------
+Note: You need another user's listing to review. Create a second user or use existing.
+
+Method: POST
+URL: {{baseUrl}}/api/reviews
+
+Headers:
+- Content-Type: application/json
+- Cookie: accessToken=...; refreshToken=...
+
+Body (raw JSON):
+{
+    "listingId": {{testListingId}},
+    "rating": 5,
+    "reviewBody": "Excellent service! Highly recommended."
+}
+
+Expected: 200 OK with review details
+Save reviewId for later
+
+
+REQUEST 14: Get my reviews
+--------------------------
+Method: GET
+URL: {{baseUrl}}/api/reviews/me
+
+Headers:
+- Cookie: accessToken=...; refreshToken=...
+
+Expected: 200 OK with array of reviews
+
+
+REQUEST 15: Update review
+-------------------------
+Method: PUT
+URL: {{baseUrl}}/api/reviews
+
+Headers:
+- Content-Type: application/json
+- Cookie: accessToken=...; refreshToken=...
+
+Body (raw JSON):
+{
+    "reviewId": {{reviewId}},
+    "rating": 4,
+    "reviewBody": "Updated: Good service overall."
+}
+
+Expected: 200 OK with updated review
+
+
+REQUEST 16: Delete review
+-------------------------
+Method: DELETE
+URL: {{baseUrl}}/api/reviews?reviewId={{reviewId}}
+
+Headers:
+- Cookie: accessToken=...; refreshToken=...
+
+Expected: 200 OK with "Review deleted successfully."
+
+
+PHASE 5: Messages
+-----------------
+
+REQUEST 17: Send a message
+--------------------------
+Note: You need another user's ID. Get this from search or user endpoints.
+
+Method: POST
+URL: {{baseUrl}}/api/messages
+
+Headers:
+- Content-Type: application/json
+- Cookie: accessToken=...; refreshToken=...
+
+Body (raw JSON):
+{
+    "recipientId": 2,
+    "listingId": {{testListingId}},
+    "message": "Hi, I'm interested in your services. Are you available?"
+}
+
+Expected: 200 OK with message details
+
+
+REQUEST 18: Get conversation
+----------------------------
+Method: GET
+URL: {{baseUrl}}/api/messages/conversation?otherUserId=2&listingId={{testListingId}}
+
+Headers:
+- Cookie: accessToken=...; refreshToken=...
+
+Expected: 200 OK with conversation including messages, listingTitle, otherUserName
+
+
+REQUEST 19: Get inbox
+---------------------
+Method: GET
+URL: {{baseUrl}}/api/messages/inbox
+
+Headers:
+- Cookie: accessToken=...; refreshToken=...
+
+Expected: 200 OK with array of conversation previews
+
+
+PHASE 6: Cleanup
+----------------
+
+REQUEST 20: Delete listing
+--------------------------
+Method: DELETE
+URL: {{baseUrl}}/api/listings?listingId={{testListingId}}
+
+Headers:
+- Cookie: accessToken=...; refreshToken=...
+
+Expected: 200 OK with "Listing deleted successfully."
+
+
+REQUEST 21: Logout
+------------------
+Method: POST
+URL: {{baseUrl}}/api/auth/logout
+
+Headers:
+- Cookie: accessToken=...; refreshToken=...
+
+Expected: 200 OK with cookies cleared
+
+
+REQUEST 22: Delete account (optional)
+--------------------------------------
+Method: DELETE
+URL: {{baseUrl}}/api/users
+
+Headers:
+- Cookie: accessToken=...; refreshToken=...
+
+Expected: 200 OK with "Deleted account successfully."
+
+
+================================================================================
+COOKIE HANDLING IN POSTMAN
+================================================================================
+
+Manual Cookie Method:
+---------------------
+1. After login/register, check the response "Headers" tab
+2. Look for "Set-Cookie" headers
+3. Copy the values for accessToken and refreshToken
+4. Go to your subsequent request's "Headers" tab
+5. Add header: Cookie: accessToken=value; refreshToken=value
+
+
+================================================================================
+MULTIPART FORM-DATA IN POSTMAN
+================================================================================
+
+For file uploads (listings, profile photos):
+
+1. Select "Body" tab
+2. Select "form-data"
+3. Add fields:
+   - Key: "listing", Value: [paste JSON], Content-Type: application/json
+   - Key: "photos", Value: [select "File" from dropdown, choose file]
+   - Key: "altTexts", Value: "Main photo"
+   - Key: "altTexts", Value: "Secondary photo" (add same key multiple times)
+
+================================================================================
+COMMON TESTING SCENARIOS
+================================================================================
+
+SCENARIO 1: Full User Journey
+-------------------------------
+1. Register new user (serviceProvider=true)
+2. Login
+3. Update profile with photo
+4. Create listing with photos
+5. Search for own listing
+6. Update listing
+7. Logout
+8. Delete account
+
+SCENARIO 2: Two-User Message Flow
+---------------------------------
+User A:
+1. Register as service provider
+2. Create listing
+
+User B:
+3. Register as regular user
+4. Search for User A's listing
+5. Send message about listing
+
+User A:
+6. Check inbox
+7. View conversation
+8. Reply to message
+
+SCENARIO 3: Review Flow
+-------------------------
+1. User A creates listing
+2. User B creates account
+3. User B leaves review on User A's listing
+4. User B updates review
+5. User B deletes review
+
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+401 Unauthorized:
+-----------------
+- Check cookies are being sent
+- Try refreshing token: POST /api/auth/refresh
+- Login again to get fresh tokens
+
+403 Forbidden:
+--------------
+- User doesn't have SELLER role (set serviceProvider=true in registration)
+- Not the owner of the resource
+
+404 Not Found:
+--------------
+- Check the ID in URL parameter
+- Resource may have been deleted
+
+400 Bad Request:
+----------------
+- Check JSON syntax
+- Ensure required fields are present
+- For multipart: check file types and sizes (<10MB)
+
+500 Internal Server Error:
+--------------------------
+- Check server logs
+- Verify database connection
+- Check file upload limits
+
+
+================================================================================
+QUICK REFERENCE - HTTP METHODS
+================================================================================
+
+POST   = Create new resource
+GET    = Read/retrieve resource
+PUT    = Update existing resource
+DELETE = Remove resource
+
+
+================================================================================
+ENDPOINT SUMMARY BY AUTH TYPE
+================================================================================
+
+PUBLIC (No auth needed):
+- /api/auth/register
+- /api/auth/login
+- /api/auth/logout
+- /api/auth/refresh
+- /api/auth/confirm-email
+- /api/auth/activate-account
+- /api/auth/deactivate-account
+- /api/auth/forgot-password
+- /api/auth/verify-password-reset-code
+- /api/auth/reset-password
+- /api/listings/categories
+
+AUTHENTICATED (Any logged-in user):
+- /api/users/me
+- /api/users/id
+- /api/users/search
+- /api/users/account
+- /api/users/profile
+- /api/users/privacy
+- /api/users (DELETE)
+- /api/listings/id
+- /api/listings/radius
+- /api/listings/search
+- /api/reviews
+- /api/reviews/me
+- /api/messages
+- /api/messages/conversation
+- /api/messages/inbox
+
+SELLER ONLY (Must have serviceProvider role):
+- /api/listings (POST)
+- /api/listings/me
+- /api/listings (PUT)
+- /api/listings (DELETE)
+

@@ -106,7 +106,7 @@ export const handleUpdateAccount = async (formData, setErrors, setFormData, upda
     try {
         const updateData = createUpdateData(formData)
         await updateAccountInfo(updateData)
-        alert('Account information updated successfully!')
+        alert('Account information updated successfully!\nIf you have changed your email, we have sent an email to confirm it.')
         
         clearPasswordFields(setFormData);
     } catch (error) {

@@ -136,6 +136,46 @@
   margin-top: 4px;
 }
 
+.success {
+  color: #166534;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.resendButton {
+  width: 100%;
+  padding: 12px 16px;
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: transparent;
+  cursor: pointer;
+  transition: all 120ms ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.resendButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: var(--text);
+}
+
+.resendButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.resendButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
 @media (max-width: 768px) {
   .main {
     padding: 24px 16px 40px;

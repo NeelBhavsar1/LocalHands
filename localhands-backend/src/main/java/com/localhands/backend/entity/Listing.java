@@ -30,7 +30,7 @@ public class Listing {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "location", columnDefinition = "POINT SRID 4326", nullable = false)
@@ -51,6 +51,10 @@ public class Listing {
             inverseJoinColumns = @JoinColumn(name = "category_id", nullable = false)
     )
     private Set<ListingCategory> categories = new HashSet<>();
+
+    @Column(name = "work_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ListingWorkType workType;
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ListingPhoto> photos;

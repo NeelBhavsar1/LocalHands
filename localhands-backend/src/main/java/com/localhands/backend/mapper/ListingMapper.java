@@ -3,7 +3,6 @@ package com.localhands.backend.mapper;
 import com.localhands.backend.dto.request.ListingRequestDTO;
 import com.localhands.backend.dto.response.CategoryResponseDTO;
 import com.localhands.backend.dto.response.ListingResponseDTO;
-import com.localhands.backend.dto.response.ReviewResponseDTO;
 import com.localhands.backend.entity.Listing;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -22,6 +21,7 @@ public class ListingMapper {
         listing.setName(requestDTO.getName());
         listing.setDescription(requestDTO.getDescription());
         listing.setLocation(createPoint(requestDTO.getLongitude(), requestDTO.getLatitude()));
+        listing.setWorkType(requestDTO.getWorkType());
 
         return listing;
     }
@@ -44,6 +44,7 @@ public class ListingMapper {
                                 cat.getCategory().name()
                         ))
                         .toList(),
+                listing.getWorkType(),
                 listing.getPhotos()
                         .stream()
                         .map(ListingPhotoMapper::mapToListingPhotoResponseDTO)

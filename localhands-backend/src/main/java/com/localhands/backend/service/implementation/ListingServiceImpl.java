@@ -3,10 +3,7 @@ package com.localhands.backend.service.implementation;
 import com.localhands.backend.dto.request.ListingRequestDTO;
 import com.localhands.backend.dto.response.CategoryResponseDTO;
 import com.localhands.backend.dto.response.ListingResponseDTO;
-import com.localhands.backend.entity.Listing;
-import com.localhands.backend.entity.ListingCategory;
-import com.localhands.backend.entity.ListingPhoto;
-import com.localhands.backend.entity.User;
+import com.localhands.backend.entity.*;
 import com.localhands.backend.exception.AppException;
 import com.localhands.backend.mapper.ListingMapper;
 import com.localhands.backend.repository.ListingCategoryRepository;
@@ -38,6 +35,10 @@ public class ListingServiceImpl implements ListingService {
     @Override
     @Transactional
     public ListingResponseDTO createListing(Long userId, ListingRequestDTO requestDTO, List<MultipartFile> photoFiles, List<String> altTexts) {
+
+        if (requestDTO.getWorkType() != ListingWorkType.IN_PERSON && requestDTO.getWorkType() != ListingWorkType.ONLINE) {
+            throw new AppException("Work type must be in person or online.", HttpStatus.BAD_REQUEST);
+        }
 
         if (photoFiles.size() != altTexts.size()) {
             throw new AppException("Mismatch between photos and alt texts.", HttpStatus.BAD_REQUEST);
@@ -125,57 +126,45 @@ public class ListingServiceImpl implements ListingService {
     }
 
     @Override
-    public List<ListingResponseDTO> getListingsWithinRadius(Long requesterId, double lat, double lon, double radius, List<Long> categoryIds) {
-        if (categoryIds == null || categoryIds.isEmpty()) {
-            return listingRepository.findWithinRadiusWithoutCategories(requesterId, lat, lon, radius)
-                    .stream()
-                    .map(lis -> ListingMapper.mapToListingResponseDTO(lis, requesterId))
-                    .collect(Collectors.toList());
+    public List<ListingResponseDTO> searchForPublicListings(
+            Long requesterId,
+            String searchInput,
+            Double latitude,
+            Double longitude,
+            Double radius,
+            List<Long> categoryIds,
+            ListingWorkType workType
+    ) {
+        String search = (searchInput == null || searchInput.isBlank()) ? null : searchInput;
+
+        boolean hasLocation = latitude != null && longitude != null && radius != null;
+
+        boolean hasCategories = categoryIds != null && !categoryIds.isEmpty();
+        List<Long> categories = hasCategories ? categoryIds : List.of(-1L);
+
+        List<String> workTypes;
+
+        if (!hasLocation) {
+            workTypes = List.of("ONLINE");
+        } else if (workType == ListingWorkType.BOTH) {
+            workTypes = List.of("ONLINE", "IN_PERSON");
+        } else {
+            workTypes = List.of(workType.name());
         }
 
-        return listingRepository.findWithinRadiusWithCategories(requesterId, lat, lon, radius, categoryIds)
-                .stream()
-                .map(lis -> ListingMapper.mapToListingResponseDTO(lis, requesterId))
-                .collect(Collectors.toList());
-    }
+        List<Listing> listings = listingRepository.searchListings(
+                requesterId,
+                search,
+                latitude,
+                longitude,
+                radius,
+                categories,
+                hasCategories,
+                workTypes
+        );
 
-    @Override
-    public List<ListingResponseDTO> searchForListingsWithLocation(Long requesterId, String searchInput, double latitude, double longitude, List<Long> categoryIds) {
-
-        if (searchInput == null || searchInput.trim().length() < 3) {
-            return List.of();
-        }
-
-        if (categoryIds == null || categoryIds.isEmpty()) {
-            return listingRepository.searchWithLocationWithoutCategories(requesterId, searchInput, latitude, longitude)
-                    .stream()
-                    .map(lis -> ListingMapper.mapToListingResponseDTO(lis, requesterId))
-                    .toList();
-        }
-
-        return listingRepository.searchWithLocationWithCategories(requesterId, searchInput, latitude, longitude, categoryIds)
-                .stream()
-                .map(lis -> ListingMapper.mapToListingResponseDTO(lis, requesterId))
-                .toList();
-    }
-
-    @Override
-    public List<ListingResponseDTO> searchForListings(Long requesterId, String searchInput, List<Long> categoryIds) {
-
-        if (searchInput == null || searchInput.trim().length() < 3) {
-            return List.of();
-        }
-
-        if (categoryIds == null || categoryIds.isEmpty()) {
-            return listingRepository.searchWithoutLocationWithoutCategories(requesterId, searchInput)
-                    .stream()
-                    .map(lis -> ListingMapper.mapToListingResponseDTO(lis, requesterId))
-                    .toList();
-        }
-
-        return listingRepository.searchWithoutLocationWithCategories(requesterId, searchInput, categoryIds)
-                .stream()
-                .map(lis -> ListingMapper.mapToListingResponseDTO(lis, requesterId))
+        return listings.stream()
+                .map(l -> ListingMapper.mapToListingResponseDTO(l, requesterId))
                 .toList();
     }
 
@@ -194,8 +183,14 @@ public class ListingServiceImpl implements ListingService {
     @Transactional
     public ListingResponseDTO updateListing(Long userId, long listingId, ListingRequestDTO requestDTO, List<MultipartFile> photoFiles, List<String> altTexts) {
 
-        if (photoFiles.size() != altTexts.size()) {
-            throw new AppException("Mismatch between photos and alt texts.", HttpStatus.BAD_REQUEST);
+        if (requestDTO.getWorkType() != ListingWorkType.IN_PERSON && requestDTO.getWorkType() != ListingWorkType.ONLINE) {
+            throw new AppException("Work type must be in person or online.", HttpStatus.BAD_REQUEST);
+        }
+
+        if (photoFiles != null && !photoFiles.isEmpty()) {
+            if (altTexts == null || altTexts.size() != photoFiles.size()) {
+                throw new AppException("Alt texts must match provided photos.", HttpStatus.BAD_REQUEST);
+            }
         }
 
         if (requestDTO.getCategoryIds() == null || requestDTO.getCategoryIds().isEmpty()) {
@@ -226,26 +221,29 @@ public class ListingServiceImpl implements ListingService {
             listing.setLocation(
                     ListingMapper.createPoint(requestDTO.getLongitude(), requestDTO.getLatitude())
             );
+            listing.setWorkType(requestDTO.getWorkType());
 
-            for (ListingPhoto photo : listing.getPhotos()) {
-                fileStorageService.delete(photo.getUrl());
-            }
+            if (photoFiles != null && !photoFiles.isEmpty()) {
+                for (ListingPhoto photo : listing.getPhotos()) {
+                    fileStorageService.delete(photo.getUrl());
+                }
 
-            listing.getPhotos().clear();
+                listing.getPhotos().clear();
 
-            for (int i = 0; i < photoFiles.size(); i++) {
-                MultipartFile photoFile = photoFiles.get(i);
-                String altText = altTexts.get(i);
+                for (int i = 0; i < photoFiles.size(); i++) {
+                    MultipartFile photoFile = photoFiles.get(i);
+                    String altText = altTexts.get(i);
 
-                String url = fileStorageService.save(photoFile, "uploads/listing-images/");
-                savedFileUrls.add(url);
+                    String url = fileStorageService.save(photoFile, "uploads/listing-images/");
+                    savedFileUrls.add(url);
 
-                ListingPhoto photo = new ListingPhoto();
-                photo.setUrl(url);
-                photo.setAltText(altText);
-                photo.setListing(listing);
+                    ListingPhoto photo = new ListingPhoto();
+                    photo.setUrl(url);
+                    photo.setAltText(altText);
+                    photo.setListing(listing);
 
-                listing.getPhotos().add(photo);
+                    listing.getPhotos().add(photo);
+                }
             }
 
             Listing savedListing = listingRepository.save(listing);

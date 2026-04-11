@@ -1,0 +1,842 @@
+LOCALHANDS API REFERENCE
+========================
+
+A comprehensive reference for the LocalHands backend API endpoints.
+
+
+BASE URL
+--------
+http://localhost:8080
+
+
+AUTHENTICATION
+--------------
+
+The API uses JWT Token-based authentication via HTTP-only cookies:
+
+- Access Token: Stored in 'accessToken' cookie, short-lived, used for API requests
+- Refresh Token: Stored in 'refreshToken' cookie, long-lived, used to obtain new access tokens
+
+For authenticated endpoints, the browser automatically sends these cookies. No manual header configuration is required for cookie-based requests.
+
+Roles:
+- USER: Standard authenticated user
+- SELLER: User with service provider privileges (can create/modify listings)
+
+
+================================================================================
+AUTHENTICATION ENDPOINTS
+================================================================================
+
+Base path: /api/auth
+
+
+POST /api/auth/register
+-----------------------
+Register a new user account.
+
+Authentication: Public
+Headers: None required
+
+Body (JSON):
+{
+  "firstName": "string",
+  "lastName": "string",
+  "dateOfBirth": "YYYY-MM-DD",
+  "email": "string",
+  "password": "string",
+  "serviceProvider": boolean,
+  "rememberMe": boolean
+}
+
+Success (200):
+"Registered and logged in to new account."
+
+Response includes Set-Cookie headers for accessToken and refreshToken.
+
+Common Errors:
+- 400 Bad Request: Invalid input data
+- 409 Conflict: Email already registered
+
+
+POST /api/auth/login
+--------------------
+Authenticate and log in an existing user.
+
+Authentication: Public
+Headers: None required
+
+Body (JSON):
+{
+  "email": "string",
+  "password": "string",
+  "rememberMe": boolean
+}
+
+Success (200):
+"Logged in to account."
+
+Response includes Set-Cookie headers for accessToken and refreshToken.
+
+Common Errors:
+- 401 Unauthorized: Invalid credentials
+
+
+POST /api/auth/logout
+---------------------
+Log out the current user and invalidate tokens.
+
+Authentication: Public (cookies optional)
+Headers: None required
+Body: None
+
+Success (200):
+"Logged out successfully."
+
+Response includes Set-Cookie headers to clear accessToken and refreshToken.
+
+
+POST /api/auth/refresh
+----------------------
+Refresh the access token using the refresh token.
+
+Authentication: Public (requires refreshToken cookie)
+Headers: None required
+
+Cookies Required:
+- refreshToken: The refresh token from previous login
+
+Body: None
+
+Success (200):
+"Created new refresh and access tokens."
+
+Response includes Set-Cookie headers with new tokens.
+
+Common Errors:
+- 401 Unauthorized: Refresh token missing or invalid
+
+
+GET /api/auth/confirm-email
+---------------------------
+Confirm user's email address using token from email.
+
+Authentication: Public
+Headers: None required
+
+Query Params:
+- token (string, required): Email confirmation token
+
+Success (200):
+"Email confirmed successfully."
+
+
+GET /api/auth/activate-account
+--------------------------------
+Activate a deactivated user account.
+
+Authentication: Public
+Headers: None required
+
+Query Params:
+- token (string, required): Account activation token
+
+Success (200):
+"Account activated successfully."
+
+
+GET /api/auth/deactivate-account
+--------------------------------
+Deactivate the current user account.
+
+Authentication: Public (requires token)
+Headers: None required
+
+Query Params:
+- token (string, required): Account deactivation token
+
+Success (200):
+"Account deactivated successfully."
+
+Response includes Set-Cookie headers to clear tokens.
+
+
+POST /api/auth/forgot-password
+------------------------------
+Request a password reset email.
+
+Authentication: Public
+Headers: None required
+
+Query Params:
+- email (string, required): User's email address
+
+Success (200):
+"Successfully sent password reset code to {email}"
+
+
+POST /api/auth/verify-password-reset-code
+-----------------------------------------
+Verify the password reset code sent via email.
+
+Authentication: Public
+Headers: None required
+
+Body (JSON):
+{
+  "email": "string",
+  "code": "string"
+}
+
+Success (200):
+"reset-token-string"
+
+Common Errors:
+- 400 Bad Request: Invalid code
+
+
+POST /api/auth/reset-password
+-----------------------------
+Reset password using verified token.
+
+Authentication: Public
+Headers: None required
+
+Body (JSON):
+{
+  "email": "string",
+  "token": "string",
+  "password": "string"
+}
+
+Success (200):
+"Successfully set new password."
+
+
+================================================================================
+USER ENDPOINTS
+================================================================================
+
+Base path: /api/users
+
+
+GET /api/users/me
+-----------------
+Get the current user's private profile information.
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+
+Body: None
+
+Success (200):
+{
+  "id": 1,
+  "firstName": "string",
+  "lastName": "string",
+  "dateOfBirth": "YYYY-MM-DD",
+  "email": "string",
+  "bio": "string",
+  "roles": ["USER", "SELLER"],
+  "profilePhoto": {
+    "id": 1,
+    "url": "string",
+    "altText": "string"
+  },
+  "publicProfile": boolean,
+  "messagesEnabled": boolean
+}
+
+
+GET /api/users/id
+-----------------
+Get a user's public profile by ID.
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+
+Query Params:
+- targetUserId (long, required): ID of the user to view
+
+Success (200):
+{
+  "id": 1,
+  "firstName": "string",
+  "lastName": "string",
+  "bio": "string",
+  "roles": ["USER", "SELLER"],
+  "profilePhoto": {
+    "id": 1,
+    "url": "string",
+    "altText": "string"
+  },
+  "listings": [...],
+  "reviews": [...]
+}
+
+
+GET /api/users/search
+---------------------
+Search for users by name or other criteria.
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+
+Query Params:
+- searchInput (string, required): Search query
+
+Success (200):
+[
+  {
+    "id": 1,
+    "firstName": "string",
+    "lastName": "string",
+    "bio": "string",
+    "roles": ["USER"],
+    "profilePhoto": {...},
+    "listings": [...],
+    "reviews": [...]
+  }
+]
+
+
+PUT /api/users/account
+----------------------
+Update user account information.
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+- Content-Type: application/json
+
+Body (JSON):
+{
+  "firstName": "string",
+  "lastName": "string",
+  "dateOfBirth": "YYYY-MM-DD",
+  "email": "string",
+  "existingPassword": "string",
+  "newPassword": "string",
+  "serviceProvider": boolean
+}
+
+Success (200):
+"Updated user account successfully."
+
+Response includes updated Set-Cookie headers.
+
+
+PUT /api/users/profile
+----------------------
+Update user profile information (bio and photo).
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+- Content-Type: multipart/form-data
+
+Body (Multipart):
+- bio (JSON): { "bio": "string" }
+- photo (File, optional): Profile picture file
+
+Success (200):
+{
+  "profilePhotoUrl": "string",
+  "bio": "string"
+}
+
+
+PUT /api/users/privacy
+------------------------
+Update user privacy settings.
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+- Content-Type: application/json
+
+Body (JSON):
+{
+  "publicProfile": boolean,
+  "messagesAllowed": boolean
+}
+
+Success (200):
+"Updated user privacy settings successfully."
+
+
+DELETE /api/users
+-----------------
+Delete the current user account.
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+
+Body: None
+
+Success (200):
+"Deleted account successfully."
+
+Response includes Set-Cookie headers to clear tokens.
+
+
+================================================================================
+LISTING ENDPOINTS
+================================================================================
+
+Base path: /api/listings
+
+
+POST /api/listings
+------------------
+Create a new service listing.
+
+Authentication: Required (SELLER role only)
+Headers:
+- Cookie: accessToken and refreshToken
+- Content-Type: multipart/form-data
+
+Body (Multipart):
+- listing (JSON): Listing data
+  {
+    "name": "string",
+    "description": "string",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "categoryIds": [1, 2, 3]
+  }
+- photos (List of Files): Listing images
+- altTexts (List of Strings): Alt text for each photo
+
+Success (200):
+{
+  "listingId": 1,
+  "name": "string",
+  "description": "string",
+  "latitude": 0.0,
+  "longitude": 0.0,
+  "creationTime": "2024-01-01T00:00:00Z",
+  "updatedTime": "2024-01-01T00:00:00Z",
+  "categories": [
+    {
+      "id": 1,
+      "category": "string"
+    }
+  ],
+  "photos": [
+    {
+      "id": 1,
+      "url": "string",
+      "altText": "string"
+    }
+  ],
+  "reviews": [...],
+  "seller": {
+    "id": 1,
+    "firstName": "string",
+    "lastName": "string",
+    "profilePhoto": {...}
+  }
+}
+
+Common Errors:
+- 403 Forbidden: User does not have SELLER role
+
+
+GET /api/listings/me
+--------------------
+Get all listings belonging to the current user.
+
+Authentication: Required (SELLER role only)
+Headers:
+- Cookie: accessToken and refreshToken
+
+Body: None
+
+Success (200):
+[
+  {
+    "listingId": 1,
+    "name": "string",
+    "description": "string",
+    ...
+  }
+]
+
+
+GET /api/listings/id
+--------------------
+Get a specific listing by ID.
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+
+Query Params:
+- listingId (long, required): Listing ID
+
+Success (200):
+{
+  "listingId": 1,
+  "name": "string",
+  "description": "string",
+  ...
+}
+
+Common Errors:
+- 404 Not Found: Listing does not exist
+
+
+GET /api/listings/radius
+------------------------
+Get listings within a geographic radius.
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+
+Query Params:
+- latitude (double, required): Center latitude
+- longitude (double, required): Center longitude
+- radius (double, required): Search radius in kilometers
+- categoryIds (List of long, optional): Filter by categories
+
+Success (200):
+[
+  {
+    "listingId": 1,
+    "name": "string",
+    ...
+  }
+]
+
+
+GET /api/listings/search
+------------------------
+Search listings by text query.
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+
+Query Params:
+- searchInput (string, required): Search text
+- latitude (double, optional): User's latitude for location-based ranking
+- longitude (double, optional): User's longitude for location-based ranking
+- categoryIds (List of long, optional): Filter by categories
+
+Success (200):
+[
+  {
+    "listingId": 1,
+    "name": "string",
+    ...
+  }
+]
+
+
+GET /api/listings/categories
+----------------------------
+Get all available listing categories.
+
+Authentication: Public
+Headers: None required
+Body: None
+
+Success (200):
+[
+  {
+    "id": 1,
+    "category": "Plumbing"
+  },
+  {
+    "id": 2,
+    "category": "Electrical"
+  }
+]
+
+
+PUT /api/listings
+-----------------
+Update an existing listing.
+
+Authentication: Required (SELLER role only)
+Headers:
+- Cookie: accessToken and refreshToken
+- Content-Type: multipart/form-data
+
+Query Params:
+- listingId (long, required): ID of listing to update
+
+Body (Multipart):
+- listing (JSON): Updated listing data
+  {
+    "name": "string",
+    "description": "string",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "categoryIds": [1, 2]
+  }
+- photos (List of Files): Updated listing images
+- altTexts (List of Strings): Alt text for each photo
+
+Success (200):
+{
+  "listingId": 1,
+  "name": "string",
+  ...
+}
+
+Common Errors:
+- 403 Forbidden: Not the listing owner or not a SELLER
+- 404 Not Found: Listing does not exist
+
+
+DELETE /api/listings
+--------------------
+Delete a listing.
+
+Authentication: Required (SELLER role only)
+Headers:
+- Cookie: accessToken and refreshToken
+
+Query Params:
+- listingId (long, required): ID of listing to delete
+
+Success (200):
+"Listing deleted successfully."
+
+Common Errors:
+- 403 Forbidden: Not the listing owner or not a SELLER
+- 404 Not Found: Listing does not exist
+
+
+================================================================================
+REVIEW ENDPOINTS
+================================================================================
+
+Base path: /api/reviews
+
+
+POST /api/reviews
+-----------------
+Add a review to a listing.
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+- Content-Type: application/json
+
+Body (JSON):
+{
+  "listingId": 1,
+  "rating": 5,
+  "reviewBody": "string"
+}
+
+Success (200):
+{
+  "id": 1,
+  "rating": 5,
+  "reviewBody": "string",
+  "creationTime": "2024-01-01T00:00:00Z",
+  "listingId": 1,
+  "userId": 1,
+  "userName": "string",
+  "userProfilePhoto": "string"
+}
+
+
+GET /api/reviews/me
+-------------------
+Get all reviews written by the current user.
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+
+Body: None
+
+Success (200):
+[
+  {
+    "id": 1,
+    "rating": 5,
+    "reviewBody": "string",
+    "creationTime": "2024-01-01T00:00:00Z",
+    "listingId": 1,
+    "userId": 1,
+    "userName": "string",
+    "userProfilePhoto": "string"
+  }
+]
+
+
+PUT /api/reviews
+----------------
+Update an existing review.
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+- Content-Type: application/json
+
+Body (JSON):
+{
+  "reviewId": 1,
+  "rating": 4,
+  "reviewBody": "Updated review text"
+}
+
+Success (200):
+{
+  "id": 1,
+  "rating": 4,
+  "reviewBody": "Updated review text",
+  ...
+}
+
+
+DELETE /api/reviews
+-------------------
+Delete a review.
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+
+Query Params:
+- reviewId (long, required): ID of review to delete
+
+Success (200):
+"Review deleted successfully."
+
+
+================================================================================
+MESSAGE ENDPOINTS
+================================================================================
+
+Base path: /api/messages
+
+
+POST /api/messages
+------------------
+Send a message to another user about a listing.
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+- Content-Type: application/json
+
+Body (JSON):
+{
+  "recipientId": 1,
+  "listingId": 1,
+  "message": "string"
+}
+
+Success (200):
+{
+  "id": 1,
+  "message": "string",
+  "sentTime": "2024-01-01T00:00:00Z",
+  "senderId": 1,
+  "recipientId": 2
+}
+
+
+GET /api/messages/conversation
+------------------------------
+Get conversation messages between current user and another user about a listing.
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+
+Query Params:
+- otherUserId (long, required): ID of the other conversation participant
+- listingId (long, required): ID of the related listing
+
+Success (200):
+{
+  "listingTitle": "string",
+  "otherUserName": "string",
+  "conversation": [
+    {
+      "id": 1,
+      "message": "string",
+      "sentTime": "2024-01-01T00:00:00Z",
+      "senderId": 1,
+      "recipientId": 2
+    }
+  ],
+  "canSendMessages": boolean,
+  "canAccessListing": boolean,
+  "otherUserProfilePicture": "string"
+}
+
+
+GET /api/messages/inbox
+-----------------------
+Get all conversation previews for the current user's inbox.
+
+Authentication: Required (Authenticated User)
+Headers:
+- Cookie: accessToken and refreshToken
+
+Body: None
+
+Success (200):
+[
+  {
+    "listingId": 1,
+    "listingTitle": "string",
+    "otherUserId": 2,
+    "otherUserName": "string",
+    "lastMessage": "string",
+    "lastMessageTime": "2024-01-01T00:00:00Z",
+    "otherUserProfilePicture": "string"
+  }
+]
+
+
+================================================================================
+COMMON ERROR RESPONSES
+================================================================================
+
+400 Bad Request
+"Invalid request data or parameters"
+
+401 Unauthorized
+"Authentication required"
+
+403 Forbidden
+"Access denied - insufficient permissions"
+
+404 Not Found
+"Resource not found"
+
+500 Internal Server Error
+"An unexpected error occurred"
+
+
+================================================================================
+FILE UPLOAD LIMITS
+================================================================================
+
+- Maximum file size: 10MB
+- Maximum request size: 20MB
+
+
+================================================================================
+COOKIE SECURITY
+================================================================================
+
+All authentication cookies are:
+- HttpOnly: Not accessible via JavaScript
+- Secure: Only sent over HTTPS in production
+- SameSite: Configured to prevent CSRF attacks

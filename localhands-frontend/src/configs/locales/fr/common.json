@@ -137,6 +137,11 @@
     "profile.savePrivacy": "Enregistrer les paramètres de confidentialité",
     "profile.editAccountInfo": "Informations du compte",
     "profile.save": "Enregistrer le profil",
+    "profile.yourListings": "Vos Annonces",
+    "profile.yourReviews": "Vos Avis",
+    "profile.saveBioPfp": "Enregistrer Bio/Photo",
+
+    "listing.messageSeller": "Contacter le Vendeur",
 
     "dashboard.messages.title": "Messages",
 

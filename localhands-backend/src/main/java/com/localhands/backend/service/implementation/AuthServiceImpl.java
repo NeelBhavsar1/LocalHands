@@ -119,6 +119,10 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void resetPassword(String email, String token, String password) {
 
+        if (password == null || password.length() < 8) {
+            throw new AppException("Password must be at least 8 characters long.", HttpStatus.BAD_REQUEST);
+        }
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException("Failed to reset password.", HttpStatus.UNAUTHORIZED));
 

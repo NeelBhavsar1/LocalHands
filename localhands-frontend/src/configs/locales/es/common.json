@@ -124,8 +124,12 @@
     "profile.savePrivacy": "Guardar configuración de privacidad",
     "profile.editAccountInfo": "Información de la cuenta",
     "profile.save": "Guardar perfil",
+    "profile.yourListings": "Tus Listados",
+    "profile.yourReviews": "Tus Reseñas",
+    "profile.saveBioPfp": "Guardar Bio/Foto",
 
-    
+    "listing.messageSeller": "Contactar Vendedor",
+
     "dashboard.messages.title": "Mensajes",
 
 

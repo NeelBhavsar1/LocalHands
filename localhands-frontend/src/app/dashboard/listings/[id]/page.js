@@ -9,8 +9,9 @@ import styles from './page.module.css'
 import { getListingById, updateListing, deleteListing, getCategories } from '@/api/listingApi'
 import { getUserInfo } from '@/api/userApi'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
-import { BACKEND_URL, getDefaultIcon, createEditChangeHandler, createPhotoChangeHandler, createMapLocationHandler, validateListingForm, generateAltTexts } from '@/utils/listingUtils'
+import { BACKEND_URL, getDefaultIcon, createEditChangeHandler, createPhotoChangeHandler, createMapLocationHandler, validateListingForm, generateAltTexts, getCategoryDisplayName } from '@/utils/listingUtils'
 import { useTranslation } from 'react-i18next'
+import { MessageCircle, UserStar } from 'lucide-react'
 
 const MapWithNoSSR = dynamic(() => import('@/components/LocationPicker/LocationPicker'), { ssr: false })
 
@@ -96,7 +97,7 @@ export default function ListingDetailPage() {
             return
         }
 
-        const validation = validateListingForm(editForm, newPhotos, selectedCategories)
+        const validation = validateListingForm(editForm, newPhotos, selectedCategories, listing?.workType || 'ONLINE')
         if (!validation.valid) {
             alert(validation.error)
             return
@@ -188,7 +189,7 @@ export default function ListingDetailPage() {
                             <div className={styles.categoriesGrid}>
                                 {categories.map((category) => (
                                     <button key={category.id} type="button" className={`${styles.categoryBtn} ${selectedCategories.includes(category.id) ? styles.active : ''}`} onClick={() => handleCategoryToggle(category.id)}>
-                                        {category.category}
+                                        {getCategoryDisplayName(category.category)}
                                     </button>
                                 ))}
                             </div>
@@ -202,10 +203,7 @@ export default function ListingDetailPage() {
                     <div className={styles.mapSection}>
                         <label>{t('clickOnMapToUpdateLocation')}</label>
                         <div className={styles.mapContainer}>
-                            <MapWithNoSSR 
-                                onLocationSelect={handleMapLocationSelect} 
-                                initialPosition={listing?.latitude && listing?.longitude ? [listing.latitude, listing.longitude] : null}
-                            />
+                            <MapWithNoSSR onLocationSelect={handleMapLocationSelect} initialPosition={listing?.latitude && listing?.longitude ? [listing.latitude, listing.longitude] : null} />
                         </div>
                     </div>
 
@@ -236,44 +234,65 @@ export default function ListingDetailPage() {
                 
             ) : (
                 <div className={styles.listingView}>
-                    <div className={styles.photosGrid}>
-                        {listing.photos.map((photo, index) => (
-                            <div key={index} className={styles.photoContainer}>
-                                <img src={`${BACKEND_URL}${photo.url}`} alt={photo.altText} className={styles.photo} />
-                            </div>
-                        ))}
+                    
+                    <div className={styles.sellerBar}>
+                        <div className={styles.sellerInfo}>
+                            <img src={listing.seller?.profilePhoto?.url ? `${BACKEND_URL}${listing.seller.profilePhoto.url}` : '/profile.png'} alt={`${listing.seller?.firstName} ${listing.seller?.lastName}`} className={styles.sellerPfp} />
+                            <span className={styles.sellerName}>
+                                {listing.seller?.firstName} {listing.seller?.lastName}
+                            </span>
+                        </div>
+                        <div className={styles.serviceTags}>
+                            {!isOwner && (
+                                <>
+                                <button onClick={() => router.push(`/dashboard/messages?userId=${listing.seller?.id}&listingId=${listing.listingId}`)} className={styles.messageIconButton} title={t('messageSeller')}>
+                                        <MessageCircle size={18} />
+                                </button>
+
+                                <button className={styles.messageIconButton} title={t('viewRequirements')}>
+                                    <UserStar size={18} />
+                                </button>
+                                </>
+                            )}
+                            
+                            {listing.categories && listing.categories.map((category) => (
+                                <span key={category.id} className={styles.categoryTag}>
+                                    {getCategoryDisplayName(category.category)}
+                                </span>
+                            ))}
+                            <span className={`${styles.workTypeTag} ${styles[listing.workType?.toLowerCase()]}`}>
+                                {listing.workType === 'ONLINE' ? 'Online' : 'In Person'}
+                            </span>
+                        </div>
                     </div>
 
-                    <div className={styles.details}>
-                        <h1>{listing.name}</h1>
-                        <p className={styles.description}>{listing.description}</p>
-                        
-                        <div className={styles.meta}>
-                            <span className={styles.location}>
-                                {listing.latitude?.toFixed(4)}, {listing.longitude?.toFixed(4)}
-                            </span>
-                            <span className={styles.date}>
-                                {t('posted')}: {new Date(listing.creationTime).toLocaleDateString()}
-                            </span>
-                            <span className={styles.seller}>
-                                {t('by')}: {listing.seller?.firstName} {listing.seller?.lastName}
-                            </span>
+                    <div className={styles.mainContent}>
+                        <div className={styles.leftColumn}>
+                            <div className={styles.imageSection}>
+                                {listing.photos.map((photo, index) => (
+                                    <div key={index} className={styles.photoContainer}>
+                                        <img src={`${BACKEND_URL}${photo.url}`} alt={photo.altText} className={styles.photo} />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className={styles.infoSection}>
+                            <h1 className={styles.serviceTitle}>{listing.name}</h1>
+                            <p className={styles.description}>{listing.description}</p>
                         </div>
 
                         {listing.latitude && listing.longitude && (
-                            <div className={styles.mapSectionDisplay}>
-
-                                <label>{t('serviceLocation')}</label>
+                            <div className={styles.mapSection}>
+                                <label className={styles.mapLabel}>{t('serviceLocation')}</label>
                                 <div className={styles.mapContainerDisplay}>
-
-                                    <MapContainer center={[listing.latitude, listing.longitude]} zoom={14} scrollWheelZoom={false} style={{ height: '250px', width: '100%', borderRadius: '0.75rem' }}>
+                                    <MapContainer center={[listing.latitude, listing.longitude]} zoom={14} scrollWheelZoom={false} style={{ height: '100%', width: '100%', borderRadius: '0.75rem' }}>
                                         <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                                         <Marker position={[listing.latitude, listing.longitude]} icon={getDefaultIcon()} />
                                     </MapContainer>
                                 </div>
                             </div>
                         )}
-
                     </div>
                 </div>
             )}

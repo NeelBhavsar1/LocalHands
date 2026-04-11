@@ -6,7 +6,9 @@ import { useTranslation } from 'react-i18next'
 import { useState, useEffect, useRef } from 'react'
 import ToggleSwitch from '@/components/ToggleSwitch/ToggleSwitch'
 import { getUserInfo, updatePrivacyInfo, updateProfileInfo } from '@/api/userApi'
+import { getMyListings } from '@/api/listingApi'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
+import ListingList from '@/components/ListingList/ListingList'
 
 // Get backend URL from environment or default to localhost
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080';
@@ -21,14 +23,17 @@ export default function page() {
     const [profileImage, setProfileImage] = useState('/profile.png');
     const [profileAltText, setProfileAltText] = useState('Profile');
     const [selectedFile, setSelectedFile] = useState(null);
+    const [listings, setListings] = useState([]);
+    const [user, setUser] = useState(null);
     const fileInputRef = useRef(null);
 
-    // Fetch user info on mount
+    // Fetch user info and listings on mount
     useEffect(() => {
         const fetchUserData = async () => {
             try {
                 const userData = await getUserInfo();
-                // Handle both possible field names from backend
+                setUser(userData);
+                
                 const messagesValue = userData.messagesEnabled;
                 const publicProfileValue = userData.publicProfile;
                 setAllowMessages(messagesValue === true);
@@ -44,6 +49,12 @@ export default function page() {
                 } else if (userData.firstName && userData.firstName.trim() !== "") {
                     setProfileAltText(`No image of ${userData.firstName}.`);
                 }
+
+                //to fetch listings if user is a seller or buyer (since buyer listings will not appear on dashboard page)
+                if (userData?.roles?.includes("SELLER") || userData?.roles?.includes("BUYER")) {
+                    const listingsData = await getMyListings();
+                    setListings(listingsData);
+                }
             } catch (error) {
                 console.error('Failed to fetch user data:', error);
                 alert('Failed to load profile data');
@@ -58,7 +69,7 @@ export default function page() {
         const file = e.target.files[0];
         if (file) {
             setSelectedFile(file);
-            // Show preview
+           
             const reader = new FileReader();
             reader.onload = (e) => setProfileImage(e.target.result);
             reader.readAsDataURL(file);
@@ -128,21 +139,17 @@ export default function page() {
 
                         <div className={styles.bioContainer}>
                             <label htmlFor="bio">{t("profile.bio")}</label>
-                            <textarea 
-                                id="bio" 
-                                placeholder={t("profile.bioPlaceholder")} 
-                                className={styles.bioTextarea}
-                                value={bio}
-                                onChange={(e) => setBio(e.target.value)}
-                            />
+                            <textarea id="bio" placeholder={t("profile.bioPlaceholder")} className={styles.bioTextarea} value={bio} onChange={(e) => setBio(e.target.value)} />
+                            
+                            <button className={styles.saveBioButton} onClick={handleSave} disabled={saving}>
+                                {saving ? <LoadingSpinner /> : t("profile.saveBioPfp")}
+                            </button>
                         </div>
                     </div>
 
                     <div className={styles.rightSection}>
                         <div className={styles.formContainer}>
                             <h2 className={styles.editai}>{t("profile.privacySettings")}</h2>
-                            
-
                             
                             <div className={styles.checkboxGroup}>
                                 <label>{t("profile.publicProfile")}</label>
@@ -177,11 +184,20 @@ export default function page() {
                             </div>
                         </div>
                     </div>
+
+                    <div className={styles.bottomRow}>
+                        {(user?.roles?.includes("SELLER") || user?.roles?.includes("BUYER")) && (
+                            <div className={styles.listingsSection}>
+                                <h2 className={styles.sectionTitle}>{t("profile.yourListings")}</h2>
+                                <ListingList listings={listings} />
+                            </div>
+                        )}
+                        <div className={styles.reviewsSection}>
+                            <h2 className={styles.sectionTitle}>{t("profile.yourReviews")}</h2>
+                        </div>
+                    </div>
                 </div>
 
-                <button className={styles.saveButton} onClick={handleSave} disabled={saving}>
-                    {saving ? <LoadingSpinner /> : t("profile.save")}
-                </button>
             </div>
         </div>
     )

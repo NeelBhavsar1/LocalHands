@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import styles from './CreateServiceForm.module.css'
 import { createListing, getCategories } from '@/api/listingApi'
-import { createServiceChangeHandler, createServicePhotoHandler, createMapLocationHandler, createWorkTypeHandler, validateServiceForm, generateAltTexts, resetServiceForm } from '@/utils/listingUtils'
+import { createServiceChangeHandler, createServicePhotoHandler, createMapLocationHandler, createWorkTypeHandler, validateServiceForm, generateAltTexts, resetServiceForm, getCategoryDisplayName } from '@/utils/listingUtils'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
 import { useTranslation } from 'react-i18next'
 
@@ -127,7 +127,7 @@ export default function CreateServiceForm({ onSuccess }) {
                             <div className={styles.categoriesGrid}>
                                 {categories.map((category) => (
                                     <button key={category.id} type="button" className={`${styles.categoryBtn} ${selectedCategories.includes(category.id) ? styles.active : ''}`} onClick={() => handleCategoryToggle(category.id)}>
-                                        {category.category}
+                                        {getCategoryDisplayName(category.category)}
                                     </button>
                                 ))}
                             </div>

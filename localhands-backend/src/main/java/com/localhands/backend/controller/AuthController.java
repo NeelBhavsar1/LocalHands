@@ -6,12 +6,15 @@ import com.localhands.backend.dto.request.UserLoginRequestDTO;
 import com.localhands.backend.dto.request.UserRegisterRequestDTO;
 import com.localhands.backend.dto.response.CookieResponseDTO;
 import com.localhands.backend.exception.AppException;
+import com.localhands.backend.security.UserPrincipal;
 import com.localhands.backend.service.AuthService;
 import com.localhands.backend.service.UserService;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
@@ -98,6 +101,12 @@ public class AuthController {
     public ResponseEntity<String> confirmEmail(@RequestParam String token) {
         userService.confirmEmail(token);
         return ResponseEntity.ok("Email confirmed successfully.");
+    }
+
+    @PostMapping("/resend-activation-email")
+    public ResponseEntity<String> resendActivationEmail(@AuthenticationPrincipal UserPrincipal user) {
+        userService.resendActivationEmail(user.getId());
+        return ResponseEntity.ok("Resent account activation email.");
     }
 
     @GetMapping("/activate-account")

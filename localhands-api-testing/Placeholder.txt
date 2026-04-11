@@ -15,6 +15,7 @@ localhost:8080/api:
 		POST /logout - logout.
 		POST /refresh - refresh access token using refresh token - gets rid of cookies if expired.
 		GET  /confirm-email?{code} - Check code is correct and set the new email to the account it is associated with.
+		POST /resend-activation-email - Resends activation email so accounts don't get deleted within 7 days of creation.
 		GET  /activate-account - confirms email so account doesn't delete if not verified within a few days.
 		GET  /deactivate-account - deactivates account if account creation was not the intended user.
 		POST /forgot-password - send forgot password code.
@@ -25,8 +26,8 @@ localhost:8080/api:
 		POST        - creates new listing. Find out how to input this data.
 		GET /me	    - obtains all of the user's listings.
 		GET /id	    - obtains a listing by its id.
-		GET /radius - obtains listings based on location and radius.
-		GET /search - obtains listings based on user input of the name (like a search bar - no filters yet). Can supply longitude or latitude parameters to search and return based on distance.
+		GET /search - obtains listings based on location, radius, search phrase, categories and work type - also a fallback option if location not provided to online listings only.
+					Only searchInput and workType are actually required and the api manages it. If search input is "" it will allow anything. Same for categories.
 		GET /categories - Gets all categories (you can use this to map a dictionary so the id/name can map to a more user friendly category name.)
 		PUT	    - edits a listing. Find out how to input this data.
 		DELETE	    - deletes a listing.
