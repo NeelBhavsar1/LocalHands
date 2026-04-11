@@ -201,5 +201,24 @@
     "editServiceForm.error.longitudeRequired": "Längengrad ist erforderlich",
     "editServiceForm.error.photosRequired": "Fotos sind erforderlich",
 
-    "back": "Zurück"
+    "back": "Zurück",
+
+    "reviews": "Bewertungen",
+    "rating": "Bewertung",
+    "review": "Bewertung",
+    "star": "Stern",
+    "stars": "Sterne",
+    "saveChanges": "Änderungen Speichern",
+    "saving": "Speichern...",
+    "cancel": "Abbrechen",
+    "editReview": "Bewertung Bearbeiten",
+    "deleteReview": "Bewertung Löschen",
+    "viewListing": "Angebot Ansehen",
+    "viewRequirements": "Bewertung Schreiben",
+    "submitting": "Wird gesendet...",
+    "submitReview": "Bewertung Absenden",
+    "writeReview": "Bewertung Schreiben",
+    "serviceLocation": "Service-Standort",
+    "editListing": "Angebot Bearbeiten",
+    "deleteListing": "Angebot Löschen"
 }

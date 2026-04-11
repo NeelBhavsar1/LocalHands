@@ -189,5 +189,24 @@
     "createServiceForm.error.longitudeRequired": "La longitude est requise",
     "createServiceForm.error.photosRequired": "Les photos sont requises",
 
-    "back": "Retour"
+    "back": "Retour",
+
+    "reviews": "Avis",
+    "rating": "Évaluation",
+    "review": "Avis",
+    "star": "étoile",
+    "stars": "étoiles",
+    "saveChanges": "Enregistrer les Modifications",
+    "saving": "Enregistrement...",
+    "cancel": "Annuler",
+    "editReview": "Modifier l'Avis",
+    "deleteReview": "Supprimer l'Avis",
+    "viewListing": "Voir l'Annonce",
+    "viewRequirements": "Écrire un Avis",
+    "submitting": "Envoi en cours...",
+    "submitReview": "Envoyer l'Avis",
+    "writeReview": "Écrire un Avis",
+    "serviceLocation": "Lieu du Service",
+    "editListing": "Modifier l'Annonce",
+    "deleteListing": "Supprimer l'Annonce"
 }

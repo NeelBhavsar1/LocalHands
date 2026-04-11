@@ -209,5 +209,24 @@
     "editServiceForm.error.longitudeRequired": "Longitude is required",
     "editServiceForm.error.photosRequired": "Photos are required",
 
-    "back": "Back"
+    "back": "Back",
+
+    "reviews": "Reviews",
+    "rating": "Rating",
+    "review": "Review",
+    "star": "star",
+    "stars": "stars",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "editReview": "Edit Review",
+    "deleteReview": "Delete Review",
+    "viewListing": "View Listing",
+    "viewRequirements": "Write Review",
+    "submitting": "Submitting...",
+    "submitReview": "Submit Review",
+    "writeReview": "Write a Review",
+    "serviceLocation": "Service Location",
+    "editListing": "Edit Listing",
+    "deleteListing": "Delete Listing"
 }

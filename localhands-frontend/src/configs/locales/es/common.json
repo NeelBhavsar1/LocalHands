@@ -176,5 +176,24 @@
     "createServiceForm.error.longitudeRequired": "La longitud es requerida",
     "createServiceForm.error.photosRequired": "Las fotos son requeridas",
 
-    "back": "Atrás"
+    "back": "Atrás",
+
+    "reviews": "Reseñas",
+    "rating": "Calificación",
+    "review": "Reseña",
+    "star": "estrella",
+    "stars": "estrellas",
+    "saveChanges": "Guardar Cambios",
+    "saving": "Guardando...",
+    "cancel": "Cancelar",
+    "editReview": "Editar Reseña",
+    "deleteReview": "Eliminar Reseña",
+    "viewListing": "Ver Listado",
+    "viewRequirements": "Escribir Reseña",
+    "submitting": "Enviando...",
+    "submitReview": "Enviar Reseña",
+    "writeReview": "Escribir una Reseña",
+    "serviceLocation": "Ubicación del Servicio",
+    "editListing": "Editar Listado",
+    "deleteListing": "Eliminar Listado"
 }

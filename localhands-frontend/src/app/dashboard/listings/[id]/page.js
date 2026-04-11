@@ -9,7 +9,9 @@ import styles from './page.module.css'
 import { getListingById, updateListing, deleteListing, getCategories } from '@/api/listingApi'
 import { getUserInfo } from '@/api/userApi'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
-import { BACKEND_URL, getDefaultIcon, createEditChangeHandler, createPhotoChangeHandler, createMapLocationHandler, validateListingForm, generateAltTexts, getCategoryDisplayName } from '@/utils/listingUtils'
+import ReviewModal from '@/components/ReviewModal/ReviewModal'
+import ReviewsSection from '@/components/ReviewsSection/ReviewsSection'
+import { BACKEND_URL, getDefaultIcon, createEditChangeHandler, createPhotoChangeHandler, createMapLocationHandler, validateListingForm, generateAltTexts, getCategoryDisplayName, createReviewChangeHandler, submitReview, createCategoryToggleHandler, updateReviewInListing, removeReviewFromListing } from '@/utils/listingUtils'
 import { useTranslation } from 'react-i18next'
 import { MessageCircle, UserStar } from 'lucide-react'
 
@@ -30,6 +32,9 @@ export default function ListingDetailPage() {
     const [selectedCategories, setSelectedCategories] = useState([])
     const [categoriesLoading, setCategoriesLoading] = useState(false)
     const { t } = useTranslation()
+    const [review, setReview] = useState(false)
+    const [reviewForm, setReviewForm] = useState({ rating: 5, reviewBody: '' })
+    const [submittingReview, setSubmittingReview] = useState(false)
 
     const [editForm, setEditForm] = useState({
         name: '',
@@ -79,14 +84,32 @@ export default function ListingDetailPage() {
 
     const handleMapLocationSelect = createMapLocationHandler(setEditForm)
 
-    const handleCategoryToggle = (categoryId) => {
-        setSelectedCategories(prev => {
-            if (prev.includes(categoryId)) {
-                return prev.filter(id => id !== categoryId)
-            } else {
-                return [...prev, categoryId]
-            }
-        })
+    const handleCategoryToggle = createCategoryToggleHandler(setSelectedCategories)
+
+    const writeReview = () => {
+        setReview(true)
+    }
+
+    const closeReview = () => {
+        setReview(false)
+        setReviewForm({ rating: 5, reviewBody: '' })
+    }
+
+    const handleReviewChange = createReviewChangeHandler(setReviewForm)
+
+    const handleReviewSubmit = async (e) => {
+        e.preventDefault()
+        setSubmittingReview(true)
+
+        try {
+            await submitReview(BACKEND_URL, listingId, reviewForm)
+            alert('Review submitted successfully!')
+            closeReview()
+        } catch (error) {
+            alert('Error submitting review: ' + error.message)
+        } finally {
+            setSubmittingReview(false)
+        }
     }
 
     const handleUpdate = async (e) => {
@@ -249,7 +272,7 @@ export default function ListingDetailPage() {
                                         <MessageCircle size={18} />
                                 </button>
 
-                                <button className={styles.messageIconButton} title={t('viewRequirements')}>
+                                <button className={styles.messageIconButton} title={t('viewRequirements')} onClick={writeReview}>
                                     <UserStar size={18} />
                                 </button>
                                 </>
@@ -280,6 +303,7 @@ export default function ListingDetailPage() {
                         <div className={styles.infoSection}>
                             <h1 className={styles.serviceTitle}>{listing.name}</h1>
                             <p className={styles.description}>{listing.description}</p>
+                            <ReviewsSection reviews={listing.reviews} backendUrl={BACKEND_URL} t={t} currentUser={currentUser} onReviewUpdated={(updatedReview) => updateReviewInListing(setListing, updatedReview)} onReviewDeleted={(reviewId) => removeReviewFromListing(setListing, reviewId)} />
                         </div>
 
                         {listing.latitude && listing.longitude && (
@@ -296,6 +320,8 @@ export default function ListingDetailPage() {
                     </div>
                 </div>
             )}
+
+            <ReviewModal isOpen={review} onClose={closeReview} onSubmit={handleReviewSubmit} formData={reviewForm} onChange={handleReviewChange} submitting={submittingReview} t={t} />
 
         </div>
     )
