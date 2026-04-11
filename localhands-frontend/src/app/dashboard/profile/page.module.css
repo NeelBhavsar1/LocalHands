@@ -26,8 +26,12 @@
 }
 
 .contentWrapper {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 35% 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "left right"
+    "bottom bottom";
   gap: 3rem;
   width: 100%;
   color: var(--text);
@@ -37,8 +41,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  flex: 0 0 35%;
-  max-width: 400px;
+  grid-area: left;
   color: var(--text);
 }
 
@@ -46,7 +49,15 @@
   display: flex;
   flex-direction: column;
   gap: .6rem;
-  flex: 1;
+  grid-area: right;
+}
+
+.bottomRow {
+  grid-area: bottom;
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+  width: 100%;
 }
 
 .profileImageContainer {
@@ -184,26 +195,44 @@
 
 }
 
-.saveButton {
-  padding: 0.75rem 2rem;
+.saveBioButton {
+  padding: 0.5rem 1rem;
   border-radius: 0.5rem;
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 0.875rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 120ms ease-in-out;
-  align-self: flex-end;
-  margin-top: 2rem;
-  color: var(--text);
-
+  margin-top: 0.5rem;
+  align-self: flex-start;
+  color: white;
   border: 1px solid rgba(0, 0, 0, 0.12);
   background: rgba(0, 0, 0, 0.88);
-  color: white;
-  font-weight: 600;
-
 }
 
-.saveButton:hover {
+.saveBioButton:hover {
   transform: translateY(-3px);
+}
+
+.saveBioButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.listingsSection {
+  flex: 1;
+}
+
+.reviewsSection {
+  flex: 1;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  margin-top: 0;
+  color: var(--text);
+  text-align: center;
 }
 
 @media (max-width: 768px) {
@@ -216,6 +245,7 @@
   }
 
   .contentWrapper {
+    display: flex;
     flex-direction: column;
     gap: 2rem;
   }
@@ -224,6 +254,16 @@
     flex: 1;
     max-width: 100%;
     align-items: center;
+  }
+
+  .rightSection {
+    order: 2;
+  }
+
+  .bottomRow {
+    order: 3;
+    flex-direction: column;
+    gap: 2rem;
   }
 
   .profileImage {
@@ -239,10 +279,9 @@
     text-align: center;
   }
 
-  .saveButton {
+  .saveBioButton {
     align-self: stretch;
     width: 100%;
-    margin-top: 1rem;
   }
 }
 

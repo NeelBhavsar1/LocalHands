@@ -132,6 +132,9 @@
     "profile.serviceProviderDescription": "Beschreibung des Dienstleisters",
     "profile.serviceProviderTitle": "Titel des Dienstleisters",
     "profile.save": "Profil speichern",
+    "profile.yourListings": "Ihre Angebote",
+    "profile.yourReviews": "Ihre Bewertungen",
+    "profile.saveBioPfp": "Bio/Foto speichern",
 
     "dashboard.messages.title": "Nachrichten",
 

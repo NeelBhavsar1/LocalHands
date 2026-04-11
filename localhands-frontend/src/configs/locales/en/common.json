@@ -139,7 +139,9 @@
     "profile.savePrivacy": "Save Privacy Settings",
     "profile.editAccountInfo": "Account Information",
     "profile.save": "Save profile",
-
+    "profile.yourListings": "Your Listings",
+    "profile.yourReviews": "Your Reviews",
+    "profile.saveBioPfp": "Save Bio/PFP",
 
     "dashboard.messages.title": "Messages",
 
