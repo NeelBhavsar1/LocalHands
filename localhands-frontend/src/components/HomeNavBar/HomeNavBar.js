@@ -36,16 +36,16 @@ export default function HomeNavBar({ showLinks = true }) {
     return (
         <div className={styles.container}>
             <div className={styles.logo}>
-                <Link href="/"><Image src="/logo-v2.png" alt="LocalHands Logo" width={100} height={100} className={styles.localHandsImage}/></Link>
+                <a href="/"><Image src="/logo-v2.png" alt="LocalHands Logo" width={100} height={100} className={styles.localHandsImage}/></a>
                 <p>Local<span>Hands</span></p>
             </div>
 
             {showLinks && (
             <div className={styles.navLinks}>
-                <Link href="/home">{t("nav.home")}</Link>
-                <Link href="/about">{t("nav.about")}</Link>
-                <Link href="/services">{t("nav.services")}</Link>
-                <Link href="/contact">{t("nav.contact")}</Link>
+                <a href="/home">{t("nav.home")}</a>
+                <a href="/about">{t("nav.about")}</a>
+                <a href="/services">{t("nav.services")}</a>
+                <a href="/contact">{t("nav.contact")}</a>
             </div>
             )}
             
@@ -54,9 +54,9 @@ export default function HomeNavBar({ showLinks = true }) {
                 <ToggleButton />
                 {showLinks && (
                     isLoggedIn ? (
-                        <Link href="/dashboard"><button className={styles.dashboardButton}>{t("nav.dashboard")}</button></Link>
+                        <a href="/dashboard"><button className={styles.dashboardButton}>{t("nav.dashboard")}</button></a>
                     ) : (
-                        <Link href="/login"><button className={styles.loginButton}>{t("nav.login")}</button></Link>
+                        <a href="/login"><button className={styles.loginButton}>{t("nav.login")}</button></a>
                     )
                 )}
             </div>
@@ -71,10 +71,10 @@ export default function HomeNavBar({ showLinks = true }) {
                 <div className={styles.mobileMenu}>
                     {( showLinks && 
                     <>
-                        <Link href="/home" onClick={toggleMobileMenu}>{t("nav.home")}</Link>
-                        <Link href="/services" onClick={toggleMobileMenu}>{t("nav.services")}</Link>
-                        <Link href="/about" onClick={toggleMobileMenu}>{t("nav.about")}</Link>
-                        <Link href="/contact" onClick={toggleMobileMenu}>{t("nav.contact")}</Link>
+                        <a href="/home" onClick={toggleMobileMenu}>{t("nav.home")}</a>
+                        <a href="/services" onClick={toggleMobileMenu}>{t("nav.services")}</a>
+                        <a href="/about" onClick={toggleMobileMenu}>{t("nav.about")}</a>
+                        <a href="/contact" onClick={toggleMobileMenu}>{t("nav.contact")}</a>
                     </>
                     )}
 
@@ -83,9 +83,9 @@ export default function HomeNavBar({ showLinks = true }) {
                         <ToggleButton onToggleComplete={closeMobileMenu}/>
                         {showLinks && (
                             isLoggedIn ? (
-                                <Link href="/dashboard" onClick={closeMobileMenu}><button className={styles.dashboardButton}>{t("nav.dashboard")}</button></Link>
+                                <a href="/dashboard" onClick={closeMobileMenu}><button className={styles.dashboardButton}>{t("nav.dashboard")}</button></a>
                             ) : (
-                                <Link href="/login" onClick={closeMobileMenu}><button className={styles.loginButton}>{t("nav.login")}</button></Link>
+                                <a href="/login" onClick={closeMobileMenu}><button className={styles.loginButton}>{t("nav.login")}</button></a>
                             )
                         )}
                     </div>
