@@ -28,15 +28,6 @@ export const createServicePhotoHandler = (setPhotos) => (e) => {
     setPhotos(files);
 };
 
-// Map location selection handler
-export const createMapLocationHandler = (setFormData) => (lat, lng) => {
-    setFormData(prev => ({
-        ...prev,
-        latitude: lat.toFixed(6),
-        longitude: lng.toFixed(6)
-    }));
-};
-
 // Work type change handler
 export const createWorkTypeHandler = (setWorkType, setFormData) => (type) => {
     setWorkType(type);
@@ -90,4 +81,40 @@ export const resetServiceForm = (setFormData, setPhotos, setWorkType, setShowFor
     setWorkType('online');
     setSelectedCategories && setSelectedCategories([]);
     setShowForm(false);
+};
+
+//edit page handlers
+export const createEditChangeHandler = (setEditForm) => (e) => {
+    const { name, value } = e.target;
+    setEditForm(prev => ({ ...prev, [name]: value }))
+};
+
+export const createPhotoChangeHandler = (setNewPhotos) => (e) => {
+    const files = Array.from(e.target.files)
+    setNewPhotos(files)
+};
+
+export const createMapLocationHandler = (setEditForm) => (lat, lng) => {
+    setEditForm(prev => ({ ...prev, latitude: lat.toFixed(6), longitude: lng.toFixed(6) }))
+};
+
+export const validateListingForm = (editForm, newPhotos, selectedCategories, workType = 'ONLINE') => {
+    if (!newPhotos || newPhotos.length === 0) {
+        return { valid: false, error: 'Please select at least one photo' }
+    }
+
+    const lat = parseFloat(editForm.latitude);
+    const lng = parseFloat(editForm.longitude);
+
+    if (isNaN(lat) || isNaN(lng)) {
+        return { valid: false, error: 'Please select a location on the map' }
+    }
+
+    //ensure categoryids are numbers
+    const categoryIds = selectedCategories?.map(id => typeof id === 'string' ? parseInt(id, 10) : id) || [];
+
+    return {
+        valid: true,
+        data: { name: editForm.name, description: editForm.description, latitude: lat, longitude: lng, categoryIds: categoryIds, workType: workType }
+    }
 };

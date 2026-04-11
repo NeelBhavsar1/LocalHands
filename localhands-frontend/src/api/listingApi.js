@@ -82,22 +82,25 @@ export const getListingById = async (listingId) => {
 }
 
 /**
- * Search listings by name with optional location and category filter
- * @param {*} searchInput - The search input
- * @param {*} latitude - The latitude of the location
- * @param {*} longitude - The longitude of the location
+ * Search listings by name with optional location, radius, category and work type filter
+ * @param {*} searchInput - The search input (empty string returns all)
+ * @param {*} latitude - The latitude of the location (optional)
+ * @param {*} longitude - The longitude of the location (optional)
  * @param {*} categoryIds - Optional array of category IDs to filter by
+ * @param {*} workType - The work type ('ONLINE', 'IN_PERSON', or 'BOTH')
+ * @param {*} radius - The radius in meters (optional, required if lat/lng provided)
  * @returns 
  */
-export const searchListings = async (searchInput, latitude, longitude, categoryIds) => {
+export const searchListings = async (searchInput, latitude, longitude, categoryIds, workType = 'BOTH', radius) => {
     try {
-        const params = { searchInput };
+        const params = { searchInput, workType };
         if (latitude && longitude) {
             params.latitude = latitude;
             params.longitude = longitude;
+            params.radius = radius || 50000;
         }
         if (categoryIds && categoryIds.length > 0) {
-            params.categoryIds = categoryIds.join(',');
+            params.categoryIds = categoryIds;
         }
         
         const res = await api.get("/api/listings/search", { params })

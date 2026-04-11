@@ -5,7 +5,7 @@ import styles from './page.module.css'
 import CreateServiceForm from '@/components/CreateServiceForm/CreateServiceForm'
 import SearchBar from '@/components/searchBar/SearchBar'
 import ListingCard from '@/components/ListingCard/ListingCard'
-import { getListingsWithinRadius } from '@/api/listingApi'
+import { searchListings } from '@/api/listingApi'
 import { getUserInfo } from '@/api/userApi'
 
 // Convert miles to meters for API
@@ -17,6 +17,8 @@ export default function ServicesPage() {
     const [listingsLoading, setListingsLoading] = useState(false)
     const [radius, setRadius] = useState(50) // in miles
     const [selectedCategories, setSelectedCategories] = useState([])
+    const [searchQuery, setSearchQuery] = useState('')
+    const [workType, setWorkType] = useState('BOTH')
     const [currentUser, setCurrentUser] = useState(null)
 
     // Get user info and location on mount
@@ -49,30 +51,35 @@ export default function ServicesPage() {
     }, [])
 
 
-    // Fetch nearby listings when location, radius, or selected categories changes
+    // Fetch listings when filters change
     useEffect(() => {
-        if (!location) return
-
-        const fetchNearbyListings = async () => {
+        const fetchListings = async () => {
             setListingsLoading(true)
             try {
                 const radiusInMeters = milesToMeters(radius)
-                const listings = await getListingsWithinRadius(
-                    location.latitude,
-                    location.longitude,
-                    radiusInMeters,
-                    selectedCategories
+                const listings = await searchListings(
+                    searchQuery,
+                    location?.latitude,
+                    location?.longitude,
+                    selectedCategories,
+                    workType,
+                    radiusInMeters
                 )
-                setNearbyListings(listings)
+                
+                //filter out current users own listings
+                const otherListings = listings.filter(listing => 
+                    listing.seller?.id !== currentUser?.id
+                )
+                setNearbyListings(otherListings)
             } catch (error) {
-                console.error('Failed to fetch nearby listings:', error)
+                console.error('Failed to fetch listings:', error)
             } finally {
                 setListingsLoading(false)
             }
         }
 
-        fetchNearbyListings()
-    }, [location, radius, selectedCategories])
+        fetchListings()
+    }, [location, radius, selectedCategories, searchQuery, workType, currentUser])
 
     return (
         <div className={styles.container}>
@@ -82,12 +89,12 @@ export default function ServicesPage() {
             </div>
 
             <div className={styles.midPage}>
-                <SearchBar radius={radius} onRadiusChange={setRadius} onCategoriesChange={setSelectedCategories} />
+                <SearchBar radius={radius} onRadiusChange={setRadius} onCategoriesChange={setSelectedCategories} searchQuery={searchQuery} onSearchChange={setSearchQuery} workType={workType} onWorkTypeChange={setWorkType} />
                 {currentUser?.roles?.includes("SELLER") && <CreateServiceForm />}
             </div>
 
             <div className={styles.nearbySection}>
-                <h2>Nearby Services</h2>
+                <h2>{searchQuery ? `Search Results for "${searchQuery}"` : location ? 'Nearby Services' : 'Online Services'}</h2>
                 {listingsLoading ? (
                     <p className={styles.loadingText}>Loading nearby services...</p>
                 ) : nearbyListings.length === 0 ? (

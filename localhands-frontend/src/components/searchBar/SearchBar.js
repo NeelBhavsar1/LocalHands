@@ -7,8 +7,7 @@ import { getCategories } from '@/api/listingApi';
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 import { useTranslation } from 'react-i18next';
 
-export default function SearchBar({ radius, onRadiusChange, onCategoriesChange }) {
-    const [workType, setWorkType] = useState('all');
+export default function SearchBar({ radius, onRadiusChange, onCategoriesChange, searchQuery, onSearchChange, workType, onWorkTypeChange }) {
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [categoriesLoading, setCategoriesLoading] = useState(false);
@@ -31,24 +30,26 @@ export default function SearchBar({ radius, onRadiusChange, onCategoriesChange }
         fetchCategories()
     }, [])
 
+    //watch for selectedCategories changes and notify parent comp
+    useEffect(() => {
+        onCategoriesChange?.(selectedCategories)
+    }, [selectedCategories, onCategoriesChange])
+
     const handleCategoryToggle = (categoryId) => {
         setSelectedCategories(prev => {
-            const newSelection = prev.includes(categoryId) ? prev.filter(id => id !== categoryId) : [...prev, categoryId]
-            onCategoriesChange?.(newSelection)
-            return newSelection
+            return prev.includes(categoryId) ? prev.filter(id => id !== categoryId) : [...prev, categoryId]
         })
     }
 
     const clearCategories = () => {
         setSelectedCategories([])
-        onCategoriesChange?.([])
     }
 
     return (
         <div className={styles.wrapper}>
             <div className={styles.container}>
                 <Search className={styles.icon} size={20} />
-                <input type="text" className={styles.input} placeholder="Search services..." />
+                <input type="text" className={styles.input} placeholder="Search services..." value={searchQuery || ''} onChange={(e) => onSearchChange?.(e.target.value)} />
             </div>
 
             <div className={styles.filters}>
@@ -69,13 +70,13 @@ export default function SearchBar({ radius, onRadiusChange, onCategoriesChange }
                 <div className={styles.filterGroup}>
                     <label>{t('search.workType.label')}</label>
                     <div className={styles.workTypeFilter}>
-                        <button className={`${styles.filterBtn} ${workType === 'all' ? styles.active : ''}`} onClick={() => setWorkType('all')}>
+                        <button className={`${styles.filterBtn} ${workType === 'BOTH' ? styles.active : ''}`} onClick={() => onWorkTypeChange?.('BOTH')}>
                             {t('search.workType.all')}
                         </button>
-                        <button className={`${styles.filterBtn} ${workType === 'online' ? styles.active : ''}`} onClick={() => setWorkType('online')}>
+                        <button className={`${styles.filterBtn} ${workType === 'ONLINE' ? styles.active : ''}`} onClick={() => onWorkTypeChange?.('ONLINE')}>
                             {t('search.workType.online')}
                         </button>
-                        <button className={`${styles.filterBtn} ${workType === 'in-person' ? styles.active : ''}`} onClick={() => setWorkType('in-person')}>
+                        <button className={`${styles.filterBtn} ${workType === 'IN_PERSON' ? styles.active : ''}`} onClick={() => onWorkTypeChange?.('IN_PERSON')}>
                             {t('search.workType.inPerson')}
                         </button>
                     </div>
