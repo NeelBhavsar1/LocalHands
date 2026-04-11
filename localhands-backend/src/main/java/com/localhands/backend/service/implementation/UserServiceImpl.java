@@ -457,6 +457,54 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void resendActivationEmail(Long userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found.", HttpStatus.NOT_FOUND));
+
+        if (user.getActivationTokens().isEmpty()) {
+            throw new AppException("Account is already activated.", HttpStatus.BAD_REQUEST);
+        }
+
+        ActivateAccountToken activationToken = new ActivateAccountToken();
+
+        Instant expiry = user.getActivationTokens().get(0).getExpiryDate();
+
+        user.getActivationTokens().clear();
+
+        String token = UUID.randomUUID().toString();
+
+        activationToken.setActivationToken(hashToken(token));
+        activationToken.setExpiryDate(expiry);
+        activationToken.setUser(user);
+
+        user.getActivationTokens().add(activationToken);
+
+        String message = """
+            <html>
+                <body>
+                    <p>Hello %s,</p>
+
+                    <p>We are resending this email so you can confirm your account:</p>
+        
+                    <p><a href="%s">Confirm Email</a></p>
+        
+                    <p>This link will expire 7 days after your initial account creation. If you don’t confirm your email, your account will be automatically removed.</p>
+        
+                    <p>If this was not you, please click <a href="%s">here</a>.</p>
+        
+                    <p>Thanks,<br/>The LocalHands Team</p>
+                </body>
+            </html>
+        """.formatted(user.getFirstName(), baseUrl + "/activate-account?token=" + token, baseUrl + "/deactivate-account?token=" + token);
+
+        userRepository.save(user);
+
+        emailSenderService.sendEmail(
+                user.getEmail(),"LocalHands Account Activation Confirmation (Resend)", message);
+    }
+
+    @Override
     @Transactional
     public void activateAccount(String token) {
 

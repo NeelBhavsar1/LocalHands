@@ -50,14 +50,25 @@ export default function HomeNavBar({ showLinks = true }) {
             )}
             
             <div className={styles.userActions}>
-                <LanguageButton/>
+                <LanguageButton />
                 <ToggleButton />
+
                 {showLinks && (
-                    isLoggedIn ? (
-                        <Link href="/dashboard"><button className={styles.dashboardButton}>{t("nav.dashboard")}</button></Link>
-                    ) : (
-                        <Link href="/login"><button className={styles.loginButton}>{t("nav.login")}</button></Link>
-                    )
+                    <>
+                        {isLoggedIn && (
+                            <Link href="/dashboard">
+                                <button className={styles.dashboardButton}>
+                                    {t("nav.dashboard")}
+                                </button>
+                            </Link>
+                        )}
+
+                        <Link href="/login">
+                            <button className={styles.loginButton}>
+                                {t("nav.login")}
+                            </button>
+                        </Link>
+                    </>
                 )}
             </div>
 

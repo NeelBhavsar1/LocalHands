@@ -3,6 +3,7 @@ package com.localhands.backend.controller;
 import com.localhands.backend.dto.request.ListingRequestDTO;
 import com.localhands.backend.dto.response.CategoryResponseDTO;
 import com.localhands.backend.dto.response.ListingResponseDTO;
+import com.localhands.backend.entity.ListingWorkType;
 import com.localhands.backend.security.UserPrincipal;
 import com.localhands.backend.service.ListingService;
 import lombok.AllArgsConstructor;
@@ -43,35 +44,18 @@ public class ListingController {
         return ResponseEntity.ok(listingResponseDTO);
     }
 
-    @GetMapping("/radius")
-    public ResponseEntity<List<ListingResponseDTO>> getPublicListingsWithinRadius(
-            @AuthenticationPrincipal UserPrincipal user,
-            @RequestParam double latitude,
-            @RequestParam double longitude,
-            @RequestParam double radius,
-            @RequestParam(required = false) List<Long> categoryIds
-    ) {
-        List<ListingResponseDTO> listingResponseDTOs = listingService.getListingsWithinRadius(user.getId(), latitude, longitude, radius, categoryIds);
-        return ResponseEntity.ok(listingResponseDTOs);
-    }
-
     @GetMapping("/search")
     public ResponseEntity<List<ListingResponseDTO>> searchPublicListings(
             @AuthenticationPrincipal UserPrincipal user,
             @RequestParam String searchInput,
             @RequestParam(required = false) Double latitude,
             @RequestParam(required = false) Double longitude,
-            @RequestParam(required = false) List<Long> categoryIds
+            @RequestParam(required = false) Double radius,
+            @RequestParam(required = false) List<Long> categoryIds,
+            @RequestParam ListingWorkType workType
     ) {
-        List<ListingResponseDTO> listingResponseDTOs;
-
-        if (latitude != null && longitude != null) {
-            listingResponseDTOs = listingService.searchForListingsWithLocation(user.getId(), searchInput, latitude, longitude, categoryIds);
-        } else {
-            listingResponseDTOs = listingService.searchForListings(user.getId(), searchInput, categoryIds);
-        }
-
-        return ResponseEntity.ok(listingResponseDTOs);
+        List<ListingResponseDTO> listings = listingService.searchForPublicListings(user.getId(), searchInput, latitude, longitude, radius, categoryIds, workType);
+        return ResponseEntity.ok(listings);
     }
 
     @GetMapping("/categories")

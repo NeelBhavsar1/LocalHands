@@ -23,4 +23,5 @@ public class UserInfoResponseDTO {
     private ProfilePhotoResponseDTO profilePhoto;
     private boolean publicProfile;
     private boolean messagesEnabled;
+    private boolean emailConfirmed;
 }

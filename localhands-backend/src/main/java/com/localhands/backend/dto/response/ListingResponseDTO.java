@@ -1,5 +1,6 @@
 package com.localhands.backend.dto.response;
 
+import com.localhands.backend.entity.ListingWorkType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class ListingResponseDTO {
     private Instant creationTime;
     private Instant updatedTime;
     private List<CategoryResponseDTO> categories;
+    private ListingWorkType workType;
     private List<ListingPhotoResponseDTO> photos;
     private List<ReviewResponseDTO> reviews;
     private ListingSellerResponseDTO seller;

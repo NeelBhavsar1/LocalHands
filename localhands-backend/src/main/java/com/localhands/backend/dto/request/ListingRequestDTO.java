@@ -1,5 +1,6 @@
 package com.localhands.backend.dto.request;
 
+import com.localhands.backend.entity.ListingWorkType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,4 +18,5 @@ public class ListingRequestDTO {
     private double latitude;
     private double longitude;
     private List<Long> categoryIds;
+    private ListingWorkType workType;
 }

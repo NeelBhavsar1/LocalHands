@@ -52,6 +52,10 @@ public class Listing {
     )
     private Set<ListingCategory> categories = new HashSet<>();
 
+    @Column(name = "work_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ListingWorkType workType;
+
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ListingPhoto> photos;
 

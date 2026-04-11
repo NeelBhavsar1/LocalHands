@@ -36,7 +36,8 @@ public class UserMapper {
                         ? null
                         : ProfilePhotoMapper.mapToProfilePhotoResponseDTO(user.getProfilePhotos().get(0)),
                 user.isPublicProfile(),
-                user.isMessagesEnabled()
+                user.isMessagesEnabled(),
+                user.getActivationTokens().isEmpty()
         );
     }
 
