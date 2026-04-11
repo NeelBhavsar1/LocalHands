@@ -9,6 +9,7 @@ import styles from './layout.module.css'
 export default function layout({children}) {
   return (
     <div className={styles.container}>
+        {/*REMOVE <HomeNavBar showLinks={false}/> to view next.js errors more easily*/}
         <HomeNavBar showLinks={false}/>
         <Sidebar />
         <main className={styles.content}>

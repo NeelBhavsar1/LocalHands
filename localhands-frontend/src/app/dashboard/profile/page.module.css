@@ -271,8 +271,19 @@
     height: 100px;
   }
 
+  .bioContainer {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .bioContainer label {
+    text-align: center;
+  }
+
   .bioTextarea {
     min-height: 120px;
+    width: 100%;
+    text-align: center;
   }
 
   .editai {

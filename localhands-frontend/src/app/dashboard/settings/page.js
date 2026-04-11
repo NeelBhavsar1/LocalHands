@@ -77,7 +77,10 @@ export default function page() {
 
                         <div className={styles.formGroup}>
                             <label>{t("settings.serviceProvider")}</label>
-                            <ToggleSwitch isOn={formData.isServiceProvider} setIsOn={(value) => setFormData(prev => ({ ...prev, isServiceProvider: value }))} />
+                            <div className={styles.toggleRow}>
+                                <ToggleSwitch isOn={formData.isServiceProvider} setIsOn={(value) => setFormData(prev => ({ ...prev, isServiceProvider: value }))} />
+                                <span className={styles.hint}>Removing this will delete all your listings and services</span>
+                            </div>
                         </div>
                     </div>
 
