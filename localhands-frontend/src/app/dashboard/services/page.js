@@ -57,12 +57,14 @@ export default function ServicesPage() {
             setListingsLoading(true)
             try {
                 const radiusInMeters = milesToMeters(radius)
+                
+                const effectiveWorkType = location ? workType : 'ONLINE'
                 const listings = await searchListings(
                     searchQuery,
                     location?.latitude,
                     location?.longitude,
                     selectedCategories,
-                    workType,
+                    effectiveWorkType,
                     radiusInMeters
                 )
                 
@@ -96,10 +98,10 @@ export default function ServicesPage() {
             <div className={styles.nearbySection}>
                 <h2>{searchQuery ? `Search Results for "${searchQuery}"` : location ? 'Nearby Services' : 'Online Services'}</h2>
                 {listingsLoading ? (
-                    <p className={styles.loadingText}>Loading nearby services...</p>
+                    <p className={styles.loadingText}>{location ? 'Loading nearby services...' : 'Loading online services...'}</p>
                 ) : nearbyListings.length === 0 ? (
                     <p className={styles.noListingsText}>
-                        There are currently no listings available in your area, either increase your search radius or check for online work.
+                        {location ? 'There are currently no listings available in your area, either increase your search radius or check for online work.': 'There are currently no online listings available. Please enable location access to see services in your area.'}
                     </p>
                 ) : (
                     <div className={styles.listingsGrid}>

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import styles from "./page.module.css";
 import HomeNavBar from "@/components/HomeNavBar/HomeNavBar";
@@ -12,6 +13,7 @@ import { validateForgotPasswordEmail, validateForgotPasswordPin, validatePasswor
 
 export default function page() {
   const { t } = useTranslation()
+  const router = useRouter()
   const PIN_LENGTH = 6
   const [step, setStep] = useState("email")
   const [email, setEmail] = useState("")
@@ -20,6 +22,8 @@ export default function page() {
   const [isCheckingEmail, setIsCheckingEmail] = useState(false)
   const [isVerifyingPin, setIsVerifyingPin] = useState(false)
   const [isResettingPassword, setIsResettingPassword] = useState(false)
+  const [isResendingEmail, setIsResendingEmail] = useState(false)
+  const [resendMessage, setResendMessage] = useState("")
   const [resetToken, setResetToken] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -44,6 +48,21 @@ export default function page() {
       setErrors({ email: error.message || t("forgotPassword.errors.emailNotFound") })
     } finally {
       setIsCheckingEmail(false);
+    }
+  };
+
+  const handleResendEmail = async () => {
+    setErrors({})
+    setResendMessage("")
+    setIsResendingEmail(true)
+
+    try {
+      await sendPasswordResetEmail(email.trim())
+      setResendMessage(t("forgotPassword.pinStep.resendSuccess") || "Email resent successfully!")
+    } catch (error) {
+      setErrors({ resend: error.message || t("forgotPassword.errors.resendFailed") })
+    } finally {
+      setIsResendingEmail(false)
     }
   };
 
@@ -86,16 +105,10 @@ export default function page() {
       await resetPassword(email.trim(), resetToken, newPassword);
       setSuccessMessage(t("forgotPassword.passwordStep.successMessage"));
       
-      //reset form after successful password reset + 3 second delay
+      //redirect to login after 2 second delay
       setTimeout(() => {
-        setStep("email");
-        setEmail("");
-        setPin("");
-        setNewPassword("");
-        setConfirmPassword("");
-        setResetToken("");
-        setSuccessMessage("");
-      }, 3000)
+        router.push("/login")
+      }, 2000)
 
     } catch (error) {
       setErrors({ password: error.message || t("forgotPassword.errors.passwordMismatch") });
@@ -157,6 +170,14 @@ export default function page() {
                   {isVerifyingPin ? <LoadingSpinner size="small" /> : t("forgotPassword.pinStep.verifyButton")}
                 </button>
 
+                <button type="button" className={styles.resendButton} onClick={handleResendEmail} disabled={isVerifyingPin || isResendingEmail}>
+                  {isResendingEmail ? <LoadingSpinner size="small" /> : (t("forgotPassword.pinStep.resendButton") || "Resend email")}
+                </button>
+
+
+                {resendMessage && <span className={styles.success}>{resendMessage}</span>}
+                {errors.resend && <span className={styles.error}>{errors.resend}</span>}
+
                 <button type="button" className={styles.backButton} onClick={() => setStep("email")} disabled={isVerifyingPin}>
                   {t("forgotPassword.pinStep.useDifferentEmail")}
                 </button>
@@ -177,14 +198,7 @@ export default function page() {
                 <form className={styles.form} onSubmit={submitPasswordStep} autoComplete="off">
                   <label htmlFor="newPassword">
                     {t("forgotPassword.passwordStep.newPasswordLabel")}
-                    <input 
-                      id="newPassword" 
-                      name="newPassword" 
-                      type="password" 
-                      value={newPassword} 
-                      placeholder={t("forgotPassword.passwordStep.newPasswordPlaceholder")} 
-                      onChange={(e) => setNewPassword(e.target.value)} 
-                      required 
+                    <input id="newPassword" name="newPassword" type="password" value={newPassword} placeholder={t("forgotPassword.passwordStep.newPasswordPlaceholder")} onChange={(e) => setNewPassword(e.target.value)} required 
                       disabled={isResettingPassword}
                     />
                     {errors.password && <span className={styles.error}>{errors.password}</span>}
@@ -192,16 +206,7 @@ export default function page() {
 
                   <label htmlFor="confirmPassword">
                     {t("forgotPassword.passwordStep.confirmPasswordLabel")}
-                    <input 
-                      id="confirmPassword" 
-                      name="confirmPassword" 
-                      type="password" 
-                      value={confirmPassword} 
-                      placeholder={t("forgotPassword.passwordStep.confirmPasswordPlaceholder")} 
-                      onChange={(e) => setConfirmPassword(e.target.value)} 
-                      required 
-                      disabled={isResettingPassword}
-                    />
+                    <input id="confirmPassword" name="confirmPassword" type="password" value={confirmPassword} placeholder={t("forgotPassword.passwordStep.confirmPasswordPlaceholder")} onChange={(e) => setConfirmPassword(e.target.value)} required disabled={isResettingPassword} />
                     {errors.confirmPassword && <span className={styles.error}>{errors.confirmPassword}</span>}
                   </label>
 

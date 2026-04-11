@@ -118,3 +118,39 @@ export const validateListingForm = (editForm, newPhotos, selectedCategories, wor
         data: { name: editForm.name, description: editForm.description, latitude: lat, longitude: lng, categoryIds: categoryIds, workType: workType }
     }
 };
+
+//categoru name mapping
+export const CATEGORY_NAME_MAP = {
+    'CLEANING': 'Cleaning',
+    'PLUMBING': 'Plumbing',
+    'ELECTRICAL': 'Electrical',
+    'GARDENING': 'Gardening',
+    'PAINTING': 'Painting',
+    'CARPENTRY': 'Carpentry',
+    'HANDYMAN': 'Handyman',
+    'MOVING': 'Moving',
+    'DELIVERY': 'Delivery',
+    'HEAVY_LIFTING': 'Heavy Lifting',
+    'TUTORING': 'Tutoring',
+    'IT_SUPPORT': 'IT Support',
+    'TECH_SETUP': 'Tech Setup',
+    'PET_CARE': 'Pet Care',
+    'BABYSITTING': 'Babysitting',
+    'CAR_WASH': 'Car Wash',
+    'CAR_REPAIR': 'Car Repair',
+    'BEAUTY': 'Beauty',
+    'HAIRDRESSING': 'Hairdressing',
+    'PHOTOGRAPHY': 'Photography',
+    'VIDEOGRAPHY': 'Videography',
+    'FITNESS_TRAINING': 'Fitness Training',
+    'EVENT_HELP': 'Event Help',
+    'CATERING': 'Catering',
+    'HOME_REPAIR': 'Home Repair',
+    'APPLIANCE_REPAIR': 'Appliance Repair',
+    'OTHER': 'Other'
+};
+
+// Helper function to get human-readable category name
+export const getCategoryDisplayName = (categoryName) => {
+    return CATEGORY_NAME_MAP[categoryName] || categoryName?.replace(/_/g, ' ') 
+};

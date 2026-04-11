@@ -9,7 +9,7 @@ import styles from './page.module.css'
 import { getListingById, updateListing, deleteListing, getCategories } from '@/api/listingApi'
 import { getUserInfo } from '@/api/userApi'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
-import { BACKEND_URL, getDefaultIcon, createEditChangeHandler, createPhotoChangeHandler, createMapLocationHandler, validateListingForm, generateAltTexts } from '@/utils/listingUtils'
+import { BACKEND_URL, getDefaultIcon, createEditChangeHandler, createPhotoChangeHandler, createMapLocationHandler, validateListingForm, generateAltTexts, getCategoryDisplayName } from '@/utils/listingUtils'
 import { useTranslation } from 'react-i18next'
 
 const MapWithNoSSR = dynamic(() => import('@/components/LocationPicker/LocationPicker'), { ssr: false })
@@ -188,7 +188,7 @@ export default function ListingDetailPage() {
                             <div className={styles.categoriesGrid}>
                                 {categories.map((category) => (
                                     <button key={category.id} type="button" className={`${styles.categoryBtn} ${selectedCategories.includes(category.id) ? styles.active : ''}`} onClick={() => handleCategoryToggle(category.id)}>
-                                        {category.category}
+                                        {getCategoryDisplayName(category.category)}
                                     </button>
                                 ))}
                             </div>
@@ -202,10 +202,7 @@ export default function ListingDetailPage() {
                     <div className={styles.mapSection}>
                         <label>{t('clickOnMapToUpdateLocation')}</label>
                         <div className={styles.mapContainer}>
-                            <MapWithNoSSR 
-                                onLocationSelect={handleMapLocationSelect} 
-                                initialPosition={listing?.latitude && listing?.longitude ? [listing.latitude, listing.longitude] : null}
-                            />
+                            <MapWithNoSSR onLocationSelect={handleMapLocationSelect} initialPosition={listing?.latitude && listing?.longitude ? [listing.latitude, listing.longitude] : null} />
                         </div>
                     </div>
 
@@ -248,9 +245,26 @@ export default function ListingDetailPage() {
                         <h1>{listing.name}</h1>
                         <p className={styles.description}>{listing.description}</p>
                         
+                        {listing.categories && listing.categories.length > 0 && (
+                            <div className={styles.categoriesDisplay}>
+                                {listing.categories.map((category) => (
+                                    <span key={category.id} className={styles.categoryTag}>
+                                        {getCategoryDisplayName(category.category)}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+
+                        <div className={styles.workTypeDisplay}>
+                            <span className={styles.workTypeBadge}>
+                                {listing.workType === 'ONLINE' ? 'Online' : 'In Person'}
+                            </span>
+                        </div>
+                        
+                        
                         <div className={styles.meta}>
                             <span className={styles.location}>
-                                {listing.latitude?.toFixed(4)}, {listing.longitude?.toFixed(4)}
+                                {listing.workType === 'ONLINE' ? 'Online Service' : `${listing.latitude?.toFixed(4)}, ${listing.longitude?.toFixed(4)}`}
                             </span>
                             <span className={styles.date}>
                                 {t('posted')}: {new Date(listing.creationTime).toLocaleDateString()}

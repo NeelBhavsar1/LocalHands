@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Search, MapPin, Tag } from 'lucide-react';
 import styles from './searchBar.module.css';
 import { getCategories } from '@/api/listingApi';
+import { getCategoryDisplayName } from '@/utils/listingUtils';
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 import { useTranslation } from 'react-i18next';
 
@@ -108,7 +109,7 @@ export default function SearchBar({ radius, onRadiusChange, onCategoriesChange, 
                                             {categories.map((category) => (
                                                 <label key={category.id} className={`${styles.categoryItem} ${selectedCategories.includes(category.id) ? styles.selected : ''}`}>
                                                     <input type="checkbox" checked={selectedCategories.includes(category.id)} onChange={() => handleCategoryToggle(category.id)} />
-                                                    <span className={styles.categoryName}>{category.category}</span>
+                                                    <span className={styles.categoryName}>{getCategoryDisplayName(category.category)}</span>
                                                 </label>
                                             ))}
                                         </div>

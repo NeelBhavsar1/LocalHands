@@ -3,28 +3,27 @@ To Do:
 	Frontend
 		- Review and message capabilities in sections and listings. 
 		- Touch up on the dashboard home page for service providers (with or without listings already) and customers. Make sure all links work and translations work for each part of the page/pages.
-		- Touch up on the very base URL home page, footer and header links etc.\
-		- Polish service search slightly. Buttons look a bit squished and search bar is wonky if no add listings button is present..
+		- Touch up on the very base URL home page, footer and header links etc.
+		(COMPLETED)- Polish service search slightly. Buttons look a bit squished and search bar is wonky if no add listings button is present..
 		- View public profiles feature with all listings, and reviews given. Can be accessible thru a link to their profile on listing/messages etc. And maybe have the pfp in the listing.
 		- Add reviews to all public listings.
 		- Check language support everywhere.
-		- Forgot password resend email button when it asks for the pin. 
+		(COMPLETED)- Forgot password resend email button when it asks for the pin. 
 		- Move around profile settings and (maybe) add a save button for privacy settings, it looks atm that the save button saves all rather than privacy settings being saved on a toggle. Add view public profile too and all reviews you have made. Pfp is inverted in dark mode (lol).
-		- Make the following frontend URLs (these are pages that won't be accessed by any other part of the website - only emails):
+		(COMPLETED)- Make the following frontend URLs (these are pages that won't be accessed by any other part of the website - only emails):
 			- /activate-account?token=
 			- /deactivate-account?token=
 			- /confirm-email?token=
 			- These will obtain the token URL query parameter (token) and depending on the endpoint will call the right API (see /api/auth on backend for them). Each one should just say a success or fail message.
 		- Live messaging. 
-		- When creating a new service make sure to add location map in it.
-		- Put categories and work type on the detailed listing page too - maybe replace the location with the location if in person or online for online.
-		- View your listings/search for listings add work type under the images along with the categories - maybe replace the location with the location if in person or online for online.
-		- Refactor search with new API. Lock onto online only if no coordinates given as a backup.
+		(COMPLETED NOTE: did this few commits ago)- When creating a new service make sure to add location map in it.
+		(COMPLETED)- Put categories and work type on the detailed listing page too - maybe replace the location with the location if in person or online for online.
+		(COMPLETED)- View your listings/search for listings add work type under the images along with the categories - maybe replace the location with the location if in person or online for online.
+		(COMPLETED)- Refactor search with new API. Lock onto online only if no coordinates given as a backup.
 		- Let user know if they havent verified their email using getUserinfo on the home page for both customer and provider. Let them know the consequence of deactivation within 7 days of creation. This reminds them to check their email and confirm. Use my new api to resend confirmation email as a button next to it - POST /resend-activation-email.
-		- Back to previous - maybe keep data of search if going back to it.
-		- Categories dictionary to more human readable names.
+		(COMPLETED)- Categories dictionary to more human readable names.
 		- I've changed the update listing api so new photos are no longer required if the user wants them to stay the same, please check it works and update the photos section of edit listings to let them know only to change the photos.
-		- Added work type in the Listing Request DTO. Make sure it is either "ONLINE" or "IN_PERSON". For searching, you can also have "BOTH".
+		(COMPLETED)- Added work type in the Listing Request DTO. Make sure it is either "ONLINE" or "IN_PERSON". For searching, you can also have "BOTH".
 
 
 	Backend

@@ -1,5 +1,6 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
+import { getCategoryDisplayName } from '@/utils/listingUtils'
 import styles from './ListingCard.module.css'
 
 // Get backend URL from environment or default to localhost
@@ -28,19 +29,25 @@ export default function ListingCard({ listing }) {
             <h3 className={styles.name}>{listing.name}</h3>
             <p className={styles.description}>{listing.description}</p>
             
-            {listing.categories && listing.categories.length > 0 && (
-                <div className={styles.categories}>
-                    {listing.categories.map((category) => (
-                        <span key={category.id} className={styles.categoryTag}>
-                            {category.category}
-                        </span>
-                    ))}
-                </div>
-            )}
+            <div className={styles.tags}>
+                {listing.workType && (
+                    <span className={`${styles.workTypeTag} ${styles[listing.workType.toLowerCase()]}`}>
+                        {listing.workType === 'ONLINE' ? 'Online' : 'In Person'}
+                    </span>
+                )}
+                {listing.categories && listing.categories.slice(0, 2).map((category) => (
+                    <span key={category.id} className={styles.categoryTag}>
+                        {getCategoryDisplayName(category.category)}
+                    </span>
+                ))}
+                {listing.categories && listing.categories.length > 2 && (
+                    <span className={styles.moreTag}>+{listing.categories.length - 2}</span>
+                )}
+            </div>
 
             <div className={styles.footer}>
                 <span className={styles.location}>
-                    {listing.latitude?.toFixed(4)}, {listing.longitude?.toFixed(4)}
+                    {listing.workType === 'ONLINE' ? 'Online Service' : `${listing.latitude?.toFixed(4)}, ${listing.longitude?.toFixed(4)}`}
                 </span>
                 <span className={styles.date}>
                     {new Date(listing.creationTime).toLocaleDateString()}
