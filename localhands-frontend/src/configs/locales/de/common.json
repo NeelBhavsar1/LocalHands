@@ -220,5 +220,17 @@
     "writeReview": "Bewertung Schreiben",
     "serviceLocation": "Service-Standort",
     "editListing": "Angebot Bearbeiten",
-    "deleteListing": "Angebot Löschen"
+    "deleteListing": "Angebot Löschen",
+
+    "messages.title": "Nachrichten",
+    "messages.noConversations": "Noch keine Unterhaltungen",
+    "messages.selectConversation": "Wählen Sie eine Unterhaltung aus",
+    "messages.selectConversationSubtitle": "Wählen Sie eine Unterhaltung aus der Seitenleiste, um zu chatten",
+    "messages.noMessages": "Noch keine Nachrichten. Starten Sie die Unterhaltung!",
+    "messages.typeMessage": "Nachricht eingeben...",
+    "messages.send": "Senden",
+    "messages.messagingDisabled": "Nachrichten sind für diese Unterhaltung deaktiviert",
+    "messages.today": "Heute",
+    "messages.yesterday": "Gestern",
+    "messages.failedToSend": "Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
 }

@@ -195,5 +195,17 @@
     "writeReview": "Escribir una Reseña",
     "serviceLocation": "Ubicación del Servicio",
     "editListing": "Editar Listado",
-    "deleteListing": "Eliminar Listado"
+    "deleteListing": "Eliminar Listado",
+
+    "messages.title": "Mensajes",
+    "messages.noConversations": "Aún no hay conversaciones",
+    "messages.selectConversation": "Selecciona una conversación",
+    "messages.selectConversationSubtitle": "Elige una conversación de la barra lateral para empezar a chatear",
+    "messages.noMessages": "Aún no hay mensajes. ¡Inicia la conversación!",
+    "messages.typeMessage": "Escribe un mensaje...",
+    "messages.send": "Enviar",
+    "messages.messagingDisabled": "La mensajería está deshabilitada para esta conversación",
+    "messages.today": "Hoy",
+    "messages.yesterday": "Ayer",
+    "messages.failedToSend": "No se pudo enviar el mensaje. Por favor, inténtalo de nuevo."
 }

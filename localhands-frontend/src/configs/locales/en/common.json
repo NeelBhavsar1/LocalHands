@@ -228,5 +228,17 @@
     "writeReview": "Write a Review",
     "serviceLocation": "Service Location",
     "editListing": "Edit Listing",
-    "deleteListing": "Delete Listing"
+    "deleteListing": "Delete Listing",
+
+    "messages.title": "Messages",
+    "messages.noConversations": "No conversations yet",
+    "messages.selectConversation": "Select a conversation",
+    "messages.selectConversationSubtitle": "Choose a conversation from the sidebar to start chatting",
+    "messages.noMessages": "No messages yet. Start the conversation!",
+    "messages.typeMessage": "Type a message...",
+    "messages.send": "Send",
+    "messages.messagingDisabled": "Messaging is disabled for this conversation",
+    "messages.today": "Today",
+    "messages.yesterday": "Yesterday",
+    "messages.failedToSend": "Failed to send message. Please try again."
 }

@@ -208,5 +208,17 @@
     "writeReview": "Écrire un Avis",
     "serviceLocation": "Lieu du Service",
     "editListing": "Modifier l'Annonce",
-    "deleteListing": "Supprimer l'Annonce"
+    "deleteListing": "Supprimer l'Annonce",
+
+    "messages.title": "Messages",
+    "messages.noConversations": "Aucune conversation encore",
+    "messages.selectConversation": "Sélectionnez une conversation",
+    "messages.selectConversationSubtitle": "Choisissez une conversation dans la barre latérale pour commencer à discuter",
+    "messages.noMessages": "Pas encore de messages. Commencez la conversation !",
+    "messages.typeMessage": "Tapez un message...",
+    "messages.send": "Envoyer",
+    "messages.messagingDisabled": "La messagerie est désactivée pour cette conversation",
+    "messages.today": "Aujourd'hui",
+    "messages.yesterday": "Hier",
+    "messages.failedToSend": "Échec de l'envoi du message. Veuillez réessayer."
 }

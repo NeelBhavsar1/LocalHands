@@ -1,0 +1,63 @@
+.container {
+    height: calc(100vh - 140px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border-radius: 0.75rem;
+}
+
+.messagingLayout {
+    display: flex;
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+}
+
+.sidebarContainer {
+    height: 100%;
+}
+
+.chatArea {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .container {
+        height: calc(100vh - 120px);
+        border-radius: 0;
+        background: transparent;
+    }
+    
+    .messagingLayout {
+        flex-direction: column;
+        position: relative;
+    }
+    
+    .sidebarContainer {
+        width: 100%;
+        height: 100%;
+    }
+    
+    .sidebarHidden {
+        display: none;
+    }
+    
+    .chatArea {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 10;
+        background: var(--surface);
+    }
+    
+    .chatOpen {
+        display: flex;
+    }
+}
