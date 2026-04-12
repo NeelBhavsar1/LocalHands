@@ -1,23 +1,13 @@
 To Do:
 
 	Frontend
-		(COMPLETED)- Review and message capabilities in sections and listings. 
 		- Touch up on the dashboard home page for service providers (with or without listings already) and customers. Make sure all links work and translations work for each part of the page/pages.
 		- Touch up on the very base URL home page, footer and header links etc.
-		(COMPLETED)- View public profiles feature with all listings, and reviews given. Can be accessible thru a link to their profile on listing/messages etc. And maybe have the pfp in the listing.
-		(COMPLETED)- Add reviews to all public listings.
-		(COMPLETED)- When adding a review, refresh the page so it appears.
 		- Check language support everywhere.
 		- Move around profile settings and (maybe) add a save button for privacy settings, it looks atm that the save button saves all rather than privacy settings being saved on a toggle. Add view public profile too and all reviews you have made. Pfp is inverted in dark mode (lol).
-		(COMPLETED)- Live messaging - see WhatsApp for more details.
 		- Let user know if they havent verified their email using getUserinfo on the home page for both customer and provider. Let them know the consequence of deactivation within 7 days of creation. This reminds them to check their email and confirm. Use my new api to resend confirmation email as a button next to it - POST /resend-activation-email.
 		- I've changed the update listing api so new photos are no longer required if the user wants them to stay the same, please check it works and update the photos section of edit listings to let them know only to change the photos. Also make sure it is tailored depending on the work type.
-		(COMPLETED)- Put a bit of a delay on the searching. Like 2 seconds after finished typing. This stops countless search requests every key change (probably exceed trial on AWS).
 		- Check own listings span across whole page in home page (if we keeping that).
-		(COMPLETED)- Activation, deactivation and confirm email websites scroll for some reason.
-		(COMPLETED)- Deactivate in person filter and radius if no location.
-		(COMPLETED)- Is miles to meters still implemented in places it shouldnt be? Double check.
-		(COMPLETED)- Strange 0 thing at the bottom left of listing. Remove this
 		- I've changed the user update profile slightly. UserProfileUpdateRequestDTO now contains resetProfilePhoto (Boolean) that is now checked to see if the user wants the default pfp back. I thought this was a good idea for a button if someone wants to make the pfp default again.
 			- If you want the pfp to stay the same - don't upload a pfp and resetProfilePhoto false.
 			- If you want the pfp to change - upload a new pfp and resetProfilePhoto false.
