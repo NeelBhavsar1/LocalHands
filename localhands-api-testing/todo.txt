@@ -13,7 +13,3 @@ To Do:
 			- If you want the pfp to change - upload a new pfp and resetProfilePhoto false.
 			- If you want the pfp to go to default - don't upload a pfp and resetProfilePhoto true.
 			- Any other combination is forbidden.
-
-
-	Backend
-		- Research and perform deployment.
