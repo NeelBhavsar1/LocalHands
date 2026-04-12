@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import Link from 'next/link';
 import styles from './ChatWindow.module.css';
 import { Send, ChevronLeft } from 'lucide-react';
 
@@ -99,10 +100,18 @@ export default function ChatWindow({ conversation, messages, currentUser, onSend
                         <ChevronLeft size={24} />
                     </button>
                 )}
-                <img src={otherUserProfilePicture ? `${BACKEND_URL}${otherUserProfilePicture}` : '/profile.png'} alt={otherUserName} className={styles.headerAvatar} />
+
+                <Link href={`/profile/${conversation?.otherUserId}`} className={styles.headerAvatarLink}>
+                    <img src={otherUserProfilePicture ? `${BACKEND_URL}${otherUserProfilePicture}` : '/profile.png'} alt={otherUserName} className={styles.headerAvatar} />
+                </Link>
+                
                 <div className={styles.headerInfo}>
-                    <h3 className={styles.headerName}>{otherUserName}</h3>
+
+                    <Link href={`/profile/${conversation?.otherUserId}`} className={styles.headerNameLink}>
+                        <h3 className={styles.headerName}>{otherUserName}</h3>
+                    </Link>
                     <p className={styles.headerListing}>{listingTitle}</p>
+                    
                 </div>
             </div>
 

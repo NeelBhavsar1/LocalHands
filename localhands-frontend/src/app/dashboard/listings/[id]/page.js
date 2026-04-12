@@ -14,6 +14,7 @@ import ReviewsSection from '@/components/ReviewsSection/ReviewsSection'
 import { BACKEND_URL, getDefaultIcon, createEditChangeHandler, createPhotoChangeHandler, createMapLocationHandler, validateListingForm, generateAltTexts, getCategoryDisplayName, createReviewChangeHandler, submitReview, createCategoryToggleHandler, updateReviewInListing, removeReviewFromListing } from '@/utils/listingUtils'
 import { useTranslation } from 'react-i18next'
 import { MessageCircle, UserStar } from 'lucide-react'
+import Link from 'next/link'
 
 const MapWithNoSSR = dynamic(() => import('@/components/LocationPicker/LocationPicker'), { ssr: false })
 
@@ -105,6 +106,8 @@ export default function ListingDetailPage() {
             await submitReview(BACKEND_URL, listingId, reviewForm)
             alert('Review submitted successfully!')
             closeReview()
+            //refreshes page on successful reviw submission
+            window.location.reload()
         } catch (error) {
             alert('Error submitting review: ' + error.message)
         } finally {
@@ -259,12 +262,14 @@ export default function ListingDetailPage() {
                 <div className={styles.listingView}>
                     
                     <div className={styles.sellerBar}>
-                        <div className={styles.sellerInfo}>
+
+                        <Link href={`/profile/${listing.seller?.id}`} className={styles.sellerInfo}>
                             <img src={listing.seller?.profilePhoto?.url ? `${BACKEND_URL}${listing.seller.profilePhoto.url}` : '/profile.png'} alt={`${listing.seller?.firstName} ${listing.seller?.lastName}`} className={styles.sellerPfp} />
                             <span className={styles.sellerName}>
                                 {listing.seller?.firstName} {listing.seller?.lastName}
                             </span>
-                        </div>
+                        </Link>
+                        
                         <div className={styles.serviceTags}>
                             {!isOwner && (
                                 <>

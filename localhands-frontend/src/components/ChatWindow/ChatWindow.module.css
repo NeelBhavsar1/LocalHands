@@ -39,12 +39,30 @@
     background: var(--surface);
 }
 
+.headerAvatarLink {
+    display: flex;
+    text-decoration: none;
+}
+
 .headerAvatar {
     width: 44px;
     height: 44px;
     border-radius: 50%;
     object-fit: cover;
     background-color: var(--border);
+    transition: transform 0.2s;
+}
+
+.headerAvatarLink:hover .headerAvatar {
+    transform: scale(1.05);
+}
+
+.headerNameLink {
+    text-decoration: none;
+}
+
+.headerNameLink:hover .headerName {
+    color: var(--primary);
 }
 
 .backButton {

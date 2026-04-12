@@ -152,13 +152,13 @@
     "dashboard.BuyerButton": "Voir les services",
 
     "search.radius.label": "Rayon:",
-    "search.radius.5": "5 km",
-    "search.radius.10": "10 km",
-    "search.radius.25": "25 km",
-    "search.radius.50": "50 km",
-    "search.radius.100": "100 km",
-    "search.radius.150": "150 km",
-    "search.radius.200": "200 km",
+    "search.radius.5": "5 miles",
+    "search.radius.10": "10 miles",
+    "search.radius.25": "25 miles",
+    "search.radius.50": "50 miles",
+    "search.radius.100": "100 miles",
+    "search.radius.150": "150 miles",
+    "search.radius.200": "200 miles",
     
     "search.workType.label": "Type de travail:",
     "search.workType.all": "Tous",
@@ -220,5 +220,12 @@
     "messages.messagingDisabled": "La messagerie est désactivée pour cette conversation",
     "messages.today": "Aujourd'hui",
     "messages.yesterday": "Hier",
-    "messages.failedToSend": "Échec de l'envoi du message. Veuillez réessayer."
+    "messages.failedToSend": "Échec de l'envoi du message. Veuillez réessayer.",
+
+    "publicProfile.viewProfile": "Voir le Profil",
+    "publicProfile.listings": "Annonces",
+    "publicProfile.reviews": "Avis",
+    "publicProfile.noListings": "Pas encore d'annonces",
+    "publicProfile.noReviews": "Pas encore d'avis",
+    "publicProfile.profileNotFound": "Profil non trouvé"
 }

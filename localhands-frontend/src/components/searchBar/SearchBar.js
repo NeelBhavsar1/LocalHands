@@ -8,7 +8,7 @@ import { getCategoryDisplayName } from '@/utils/listingUtils';
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner';
 import { useTranslation } from 'react-i18next';
 
-export default function SearchBar({ radius, onRadiusChange, onCategoriesChange, searchQuery, onSearchChange, workType, onWorkTypeChange }) {
+export default function SearchBar({ radius, onRadiusChange, onCategoriesChange, searchQuery, onSearchChange, workType, onWorkTypeChange, hasLocation }) {
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [categoriesLoading, setCategoriesLoading] = useState(false);
@@ -54,32 +54,38 @@ export default function SearchBar({ radius, onRadiusChange, onCategoriesChange, 
             </div>
 
             <div className={styles.filters}>
-                <div className={styles.filterGroup}>
-                    <MapPin size={16} />
-                    <label htmlFor="radius">{t('search.radius.label')}</label>
-                    <select id="radius" className={styles.select} value={radius} onChange={(e) => onRadiusChange?.(Number(e.target.value))}>
-                        <option value={5}>{t('search.radius.5')}</option>
-                        <option value={10}>{t('search.radius.10')}</option>
-                        <option value={25}>{t('search.radius.25')}</option>
-                        <option value={50}>{t('search.radius.50')}</option>
-                        <option value={100}>{t('search.radius.100')}</option>
-                        <option value={150}>{t('search.radius.150')}</option>
-                        <option value={200}>{t('search.radius.200')}</option>
-                    </select>
-                </div>
+                {hasLocation && (
+                    <div className={styles.filterGroup}>
+                        <MapPin size={16} />
+                        <label htmlFor="radius">{t('search.radius.label')}</label>
+                        <select id="radius" className={styles.select} value={radius} onChange={(e) => onRadiusChange?.(Number(e.target.value))}>
+                            <option value={5}>{t('search.radius.5')}</option>
+                            <option value={10}>{t('search.radius.10')}</option>
+                            <option value={25}>{t('search.radius.25')}</option>
+                            <option value={50}>{t('search.radius.50')}</option>
+                            <option value={100}>{t('search.radius.100')}</option>
+                            <option value={150}>{t('search.radius.150')}</option>
+                            <option value={200}>{t('search.radius.200')}</option>
+                        </select>
+                    </div>
+                )}
 
                 <div className={styles.filterGroup}>
                     <label>{t('search.workType.label')}</label>
                     <div className={styles.workTypeFilter}>
-                        <button className={`${styles.filterBtn} ${workType === 'BOTH' ? styles.active : ''}`} onClick={() => onWorkTypeChange?.('BOTH')}>
-                            {t('search.workType.all')}
-                        </button>
+                        {hasLocation && (
+                            <button className={`${styles.filterBtn} ${workType === 'BOTH' ? styles.active : ''}`} onClick={() => onWorkTypeChange?.('BOTH')}>
+                                {t('search.workType.all')}
+                            </button>
+                        )}
                         <button className={`${styles.filterBtn} ${workType === 'ONLINE' ? styles.active : ''}`} onClick={() => onWorkTypeChange?.('ONLINE')}>
                             {t('search.workType.online')}
                         </button>
-                        <button className={`${styles.filterBtn} ${workType === 'IN_PERSON' ? styles.active : ''}`} onClick={() => onWorkTypeChange?.('IN_PERSON')}>
-                            {t('search.workType.inPerson')}
-                        </button>
+                        {hasLocation && (
+                            <button className={`${styles.filterBtn} ${workType === 'IN_PERSON' ? styles.active : ''}`} onClick={() => onWorkTypeChange?.('IN_PERSON')}>
+                                {t('search.workType.inPerson')}
+                            </button>
+                        )}
                     </div>
                 </div>
 

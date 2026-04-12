@@ -139,13 +139,13 @@
     "dashboard.BuyerButton": "Ver servicios",
 
     "search.radius.label": "Radio:",
-    "search.radius.5": "5 km",
-    "search.radius.10": "10 km",
-    "search.radius.25": "25 km",
-    "search.radius.50": "50 km",
-    "search.radius.100": "100 km",
-    "search.radius.150": "150 km",
-    "search.radius.200": "200 km",
+    "search.radius.5": "5 millas",
+    "search.radius.10": "10 millas",
+    "search.radius.25": "25 millas",
+    "search.radius.50": "50 millas",
+    "search.radius.100": "100 millas",
+    "search.radius.150": "150 millas",
+    "search.radius.200": "200 millas",
     
     "search.workType.label": "Tipo de trabajo:",
     "search.workType.all": "Todos",
@@ -207,5 +207,12 @@
     "messages.messagingDisabled": "La mensajería está deshabilitada para esta conversación",
     "messages.today": "Hoy",
     "messages.yesterday": "Ayer",
-    "messages.failedToSend": "No se pudo enviar el mensaje. Por favor, inténtalo de nuevo."
+    "messages.failedToSend": "No se pudo enviar el mensaje. Por favor, inténtalo de nuevo.",
+
+    "publicProfile.viewProfile": "Ver Perfil",
+    "publicProfile.listings": "Anuncios",
+    "publicProfile.reviews": "Reseñas",
+    "publicProfile.noListings": "Aún no hay anuncios",
+    "publicProfile.noReviews": "Aún no hay reseñas",
+    "publicProfile.profileNotFound": "Perfil no encontrado"
 }

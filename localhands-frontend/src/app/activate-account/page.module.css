@@ -1,9 +1,9 @@
 .container {
-    min-height: 100vh;
+    min-height: calc(100vh - 70px);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px 20px 60px;
+    padding: 20px;
     background: var(--background);
     color: var(--text);
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import styles from './ReviewsSection.module.css'
 import { Star, ChevronDown, ChevronUp, Pencil, Trash2, ExternalLink } from 'lucide-react'
 
@@ -120,10 +121,11 @@ export default function ReviewsSection({ reviews, backendUrl, t, currentUser, on
                     
                     <div key={review.id} className={`${styles.reviewCard} ${expandedReview === review.id ? styles.expanded : ''}`}>
                         <button className={styles.reviewHeader} onClick={() => toggleReview(review.id)}>
-                            <div className={styles.reviewUser}>
+                           
+                            <Link href={`/profile/${review.userId}`} className={styles.reviewUser}>
                                 <img src={review.userProfilePhoto ? `${backendUrl}${review.userProfilePhoto}` : '/profile.png'} alt={review.userName} className={styles.reviewUserPfp} />
                                 <span className={styles.reviewUserName}>{review.userName}</span>
-                            </div>
+                            </Link>
 
                             <div className={styles.reviewMeta}>
                                 {renderStars(review.rating)}

@@ -1,5 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import Link from 'next/link';
+import { User } from 'lucide-react';
 import styles from './ChatSidebar.module.css';
 
 const BACKEND_URL ='http://localhost:8080';
@@ -46,6 +48,11 @@ export default function ChatSidebar({ conversations, selectedConversation, onSel
 
                                     <div className={styles.nameRow}>
                                         <span className={styles.userName}>{conversation.otherUserName}</span>
+                                        
+                                        <Link href={`/profile/${conversation.otherUserId}`} className={styles.viewProfileLink} title="View profile" onClick={(e) => e.stopPropagation()}>
+                                            <User size={14} />
+                                        
+                                        </Link>
                                         <span className={styles.time}>{formatTime(conversation.lastMessageTime)}</span>
                                     </div>
 
