@@ -306,7 +306,7 @@ export default function ListingDetailPage() {
                             <ReviewsSection reviews={listing.reviews} backendUrl={BACKEND_URL} t={t} currentUser={currentUser} onReviewUpdated={(updatedReview) => updateReviewInListing(setListing, updatedReview)} onReviewDeleted={(reviewId) => removeReviewFromListing(setListing, reviewId)} />
                         </div>
 
-                        {listing.latitude && listing.longitude && (
+                        {Boolean(listing.latitude) && Boolean(listing.longitude) && (
                             <div className={styles.mapSection}>
                                 <label className={styles.mapLabel}>{t('serviceLocation')}</label>
                                 <div className={styles.mapContainerDisplay}>
