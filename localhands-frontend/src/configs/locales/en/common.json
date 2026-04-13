@@ -209,5 +209,47 @@
     "editServiceForm.error.longitudeRequired": "Longitude is required",
     "editServiceForm.error.photosRequired": "Photos are required",
 
-    "back": "Back"
+    "back": "Back",
+
+    "about.title": "Why Choose LocalHands?",
+    "about.subtitle": "We take the guesswork out of hiring and offering services by providing tools designed for transparency and trust.",
+    "about.gridSection.find.title": "📍 Find Exactly What You Need",
+    "about.gridSection.find.description": "Browse our interactive map or use powerful search filters to sort providers by distance, rating, and service type so you always find the perfect match right around the corner.",
+    "about.gridSection.verified.title": "⭐ 100% Verified Reviews",
+    "about.gridSection.verified.description": "Trust is everything. We exclusively support verified reviews, meaning users can only leave feedback after a service is fully completed and paid for. No fake reviews.",
+    "about.gridSection.communication.title": "💬 Seamless Communication",
+    "about.gridSection.communication.description": "Browse detailed provider profiles complete with photos and descriptions, and use our secure in-app messaging to discuss details, scheduling, and pricing.",
+    "about.gridSection.secure.title": "🛡️ Built for Peace of Mind",
+    "about.gridSection.secure.description": "From secure payment processing to a dedicated support team ready to assist buyers and sellers with any disputes, we ensure every transaction is safe and fair.",
+    "about.gridSection.accessible.title": "🌍 Accessible to Everyone",
+    "about.gridSection.accessible.description": "Communities are diverse, and so are we. LocalHands proudly supports multiple languages so everyone can connect without barriers.",
+    "about.mission.title": "Our Mission",
+    "about.mission.description": "Whether you are a skilled professional looking to grow your local business, or a neighbour who just needs an extra set of hands, LocalHands is here to help. We are more than just a marketplace; we are a tool to build stronger, more connected, and reliable communities.",
+
+    "services.title": "Discover Local Services",
+  "services.subtitle": "From everyday errands to specialized professional work, find the right hands for every job right in your community.",
+  
+  "services.category.home.title": "🏡 Home Maintenance & Repair",
+  "services.category.home.description": "Need a leaky pipe fixed, a room painted, or general house cleaning? Connect with trusted local handymen and cleaners.",
+  
+  "services.category.outdoor.title": "🌳 Yard & Outdoor",
+  "services.category.outdoor.description": "Keep your exterior looking pristine with local landscaping, lawn mowing, gardening, and snow removal experts.",
+  
+  "services.category.errands.title": "📦 Errands & Moving",
+  "services.category.errands.description": "Get an extra set of hands for heavy lifting, furniture assembly, grocery delivery, or running general errands around town.",
+  
+  "services.category.pets.title": "🐾 Pet Care",
+  "services.category.pets.description": "Find loving, vetted neighbors for dog walking, pet sitting, and drop-in visits while you are at work or on vacation.",
+  
+  "services.category.tech.title": "💻 Tech & Electronics",
+  "services.category.tech.description": "Get help setting up your smart home, mounting a TV, or troubleshooting computer issues with local tech enthusiasts.",
+  
+  "services.category.professional.title": "🎓 Professional & Tutoring",
+  "services.category.professional.description": "Learn a new language, get homework help for the kids, or find local business consulting and event planning services.",
+  
+  "services.cta.buyer.title": "Ready to get things done?",
+  "services.cta.buyer.button": "Search Providers near you",
+  
+  "services.cta.seller.title": "Have skills to share?",
+  "services.cta.seller.button": "Become a Provider today"
 }

@@ -176,5 +176,20 @@
     "createServiceForm.error.longitudeRequired": "La longitud es requerida",
     "createServiceForm.error.photosRequired": "Las fotos son requeridas",
 
-    "back": "Atrás"
+    "back": "Atrás",
+
+    "about.title": "¿Por qué elegir LocalHands?",
+    "about.subtitle": "Eliminamos las conjeturas a la hora de contratar y ofrecer servicios, proporcionando herramientas diseñadas para la transparencia y la confianza.",
+    "about.gridSection.find.title": "📍 Encuentra exactamente lo que necesitas",
+    "about.gridSection.find.description": "Explora nuestro mapa interactivo o utiliza potentes filtros de búsqueda para ordenar a los proveedores por distancia, calificación y tipo de servicio, para que siempre encuentres la opción perfecta a la vuelta de la esquina.",
+    "about.gridSection.verified.title": "⭐ 100% Reseñas verificadas",
+    "about.gridSection.verified.description": "La confianza lo es todo. Solo admitimos reseñas verificadas, lo que significa que los usuarios solo pueden dejar comentarios después de que un servicio se haya completado y pagado en su totalidad. Sin reseñas falsas.",
+    "about.gridSection.communication.title": "💬 Comunicación fluida",
+    "about.gridSection.communication.description": "Explora perfiles detallados de proveedores con fotos y descripciones, y utiliza nuestra mensajería segura en la aplicación para discutir detalles, horarios y precios.",
+    "about.gridSection.secure.title": "🛡️ Creado para tu tranquilidad",
+    "about.gridSection.secure.description": "Desde el procesamiento seguro de pagos hasta un equipo de soporte dedicado y listo para ayudar a compradores y vendedores con cualquier disputa, garantizamos que cada transacción sea segura y justa.",
+    "about.gridSection.accessible.title": "🌍 Accesible para todos",
+    "about.gridSection.accessible.description": "Las comunidades son diversas, y nosotros también. LocalHands apoya con orgullo múltiples idiomas para que todos puedan conectarse sin barreras.",
+    "about.mission.title": "Nuestra misión",
+    "about.mission.description": "Ya seas un profesional cualificado que busca hacer crecer su negocio local o un vecino que simplemente necesita un par de manos adicionales, LocalHands está aquí para ayudarte. Somos más que un mercado; somos una herramienta para construir comunidades más fuertes, conectadas y confiables."
 }
