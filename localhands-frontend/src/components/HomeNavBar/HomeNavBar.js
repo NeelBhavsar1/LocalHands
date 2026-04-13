@@ -7,9 +7,13 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { getUserInfo } from "@/api/userApi";
+import { logoutUser } from "@/api/authApi";
+import { useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
 
 export default function HomeNavBar({ showLinks = true }) {
     const { t } = useTranslation();
+    const router = useRouter();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -33,6 +37,18 @@ export default function HomeNavBar({ showLinks = true }) {
         setIsMobileMenuOpen(false);
     }
 
+    const handleLogout = async () => {
+        try {
+            await logoutUser();
+            setIsLoggedIn(false);
+            router.push("/");
+        } catch (error) {
+            console.error("Logout error:", error);
+            
+            router.push("/");
+        }
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.logo}>
@@ -53,21 +69,28 @@ export default function HomeNavBar({ showLinks = true }) {
                 <LanguageButton />
                 <ToggleButton />
 
+                {/*Conditional rendering based on login status and prop passing logic*/}
                 {showLinks && (
                     <>
-                        {isLoggedIn && (
-                            <Link href="/dashboard">
-                                <button className={styles.dashboardButton}>
-                                    {t("nav.dashboard")}
+                        {isLoggedIn ? (
+                            <>
+                                <Link href="/dashboard">
+                                    <button className={styles.dashboardButton}>
+                                        {t("nav.dashboard")}
+                                    </button>
+                                </Link>
+                                <button onClick={handleLogout} className={styles.logoutButton}>
+                                    <LogOut size={16} />
+                                    {t("nav.logout")}
+                                </button>
+                            </>
+                        ) : (
+                            <Link href="/login">
+                                <button className={styles.loginButton}>
+                                    {t("nav.login")}
                                 </button>
                             </Link>
                         )}
-
-                        <Link href="/login">
-                            <button className={styles.loginButton}>
-                                {t("nav.login")}
-                            </button>
-                        </Link>
                     </>
                 )}
             </div>
@@ -80,23 +103,33 @@ export default function HomeNavBar({ showLinks = true }) {
 
             {isMobileMenuOpen &&
                 <div className={styles.mobileMenu}>
-                    {( showLinks && 
+                    {showLinks && 
                     <>
                         <a href="/home" onClick={toggleMobileMenu}>{t("nav.home")}</a>
                         <a href="/services" onClick={toggleMobileMenu}>{t("nav.services")}</a>
                         <a href="/about" onClick={toggleMobileMenu}>{t("nav.about")}</a>
                         <a href="/contact" onClick={toggleMobileMenu}>{t("nav.contact")}</a>
                     </>
-                    )}
+                    }
 
                     <div className={styles.actionButton}>
                         <LanguageButton onToggleComplete={closeMobileMenu}/>
                         <ToggleButton onToggleComplete={closeMobileMenu}/>
                         {showLinks && (
                             isLoggedIn ? (
-                                <a href="/dashboard" onClick={closeMobileMenu}><button className={styles.dashboardButton}>{t("nav.dashboard")}</button></a>
+                                <>
+                                    <a href="/dashboard" onClick={closeMobileMenu}>
+                                        <button className={styles.dashboardButton}>{t("nav.dashboard")}</button>
+                                    </a>
+                                    <button onClick={() => { handleLogout(); closeMobileMenu(); }} className={styles.logoutButton}>
+                                        <LogOut size={16} />
+                                        {t("nav.logout")}
+                                    </button>
+                                </>
                             ) : (
-                                <a href="/login" onClick={closeMobileMenu}><button className={styles.loginButton}>{t("nav.login")}</button></a>
+                                <a href="/login" onClick={closeMobileMenu}>
+                                    <button className={styles.loginButton}>{t("nav.login")}</button>
+                                </a>
                             )
                         )}
                     </div>

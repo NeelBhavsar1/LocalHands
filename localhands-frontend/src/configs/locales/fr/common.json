@@ -6,6 +6,7 @@
 
     "nav.login": "Connexion",
     "nav.dashboard": "Tableau de bord",
+    "nav.logout": "Déconnexion",
     "nav.signup": "Inscription",
     "nav.home": "Accueil",
     "nav.about": "À propos",

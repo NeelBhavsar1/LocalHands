@@ -32,7 +32,11 @@ export default function CreateServiceForm({ onSuccess }) {
         longitude: ''
     })
 
-    //fetches categories when form is shown
+    /**
+     * This useEffect fetches category data information from the endpoint when the showForm
+     * is true. It sets the categoriesLoading state to true while fetching and false when done.
+     * The dependency array prevent uneccesary API calls.
+     */
     useEffect(() => {
         if (showForm) {
             const fetchCategories = async () => {

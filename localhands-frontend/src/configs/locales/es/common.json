@@ -6,6 +6,7 @@
 
     "nav.login": "Iniciar sesión",
     "nav.dashboard": "Panel de control",
+    "nav.logout": "Cerrar sesión",
     "nav.signup": "Registrarse",
     "nav.home": "Inicio",
     "nav.about": "Sobre nosotros",

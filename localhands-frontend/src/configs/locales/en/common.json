@@ -7,6 +7,7 @@
 
     "nav.login": "Login",
     "nav.dashboard": "Dashboard",
+    "nav.logout": "Logout",
     "nav.signup": "Sign Up",
     "nav.home": "Home",
     "nav.about": "About us",

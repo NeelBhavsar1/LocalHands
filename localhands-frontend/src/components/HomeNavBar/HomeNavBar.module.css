@@ -156,6 +156,47 @@
     0 12px 26px rgba(99, 102, 241, 0.2);
 }
 
+.logoutButton {
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+
+  padding: 10px 14px;
+  border-radius: 14px;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.10),
+    0 10px 22px rgba(239, 68, 68, 0.2);
+
+  transition: all 140ms ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.logoutButton:hover {
+  transform: translateY(-2px);
+  background: rgba(239, 68, 68, 1);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.12),
+    0 14px 28px rgba(239, 68, 68, 0.25);
+}
+
+.logoutButton:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.logoutButton:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 4px rgba(239, 68, 68, 0.35),
+    0 12px 26px rgba(239, 68, 68, 0.2);
+}
+
 .mobileMenuButton {
   display: none;
 }
@@ -230,5 +271,18 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
+  }
+
+  .logoutButton {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    gap: 4px;
+    min-width: 100px;
+    justify-content: center;
+  }
+
+  .logoutButton svg {
+    width: 14px;
+    height: 14px;
   }
 }
