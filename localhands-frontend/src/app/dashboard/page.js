@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { getMyListings } from '@/api/listingApi';
 import ListingList from '@/components/ListingList/ListingList';
 import Link from 'next/link';
+import { Plus } from 'lucide-react';
 
 export default function page({ children }) {
 
@@ -51,20 +52,41 @@ export default function page({ children }) {
     <div className={styles.container}>
 
         <div className={styles.header}>
-          <p className={styles.headerTitle}> Welcome Back, {user.firstName}</p>
-          <p className={styles.headerSubTitle}>Here's what's happened today.</p>
-        </div> 
+          <p className={styles.headerTitle}>{t('dashboard.welcomeMessage')}{user.firstName}</p>
+          <p className={styles.headerSubTitle}>{t('dashboard.subtitle')}</p>
+        </div>
 
         {user?.roles?.includes("SELLER") ? (
-          <div className={styles.listingsSection}>
-            <h2>{t("dashboard.ListingTitle")}</h2>
-            <ListingList listings={listings} />
+          <div className={styles.contentSection}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>{t("dashboard.ListingTitle")}</h2>
+              <Link href="/dashboard/services" className={styles.createButton}>
+                <Plus size={18} />
+                {t('dashboard.createListing')}
+              </Link>
+            </div>
+            <ListingList
+              listings={listings}
+              emptyMessage={t('dashboard.sellerEmptyState')}
+            />
+            {listings.length === 0 && (
+              <div className={styles.emptyStateAction}>
+                <Link href="/dashboard/services" className={styles.createButtonLarge}>
+                  <Plus size={20} />
+                  {t('dashboard.createFirstListing')}
+                </Link>
+              </div>
+            )}
           </div>
         ) : (
-          <div className={styles.buyerSection}>
-            <h2>{t("dashboard.BuyerTitle")}</h2>
-            <p>{t("dashboard.BuyerSubtitle")}</p>
-            <button><Link href="/dashboard/services" className={styles.viewServicesBtn}>{t("dashboard.BuyerButton")}</Link></button>
+          <div className={styles.contentSection}>
+            <div className={styles.buyerSection}>
+              <h2 className={styles.sectionTitle}>{t("dashboard.BuyerTitle")}</h2>
+              <p className={styles.buyerSubtitle}>{t("dashboard.BuyerSubtitle")}</p>
+              <Link href="/dashboard/services" className={styles.actionButton}>
+                {t("dashboard.BuyerButton")}
+              </Link>
+            </div>
           </div>
         )}
     </div>

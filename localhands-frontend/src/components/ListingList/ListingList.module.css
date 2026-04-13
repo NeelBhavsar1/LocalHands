@@ -6,12 +6,12 @@
   max-width: 500px; 
 }
 
-
-.container:empty::before {
-  content: "No listings found. Create a listing to get started.";
+.emptyMessage {
   grid-column: 1 / -1;
   text-align: center;
-  padding: 3rem;
-  color: var(--text2);
+  padding: 3rem 1rem;
+  color: var(--text);
+  opacity: 0.7;
   font-size: 1rem;
+  font-style: italic;
 }

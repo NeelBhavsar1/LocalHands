@@ -4,6 +4,7 @@ import Link from 'next/link';
 import styles from './Footer.module.css'
 import Image from 'next/image'
 import { useTranslation } from 'react-i18next';
+import { Copyright } from 'lucide-react';
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -27,7 +28,7 @@ export default function Footer() {
             </div>
           </div>           
       </div>
-      <p className={styles.copyWriteLolHailCC}>© {new Date().getFullYear()} LocalHands</p>
+      <p className={styles.copyWriteLolHailCC}><Copyright size={12} />&nbsp; {new Date().getFullYear()} LocalHands</p>
     </div>
   )
 }

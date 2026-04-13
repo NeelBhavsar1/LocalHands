@@ -24,6 +24,10 @@ export default function page() {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
+    //... is the spread operator and is the quickest way of copying an existing object into another one
+    //prev is the previous state
+    //[name] is the key of the object
+    //type === "checkbox" ? checked : value is the value of the object
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value
@@ -48,8 +52,6 @@ export default function page() {
       alert("Error: " + error);
     }
 
-    //remove later
-    console.log("Form submitted!", formData);
   };
 
   return (

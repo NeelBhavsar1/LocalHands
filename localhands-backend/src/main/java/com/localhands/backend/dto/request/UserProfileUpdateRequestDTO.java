@@ -11,5 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserProfileUpdateRequestDTO {
     private String bio;
+    private boolean resetProfilePhoto;
 }
 

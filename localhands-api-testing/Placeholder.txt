@@ -5,7 +5,7 @@ localhost:8080/api:
 		GET /id - get info about a public user (will return an error if the user is private).
 		GET /search - get all public users as if you were searching on a search bar.
 		PUT /account - update account info (make sure to pass in all existing fields - newPassword can be left null or empty). Research how to pass in bio JSON in the form { "bio": "ifpjwopijwepo" } and a file as the pfp.
-		PUT /profile - update profile info (make sure to pass in existing bio and pfp)
+		PUT /profile - update profile info
 		PUT /privacy - update privacy info (make sure to pass in existing settings)
 		DELETE - deletes user account.
 

@@ -1,0 +1,294 @@
+.reviewsSection {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.reviewsHeader {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    color: var(--text);
+}
+
+.reviewsList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.reviewCard {
+    background: var(--bg);
+    border: 1px solid rgba(128, 128, 128, 0.15);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: all 150ms ease;
+}
+
+.reviewCard:hover {
+    border-color: rgba(128, 128, 128, 0.3);
+}
+
+.reviewCard.expanded {
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.reviewHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+}
+
+.reviewUser {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    margin: -0.25rem -0.5rem;
+    border-radius: 8px;
+    transition: all 200ms ease-in-out;
+}
+
+.reviewUser:hover {
+    background-color: var(--surface-hover);
+}
+
+.reviewUser:hover .reviewUserName {
+    color: var(--primary);
+}
+
+.reviewUserPfp {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(99, 102, 241, 0.2);
+}
+
+.reviewUserName {
+    font-weight: 500;
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+.reviewMeta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.stars {
+    display: flex;
+    gap: 0.125rem;
+}
+
+.starFilled {
+    color: #fbbf24;
+}
+
+.starEmpty {
+    color: rgba(128, 128, 128, 0.3);
+}
+
+.chevron {
+    color: var(--text2);
+    transition: all 150ms ease;
+}
+
+.reviewBody {
+    padding: 0 1.25rem 1.25rem 1.25rem;
+}
+
+.reviewBody p {
+    margin: 0 0 0.75rem 0;
+    line-height: 1.6;
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+.reviewDate {
+    font-size: 0.8rem;
+    color: var(--text2);
+}
+
+.reviewFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+}
+
+.reviewActions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.viewListingBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 0.5rem;
+    background: transparent;
+    color: rgba(99, 102, 241, 1);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 150ms ease;
+}
+
+.viewListingBtn:hover {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.5);
+}
+
+.editBtn, .deleteBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    background: transparent;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 120ms ease;
+    color: var(--text2);
+}
+
+.editBtn:hover {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.5);
+    color: rgba(99, 102, 241, 1);
+}
+
+.deleteBtn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.5);
+    color: rgba(239, 68, 68, 1);
+}
+
+.editForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.formGroup label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.ratingSelect, .editTextarea {
+    width: 100%;
+    padding: 0.625rem;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    border-radius: 0.375rem;
+    font-size: 0.95rem;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.ratingSelect:focus, .editTextarea:focus {
+    outline: none;
+    border-color: rgba(99, 102, 241, 0.5);
+}
+
+.editTextarea {
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+}
+
+.editActions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.cancelEditBtn, .saveEditBtn {
+    flex: 1;
+    padding: 0.625rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 120ms ease;
+}
+
+.cancelEditBtn {
+    background: transparent;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    color: var(--text);
+}
+
+.cancelEditBtn:hover {
+    background: rgba(128, 128, 128, 0.1);
+}
+
+.saveEditBtn {
+    background: rgba(99, 102, 241, 1);
+    border: none;
+    color: white;
+}
+
+.saveEditBtn:hover:not(:disabled) {
+    background: rgba(99, 102, 241, 0.9);
+}
+
+.saveEditBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .reviewsSection {
+        margin-top: 1.5rem;
+    }
+
+    .reviewHeader {
+        padding: 0.875rem 1rem;
+    }
+
+    .reviewUserPfp {
+        width: 36px;
+        height: 36px;
+    }
+
+    .reviewUserName {
+        font-size: 0.9rem;
+    }
+
+    .reviewBody {
+        padding: 0 1rem 1rem 1rem;
+    }
+
+    .reviewFooter {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .reviewActions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .viewListingBtn {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.8rem;
+    }
+}

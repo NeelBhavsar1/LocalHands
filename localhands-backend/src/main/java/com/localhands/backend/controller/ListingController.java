@@ -69,8 +69,8 @@ public class ListingController {
             @AuthenticationPrincipal UserPrincipal user,
             @RequestParam("listingId") Long listingId,
             @RequestPart("listing") ListingRequestDTO listingRequestDTO,
-            @RequestPart("photos") List<MultipartFile> photos,
-            @RequestParam("altTexts") List<String> altTexts
+            @RequestPart(value = "photos", required = false) List<MultipartFile> photos,
+            @RequestParam(value = "altTexts", required = false) List<String> altTexts
     ) {
         ListingResponseDTO listingResponseDTO = listingService.updateListing(user.getId(), listingId, listingRequestDTO, photos, altTexts);
         return ResponseEntity.ok(listingResponseDTO);

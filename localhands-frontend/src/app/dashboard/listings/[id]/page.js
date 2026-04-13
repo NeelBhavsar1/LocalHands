@@ -9,9 +9,12 @@ import styles from './page.module.css'
 import { getListingById, updateListing, deleteListing, getCategories } from '@/api/listingApi'
 import { getUserInfo } from '@/api/userApi'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
-import { BACKEND_URL, getDefaultIcon, createEditChangeHandler, createPhotoChangeHandler, createMapLocationHandler, validateListingForm, generateAltTexts, getCategoryDisplayName } from '@/utils/listingUtils'
+import ReviewModal from '@/components/ReviewModal/ReviewModal'
+import ReviewsSection from '@/components/ReviewsSection/ReviewsSection'
+import { BACKEND_URL, getDefaultIcon, createEditChangeHandler, createPhotoChangeHandler, createMapLocationHandler, validateListingForm, generateAltTexts, getCategoryDisplayName, createReviewChangeHandler, submitReview, createCategoryToggleHandler, updateReviewInListing, removeReviewFromListing } from '@/utils/listingUtils'
 import { useTranslation } from 'react-i18next'
 import { MessageCircle, UserStar } from 'lucide-react'
+import Link from 'next/link'
 
 const MapWithNoSSR = dynamic(() => import('@/components/LocationPicker/LocationPicker'), { ssr: false })
 
@@ -30,6 +33,9 @@ export default function ListingDetailPage() {
     const [selectedCategories, setSelectedCategories] = useState([])
     const [categoriesLoading, setCategoriesLoading] = useState(false)
     const { t } = useTranslation()
+    const [review, setReview] = useState(false)
+    const [reviewForm, setReviewForm] = useState({ rating: 5, reviewBody: '' })
+    const [submittingReview, setSubmittingReview] = useState(false)
 
     const [editForm, setEditForm] = useState({
         name: '',
@@ -79,14 +85,34 @@ export default function ListingDetailPage() {
 
     const handleMapLocationSelect = createMapLocationHandler(setEditForm)
 
-    const handleCategoryToggle = (categoryId) => {
-        setSelectedCategories(prev => {
-            if (prev.includes(categoryId)) {
-                return prev.filter(id => id !== categoryId)
-            } else {
-                return [...prev, categoryId]
-            }
-        })
+    const handleCategoryToggle = createCategoryToggleHandler(setSelectedCategories)
+
+    const writeReview = () => {
+        setReview(true)
+    }
+
+    const closeReview = () => {
+        setReview(false)
+        setReviewForm({ rating: 5, reviewBody: '' })
+    }
+
+    const handleReviewChange = createReviewChangeHandler(setReviewForm)
+
+    const handleReviewSubmit = async (e) => {
+        e.preventDefault()
+        setSubmittingReview(true)
+
+        try {
+            await submitReview(BACKEND_URL, listingId, reviewForm)
+            alert('Review submitted successfully!')
+            closeReview()
+            //refreshes page on successful reviw submission
+            window.location.reload()
+        } catch (error) {
+            alert('Error submitting review: ' + error.message)
+        } finally {
+            setSubmittingReview(false)
+        }
     }
 
     const handleUpdate = async (e) => {
@@ -97,7 +123,7 @@ export default function ListingDetailPage() {
             return
         }
 
-        const validation = validateListingForm(editForm, newPhotos, selectedCategories, listing?.workType || 'ONLINE')
+        const validation = validateListingForm(editForm, newPhotos, selectedCategories, listing?.workType || 'ONLINE', true)
         if (!validation.valid) {
             alert(validation.error)
             return
@@ -219,8 +245,11 @@ export default function ListingDetailPage() {
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label htmlFor="photos">{t('newPhotosRequired')}</label>
-                        <input type="file" id="photos" accept="image/*" multiple onChange={handlePhotoChange} required />
+                        <label htmlFor="photos">
+                            {listing?.workType === 'ONLINE' ? t('editServiceForm.newPhotosOptionalOnline') : t('editServiceForm.newPhotosOptionalInPerson')}
+                        </label>
+                        
+                        <input type="file" id="photos" accept="image/*" multiple onChange={handlePhotoChange} />
                         {newPhotos.length > 0 && (
                             <p className={styles.fileInfo}>{newPhotos.length} {t('photosSelected')}</p>
                         )}
@@ -236,12 +265,14 @@ export default function ListingDetailPage() {
                 <div className={styles.listingView}>
                     
                     <div className={styles.sellerBar}>
-                        <div className={styles.sellerInfo}>
+
+                        <Link href={`/profile/${listing.seller?.id}`} className={styles.sellerInfo}>
                             <img src={listing.seller?.profilePhoto?.url ? `${BACKEND_URL}${listing.seller.profilePhoto.url}` : '/profile.png'} alt={`${listing.seller?.firstName} ${listing.seller?.lastName}`} className={styles.sellerPfp} />
                             <span className={styles.sellerName}>
                                 {listing.seller?.firstName} {listing.seller?.lastName}
                             </span>
-                        </div>
+                        </Link>
+                        
                         <div className={styles.serviceTags}>
                             {!isOwner && (
                                 <>
@@ -249,7 +280,7 @@ export default function ListingDetailPage() {
                                         <MessageCircle size={18} />
                                 </button>
 
-                                <button className={styles.messageIconButton} title={t('viewRequirements')}>
+                                <button className={styles.messageIconButton} title={t('viewRequirements')} onClick={writeReview}>
                                     <UserStar size={18} />
                                 </button>
                                 </>
@@ -280,9 +311,10 @@ export default function ListingDetailPage() {
                         <div className={styles.infoSection}>
                             <h1 className={styles.serviceTitle}>{listing.name}</h1>
                             <p className={styles.description}>{listing.description}</p>
+                            <ReviewsSection reviews={listing.reviews} backendUrl={BACKEND_URL} t={t} currentUser={currentUser} onReviewUpdated={(updatedReview) => updateReviewInListing(setListing, updatedReview)} onReviewDeleted={(reviewId) => removeReviewFromListing(setListing, reviewId)} />
                         </div>
 
-                        {listing.latitude && listing.longitude && (
+                        {Boolean(listing.latitude) && Boolean(listing.longitude) && (
                             <div className={styles.mapSection}>
                                 <label className={styles.mapLabel}>{t('serviceLocation')}</label>
                                 <div className={styles.mapContainerDisplay}>
@@ -296,6 +328,8 @@ export default function ListingDetailPage() {
                     </div>
                 </div>
             )}
+
+            <ReviewModal isOpen={review} onClose={closeReview} onSubmit={handleReviewSubmit} formData={reviewForm} onChange={handleReviewChange} submitting={submittingReview} t={t} />
 
         </div>
     )

@@ -11,6 +11,9 @@ import { getUserInfo } from '@/api/userApi'
 // Convert miles to meters for API
 const milesToMeters = (miles) => Math.round(miles * 1609.34)
 
+//1.5s delay for aws
+const DEBOUNCE_DELAY = 1500 
+
 export default function ServicesPage() {
     const [location, setLocation] = useState(null)
     const [nearbyListings, setNearbyListings] = useState([])
@@ -18,6 +21,7 @@ export default function ServicesPage() {
     const [radius, setRadius] = useState(50) // in miles
     const [selectedCategories, setSelectedCategories] = useState([])
     const [searchQuery, setSearchQuery] = useState('')
+    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
     const [workType, setWorkType] = useState('BOTH')
     const [currentUser, setCurrentUser] = useState(null)
 
@@ -50,24 +54,32 @@ export default function ServicesPage() {
         )
     }, [])
 
+    //debounce search query changes
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearchQuery(searchQuery)
+        }, DEBOUNCE_DELAY)
 
-    // Fetch listings when filters change
+        return () => clearTimeout(timer)
+    }, [searchQuery])
+
+    // Fetch listings when filters change (using debounced search query)
     useEffect(() => {
         const fetchListings = async () => {
             setListingsLoading(true)
             try {
                 const radiusInMeters = milesToMeters(radius)
-                
+
                 const effectiveWorkType = location ? workType : 'ONLINE'
                 const listings = await searchListings(
-                    searchQuery,
+                    debouncedSearchQuery,
                     location?.latitude,
                     location?.longitude,
                     selectedCategories,
                     effectiveWorkType,
                     radiusInMeters
                 )
-                
+
                 setNearbyListings(listings)
             } catch (error) {
                 console.error('Failed to fetch listings:', error)
@@ -77,7 +89,7 @@ export default function ServicesPage() {
         }
 
         fetchListings()
-    }, [location, radius, selectedCategories, searchQuery, workType, currentUser])
+    }, [location, radius, selectedCategories, debouncedSearchQuery, workType, currentUser])
 
     return (
         <div className={styles.container}>
@@ -87,12 +99,12 @@ export default function ServicesPage() {
             </div>
 
             <div className={styles.midPage}>
-                <SearchBar radius={radius} onRadiusChange={setRadius} onCategoriesChange={setSelectedCategories} searchQuery={searchQuery} onSearchChange={setSearchQuery} workType={workType} onWorkTypeChange={setWorkType} />
+                <SearchBar radius={radius} onRadiusChange={setRadius} onCategoriesChange={setSelectedCategories} searchQuery={searchQuery} onSearchChange={setSearchQuery} workType={workType} onWorkTypeChange={setWorkType} hasLocation={!!location} />
                 {currentUser?.roles?.includes("SELLER") && <CreateServiceForm />}
             </div>
 
             <div className={styles.nearbySection}>
-                <h2>{searchQuery ? `Search Results for "${searchQuery}"` : location ? 'Nearby Services' : 'Online Services'}</h2>
+                <h2>{debouncedSearchQuery ? `Search Results for "${debouncedSearchQuery}"` : location ? 'Nearby Services' : 'Online Services'}</h2>
                 {listingsLoading ? (
                     <p className={styles.loadingText}>{location ? 'Loading nearby services...' : 'Loading online services...'}</p>
                 ) : nearbyListings.length === 0 ? (

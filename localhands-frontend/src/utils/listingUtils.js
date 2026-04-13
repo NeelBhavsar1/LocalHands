@@ -1,5 +1,5 @@
 // Backend URL for image loading
-export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080';
+export const BACKEND_URL = 'http://localhost:8080';
 
 // Leaflet icon for maps (lazy loaded for SSR compatibility)
 export const getDefaultIcon = () => {
@@ -98,8 +98,9 @@ export const createMapLocationHandler = (setEditForm) => (lat, lng) => {
     setEditForm(prev => ({ ...prev, latitude: lat.toFixed(6), longitude: lng.toFixed(6) }))
 };
 
-export const validateListingForm = (editForm, newPhotos, selectedCategories, workType = 'ONLINE') => {
-    if (!newPhotos || newPhotos.length === 0) {
+export const validateListingForm = (editForm, newPhotos, selectedCategories, workType = 'ONLINE', isEdit = false) => {
+    //photos are optional when editingonly validate required photos for new listings
+    if (!isEdit && (!newPhotos || newPhotos.length === 0)) {
         return { valid: false, error: 'Please select at least one photo' }
     }
 
@@ -150,7 +151,55 @@ export const CATEGORY_NAME_MAP = {
     'OTHER': 'Other'
 };
 
-// Helper function to get human-readable category name
+//helper function to get human readable category name
 export const getCategoryDisplayName = (categoryName) => {
-    return CATEGORY_NAME_MAP[categoryName] || categoryName?.replace(/_/g, ' ') 
+    return CATEGORY_NAME_MAP[categoryName] || categoryName?.replace(/_/g, ' ')
 };
+
+//review form change handler creator
+export const createReviewChangeHandler = (setReviewForm) => (e) => {
+    const { name, value } = e.target
+    setReviewForm(prev => ({ ...prev, [name]: name === 'rating' ? parseInt(value) : value }))
+}
+
+//submits review to backend
+export const submitReview = async (backendUrl, listingId, reviewForm) => {
+    const response = await fetch(`${backendUrl}/api/reviews`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+            listingId: parseInt(listingId),
+            rating: reviewForm.rating,
+            reviewBody: reviewForm.reviewBody
+        })
+    })
+
+    if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'Failed to submit review')
+    }
+
+    return await response.json()
+}
+
+//category toggle handler creator
+export const createCategoryToggleHandler = (setSelectedCategories) => (categoryId) => {
+    setSelectedCategories(prev => {
+        if (prev.includes(categoryId)) {
+            return prev.filter(id => id !== categoryId)
+        } else {
+            return [...prev, categoryId]
+        }
+    })
+}
+
+//update review in listing state
+export const updateReviewInListing = (setListing, updatedReview) => {
+    setListing(prev => ({ ...prev, reviews: prev.reviews.map(r => r.id === updatedReview.id ? updatedReview : r) }))
+}
+
+//remove review from listing state
+export const removeReviewFromListing = (setListing, reviewId) => {
+    setListing(prev => ({ ...prev, reviews: prev.reviews.filter(r => r.id !== reviewId) }))
+}

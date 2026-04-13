@@ -538,18 +538,27 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException("User not found with id: " + userId, HttpStatus.NOT_FOUND));
 
+        boolean shouldReset = updateDTO.isResetProfilePhoto();
+        boolean hasNewPhoto = photo != null && !photo.isEmpty();
+
+        if (shouldReset && hasNewPhoto) {
+            throw new AppException("Cannot reset and upload a photo at the same time.", HttpStatus.BAD_REQUEST);
+        }
+
         String savedFileUrl = null;
 
         try {
             user.setBio(updateDTO.getBio());
 
-            for (ProfilePhoto existingPhoto : user.getProfilePhotos()) {
-                fileStorageService.delete(existingPhoto.getUrl());
+            if (shouldReset || hasNewPhoto) {
+                for (ProfilePhoto existingPhoto : user.getProfilePhotos()) {
+                    fileStorageService.delete(existingPhoto.getUrl());
+                }
+
+                user.getProfilePhotos().clear();
             }
 
-            user.getProfilePhotos().clear();
-
-            if (photo != null && !photo.isEmpty()) {
+            if (hasNewPhoto) {
                 savedFileUrl = fileStorageService.save(photo, "uploads/profile-pictures/");
 
                 ProfilePhoto profilePhoto = new ProfilePhoto();
@@ -563,7 +572,11 @@ public class UserServiceImpl implements UserService {
 
             userRepository.save(user);
 
-            return new UserProfileUpdateResponseDTO(savedFileUrl, updateDTO.getBio());
+            String finalPhotoUrl = user.getProfilePhotos().isEmpty()
+                    ? null
+                    : user.getProfilePhotos().get(0).getUrl();
+
+            return new UserProfileUpdateResponseDTO(finalPhotoUrl, user.getBio());
 
         } catch (Exception e) {
 

@@ -62,10 +62,34 @@ export const updateProfileInfo = async (profileData) => {
     }
 };
 
+//gets public profile of another user by id
+export const getPublicProfile = async (targetUserId) => {
+    try {
+        const res = await api.get(`/api/users/id?targetUserId=${targetUserId}`)
+        return res.data
+    } catch (error) {
+        console.error("Fetch public profile failed: ", error)
+        throw error.response?.data || "Failed to fetch public profile!"
+    }
+};
+
+//search for public profiles
+export const searchPublicProfiles = async (searchInput) => {
+    try {
+        const res = await api.get(`/api/users/search?searchInput=${encodeURIComponent(searchInput)}`)
+        return res.data
+    } catch (error) {
+        console.error("Search public profiles failed: ", error)
+        throw error.response?.data || "Failed to search public profiles!"
+    }
+};
+
 export const userApi = {
     getUserInfo,
     updateAccountInfo,
     deleteUserAccount,
     updatePrivacyInfo,
-    updateProfileInfo
+    updateProfileInfo,
+    getPublicProfile,
+    searchPublicProfiles
 };
