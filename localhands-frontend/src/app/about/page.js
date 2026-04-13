@@ -8,10 +8,10 @@ import { motion, useScroll, useTransform} from "framer-motion";
 
 export default function About() {
     const { t } = useTranslation();
-    const { scrollX } = useScroll(); //Tracks the position of the user's scroll
-    const titleSizeChange = useTransform(scrollX, [0, 300], [1.5, 1]); //Smoother Transformations
-    const subtitleTransparency = useTransform(scrollX, [0, 250], [0, 1]);
-    const subtitleY = useTransform(scrollX, [0, 250], [40, 0]);
+    const { scrollY } = useScroll(); //Tracks the position of the user's scroll
+    const titleSizeChange = useTransform(scrollY, [0, 300], [1.5, 1]); //Smoother Transformations
+    const subtitleTransparency = useTransform(scrollY, [0, 250], [0, 1]);
+    const subtitleY = useTransform(scrollY, [0, 250], [40, 0]);
 
     return (
         <div className={styles.container}>
