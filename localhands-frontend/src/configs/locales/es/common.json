@@ -110,6 +110,7 @@
 
     "profile.title": "Perfil",
     "profile.changeProfilePicture": "Cambiar foto de perfil",
+    "profile.resetProfilePicture": "Restablecer predeterminada",
     "profile.bioPlaceholder": "Bio",
     "profile.bio": "Bio",
     "profile.firstName": "Nombre",
@@ -137,6 +138,11 @@
     "dashboard.BuyerTitle": "¿Buscas servicios?",
     "dashboard.BuyerSubtitle": "Explora servicios de proveedores locales en tu área.",
     "dashboard.BuyerButton": "Ver servicios",
+    "dashboard.subtitle": "Esto es lo que está pasando hoy.",
+    "dashboard.noListings": "No se encontraron ofertas.",
+    "dashboard.sellerEmptyState": "Aún no tienes ninguna oferta. ¡Crea tu primera oferta para comenzar!",
+    "dashboard.createListing": "Crear Oferta",
+    "dashboard.createFirstListing": "Crear Tu Primera Oferta",
 
     "search.radius.label": "Radio:",
     "search.radius.5": "5 millas",
@@ -175,6 +181,8 @@
     "createServiceForm.error.latitudeRequired": "La latitud es requerida",
     "createServiceForm.error.longitudeRequired": "La longitud es requerida",
     "createServiceForm.error.photosRequired": "Las fotos son requeridas",
+    "editServiceForm.newPhotosOptionalOnline": "Nuevas Fotos (Opcional - sube solo si quieres cambiarlas)",
+    "editServiceForm.newPhotosOptionalInPerson": "Nuevas Fotos (Opcional - sube solo si quieres cambiarlas)",
 
     "back": "Atrás",
 

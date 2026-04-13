@@ -2,11 +2,13 @@ import React from 'react'
 import { useRouter } from 'next/navigation'
 import { getCategoryDisplayName } from '@/utils/listingUtils'
 import styles from './ListingCard.module.css'
+import { useTranslation } from 'react-i18next'
 
 // Get backend URL from environment or default to localhost
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080';
 
 export default function ListingCard({ listing }) {
+  const { t } = useTranslation()
   const router = useRouter()
 
   const handleClick = () => {
@@ -32,7 +34,7 @@ export default function ListingCard({ listing }) {
             <div className={styles.tags}>
                 {listing.workType && (
                     <span className={`${styles.workTypeTag} ${styles[listing.workType.toLowerCase()]}`}>
-                        {listing.workType === 'ONLINE' ? 'Online' : 'In Person'}
+                        {listing.workType === 'ONLINE' ? t('search.workType.online') : t('search.workType.inPerson')}
                     </span>
                 )}
                 {listing.categories && listing.categories.slice(0, 2).map((category) => (
@@ -47,7 +49,7 @@ export default function ListingCard({ listing }) {
 
             <div className={styles.footer}>
                 <span className={styles.location}>
-                    {listing.workType === 'ONLINE' ? 'Online Service' : `${listing.latitude?.toFixed(4)}, ${listing.longitude?.toFixed(4)}`}
+                    {listing.workType === 'ONLINE' ? t('search.workType.online') : `${listing.latitude?.toFixed(4)}, ${listing.longitude?.toFixed(4)}`}
                 </span>
                 <span className={styles.date}>
                     {new Date(listing.creationTime).toLocaleDateString()}

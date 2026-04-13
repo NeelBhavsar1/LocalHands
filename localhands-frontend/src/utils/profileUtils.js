@@ -3,16 +3,16 @@
 export const BACKEND_URL ='http://localhost:8080';
 
 //create formdata for profile update
-export const createProfileFormData = (bio, selectedFile) => {
+export const createProfileFormData = (bio, selectedFile, resetProfilePhoto = false) => {
     const formData = new FormData();
 
-    const bioBlob = new Blob([JSON.stringify({ bio: bio || '' })], {
+    const bioBlob = new Blob([JSON.stringify({ bio: bio || '', resetProfilePhoto: resetProfilePhoto })], {
         type: 'application/json'
     });
-    formData.append('bio', bioBlob);
+    formData.append('bio', bioBlob)
 
     if (selectedFile) {
-        formData.append('photo', selectedFile);
+        formData.append('photo', selectedFile)
     }
 
     return formData;
@@ -66,9 +66,13 @@ export const createProfileSaveHandler = ({
     publicProfile,
     bio,
     selectedFile,
+    resetProfilePhoto,
     updatePrivacyInfo,
     updateProfileInfo,
-    setSelectedFile
+    setSelectedFile,
+    setResetProfilePhoto,
+    setProfileImage,
+    defaultProfileImage
 }) => async () => {
     setSaving(true);
     try {
@@ -77,10 +81,17 @@ export const createProfileSaveHandler = ({
             publicProfile: !!publicProfile
         });
 
-        const formData = createProfileFormData(bio, selectedFile);
-        await updateProfileInfo(formData);
+        const formData = createProfileFormData(bio, selectedFile, resetProfilePhoto);
+        const response = await updateProfileInfo(formData);
 
         setSelectedFile(null);
+        setResetProfilePhoto(false);
+
+        //update profile image if server returned a new url (or null for default)
+        if (response && response.profilePhotoUrl !== undefined) {
+            setProfileImage(response.profilePhotoUrl ? BACKEND_URL + response.profilePhotoUrl : defaultProfileImage);
+        }
+
         alert('Profile updated successfully!')
     } catch (error) {
         alert('Failed to update profile: ' + error)

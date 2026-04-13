@@ -23,10 +23,12 @@ export default function page() {
     const [profileImage, setProfileImage] = useState('/profile.png');
     const [profileAltText, setProfileAltText] = useState('Profile');
     const [selectedFile, setSelectedFile] = useState(null);
+    const [resetProfilePhoto, setResetProfilePhoto] = useState(false);
     const [listings, setListings] = useState([]);
     const [userReviews, setUserReviews] = useState([]);
     const [user, setUser] = useState(null);
     const fileInputRef = useRef(null);
+    const DEFAULT_PROFILE_IMAGE = '/profile.png';
 
     // Fetch user info and listings on mount
     useEffect(() => {
@@ -45,6 +47,7 @@ export default function page() {
                     setProfileImage(BACKEND_URL + url);
                 }
                 setProfileAltText(generateProfileAltText(userData));
+                setResetProfilePhoto(false);
 
                 //to fetch listings if user is a seller or buyer (since buyer listings will not appear on dashboard page)
                 if (hasListingsRole(userData)) {
@@ -69,7 +72,26 @@ export default function page() {
 
     const handleChangePicture = triggerFileInput(fileInputRef);
 
-    const handleSave = createProfileSaveHandler({ setSaving,allowMessages,publicProfile,bio,selectedFile,updatePrivacyInfo,updateProfileInfo,setSelectedFile });
+    const handleResetPicture = () => {
+        setSelectedFile(null);
+        setResetProfilePhoto(true);
+        setProfileImage(DEFAULT_PROFILE_IMAGE);
+    };
+
+    const handleSave = createProfileSaveHandler({
+        setSaving,
+        allowMessages,
+        publicProfile,
+        bio,
+        selectedFile,
+        resetProfilePhoto,
+        updatePrivacyInfo,
+        updateProfileInfo,
+        setSelectedFile,
+        setResetProfilePhoto,
+        setProfileImage,
+        defaultProfileImage: DEFAULT_PROFILE_IMAGE
+    });
 
     if (loading) {
         return (
@@ -89,9 +111,17 @@ export default function page() {
                         <div className={styles.profileImageContainer}>
                             <img src={profileImage} alt={profileAltText} width={120} height={120} className={styles.profileImage} />
                             <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" style={{ display: 'none' }} />
-                            <button type="button" className={styles.changePictureBtn} onClick={handleChangePicture}>
-                                {t("profile.changeProfilePicture")}
-                            </button>
+                            <div className={styles.profileImageButtons}>
+
+                                <button type="button" className={styles.changePictureBtn} onClick={handleChangePicture}>
+                                    {t("profile.changeProfilePicture")}
+                                </button>
+
+                                <button type="button" className={styles.resetPictureBtn} onClick={handleResetPicture}>
+                                    {t("profile.resetProfilePicture")}
+                                </button>
+                                
+                            </div>
                         </div>
 
                         <div className={styles.bioContainer}>
@@ -151,12 +181,7 @@ export default function page() {
                         )}
                         <div className={styles.reviewsSection}>
                             <h2 className={styles.sectionTitle}>{t("profile.yourReviews")}</h2>
-                            <ReviewsSection reviews={userReviews} backendUrl={BACKEND_URL} t={t} currentUser={user}
-                                onReviewUpdated={(updatedReview) => updateUserReview(setUserReviews, updatedReview)}
-                                onReviewDeleted={(reviewId) => removeUserReview(setUserReviews, reviewId)}
-                                showViewListing={true}
-                                onViewListing={(listingId) => router.push(`/dashboard/listings/${listingId}`)}
-                            />
+                            <ReviewsSection reviews={userReviews} backendUrl={BACKEND_URL} t={t} currentUser={user} onReviewUpdated={(updatedReview) => updateUserReview(setUserReviews, updatedReview)} onReviewDeleted={(reviewId) => removeUserReview(setUserReviews, reviewId)} showViewListing={true} onViewListing={(listingId) => router.push(`/dashboard/listings/${listingId}`)} />
                         </div>
                     </div>
                 </div>

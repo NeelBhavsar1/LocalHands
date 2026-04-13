@@ -123,7 +123,7 @@ export default function ListingDetailPage() {
             return
         }
 
-        const validation = validateListingForm(editForm, newPhotos, selectedCategories, listing?.workType || 'ONLINE')
+        const validation = validateListingForm(editForm, newPhotos, selectedCategories, listing?.workType || 'ONLINE', true)
         if (!validation.valid) {
             alert(validation.error)
             return
@@ -245,8 +245,11 @@ export default function ListingDetailPage() {
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label htmlFor="photos">{t('newPhotosRequired')}</label>
-                        <input type="file" id="photos" accept="image/*" multiple onChange={handlePhotoChange} required />
+                        <label htmlFor="photos">
+                            {listing?.workType === 'ONLINE' ? t('editServiceForm.newPhotosOptionalOnline') : t('editServiceForm.newPhotosOptionalInPerson')}
+                        </label>
+                        
+                        <input type="file" id="photos" accept="image/*" multiple onChange={handlePhotoChange} />
                         {newPhotos.length > 0 && (
                             <p className={styles.fileInfo}>{newPhotos.length} {t('photosSelected')}</p>
                         )}

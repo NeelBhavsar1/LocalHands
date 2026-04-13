@@ -98,8 +98,9 @@ export const createMapLocationHandler = (setEditForm) => (lat, lng) => {
     setEditForm(prev => ({ ...prev, latitude: lat.toFixed(6), longitude: lng.toFixed(6) }))
 };
 
-export const validateListingForm = (editForm, newPhotos, selectedCategories, workType = 'ONLINE') => {
-    if (!newPhotos || newPhotos.length === 0) {
+export const validateListingForm = (editForm, newPhotos, selectedCategories, workType = 'ONLINE', isEdit = false) => {
+    //photos are optional when editingonly validate required photos for new listings
+    if (!isEdit && (!newPhotos || newPhotos.length === 0)) {
         return { valid: false, error: 'Please select at least one photo' }
     }
 
