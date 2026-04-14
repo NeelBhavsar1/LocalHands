@@ -79,6 +79,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public CookieResponseDTO generateNewTokenCookies(String refreshToken) {
         RefreshToken tokenEntity = refreshTokenRepository.findByToken(hashToken(refreshToken))
                 .orElseThrow(() -> new AppException("Invalid refresh token.", HttpStatus.UNAUTHORIZED));
@@ -232,6 +233,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public void logout(String refreshToken) {
         refreshTokenRepository.deleteByToken(hashToken(refreshToken));
     }
