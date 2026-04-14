@@ -13,8 +13,6 @@ import java.util.stream.Collectors;
 
 public class ListingMapper {
 
-    public static final GeometryFactory geometryFactory = new GeometryFactory();
-
     public static Listing mapToListing(ListingRequestDTO requestDTO) {
 
         Listing listing = new Listing();
@@ -61,10 +59,10 @@ public class ListingMapper {
     public static Point createPoint(Double lon, Double lat) {
         if (lon == null || lat == null) return null;
 
-        GeometryFactory gf = new GeometryFactory(new PrecisionModel(), 4326); // ✅ SRID set
+        GeometryFactory gf = new GeometryFactory(new PrecisionModel(), 4326);
 
         Point point = gf.createPoint(new Coordinate(lon, lat));
-        point.setSRID(4326); // ✅ (extra safety, but optional if factory has SRID)
+        point.setSRID(4326);
 
         return point;
     }
