@@ -171,6 +171,8 @@ public class AuthServiceImpl implements AuthService {
 
         savedUser.getActivationTokens().add(activationToken);
 
+        userRepository.save(savedUser);
+
         String message = """
             <html>
                 <body>
@@ -191,8 +193,6 @@ public class AuthServiceImpl implements AuthService {
 
         emailSenderService.sendEmail(
                 savedUser.getEmail(),"LocalHands Account Activation Confirmation", message);
-
-        userRepository.save(savedUser);
 
         ResponseCookie refreshCookie = generateRefreshTokenCookie(newRefreshToken, now, refreshTokenEntity.getExpiryDate());
         ResponseCookie accessCookie = generateAccessTokenCookie(accessToken, now);
@@ -236,6 +236,7 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
+    @Transactional
     public CookieResponseDTO updateUserAccount(Long userId, String refreshToken, UserAccountUpdateRequestDTO updateDTO) {
 
         User user = userRepository.findById(userId)
@@ -274,6 +275,8 @@ public class AuthServiceImpl implements AuthService {
         user.setLastName(updateDTO.getLastName());
         user.setDateOfBirth(updateDTO.getDateOfBirth());
 
+        String message = null;
+
         if (!user.getEmail().equals(updateDTO.getEmail())) {
 
             NewEmailToken emailToken = new NewEmailToken();
@@ -288,7 +291,9 @@ public class AuthServiceImpl implements AuthService {
             user.getNewEmailTokens().clear();
             user.getNewEmailTokens().add(emailToken);
 
-            String message = """
+            userRepository.save(user);
+
+            message = """
                 <html>
                     <body>
                         <p>Hello %s,</p>
@@ -307,9 +312,6 @@ public class AuthServiceImpl implements AuthService {
                     </body>
                 </html>
             """.formatted(user.getFirstName(), baseUrl + "/confirm-email?token=" + token);
-
-            emailSenderService.sendEmail(
-                    updateDTO.getEmail(),"LocalHands Confirmation of New Email", message);
         }
 
         Role buyerRole = roleRepository.findByRoleName(RoleName.BUYER)
@@ -360,6 +362,11 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(user);
 
+        if (message != null) {
+            emailSenderService.sendEmail(
+                    updateDTO.getEmail(),"LocalHands Confirmation of New Email", message);
+        }
+
         ResponseCookie refreshCookie = generateRefreshTokenCookie(newRefreshToken, now, refreshTokenEntity.getExpiryDate());
         ResponseCookie accessCookie = generateAccessTokenCookie(accessToken, now);
 
@@ -391,6 +398,8 @@ public class AuthServiceImpl implements AuthService {
 
         user.getActivationTokens().add(activationToken);
 
+        userRepository.save(user);
+
         String message = """
             <html>
                 <body>
@@ -408,8 +417,6 @@ public class AuthServiceImpl implements AuthService {
                 </body>
             </html>
         """.formatted(user.getFirstName(), baseUrl + "/activate-account?token=" + token, baseUrl + "/deactivate-account?token=" + token);
-
-        userRepository.save(user);
 
         emailSenderService.sendEmail(
                 user.getEmail(),"LocalHands Account Activation Confirmation (Resend)", message);
