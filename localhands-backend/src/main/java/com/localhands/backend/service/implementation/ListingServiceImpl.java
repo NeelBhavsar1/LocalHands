@@ -70,7 +70,7 @@ public class ListingServiceImpl implements ListingService {
                 MultipartFile photoFile = photoFiles.get(i);
                 String altText = altTexts.get(i);
 
-                String url = fileStorageService.save(photoFile, "uploads/listing-images/");
+                String url = fileStorageService.save(photoFile, "listing-images/");
                 savedFileUrls.add(url);
 
                 ListingPhoto photo = new ListingPhoto();
@@ -233,7 +233,7 @@ public class ListingServiceImpl implements ListingService {
                     MultipartFile photoFile = photoFiles.get(i);
                     String altText = altTexts.get(i);
 
-                    String url = fileStorageService.save(photoFile, "uploads/listing-images/");
+                    String url = fileStorageService.save(photoFile, "listing-images/");
                     savedFileUrls.add(url);
 
                     ListingPhoto photo = new ListingPhoto();

@@ -38,7 +38,6 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/uploads/**",
                                 "/api/auth/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/listings").hasRole("SELLER")

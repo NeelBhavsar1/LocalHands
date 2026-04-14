@@ -2,23 +2,29 @@ package com.localhands.backend.service.implementation;
 
 import com.localhands.backend.repository.*;
 import com.localhands.backend.service.CleanupServices;
-import lombok.AllArgsConstructor;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Instant;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CleanupServicesImpl implements CleanupServices {
+
+    private final S3Client s3Client;
+
+    @Value("${aws.s3.bucket}")
+    private String bucketName;
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final ListingPhotoRepository listingPhotoRepository;
@@ -51,77 +57,81 @@ public class CleanupServicesImpl implements CleanupServices {
     @Override
     public void deleteUsersWithExpiredActivationTokens() { userRepository.deleteUsersWithExpiredActivationTokens(Instant.now()); }
 
+    @Profile("prod")
     @Scheduled(fixedRate = 86400000)
     @Override
     public void cleanupUnusedProfilePhotos() {
 
-        try {
-            Path uploadPath = Paths.get("uploads/profile-pictures/");
+        Set<String> validKeys = profilePhotoRepository.findAllUrls()
+                .stream()
+                .map(url -> url != null && url.startsWith("/") ? url.substring(1) : url)
+                .collect(Collectors.toSet());
 
-            if (!Files.exists(uploadPath)) {
-                return;
-            }
+        String continuationToken = null;
 
-            List<Path> files = Files.list(uploadPath).toList();
+        do {
+            ListObjectsV2Request request = ListObjectsV2Request.builder()
+                    .bucket(bucketName)
+                    .prefix("profile-pictures/")
+                    .continuationToken(continuationToken)
+                    .build();
 
-            List<String> urls = profilePhotoRepository.findAllUrls();
+            ListObjectsV2Response response = s3Client.listObjectsV2(request);
 
-            Set<String> validFiles = urls.stream()
-                    .map(url -> url.replace("/uploads/profile-pictures/", ""))
-                    .collect(Collectors.toSet());
+            response.contents().forEach(obj -> {
+                String key = obj.key();
 
-            for (Path file : files) {
-                String fileName = file.getFileName().toString();
+                if (!validKeys.contains(key)) {
+                    s3Client.deleteObject(DeleteObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(key)
+                            .build());
 
-                if (!validFiles.contains(fileName)) {
-                    try {
-                        Files.deleteIfExists(file);
-                        System.out.println("Deleted unused file: " + fileName);
-                    } catch (IOException e) {
-                        System.out.println("Failed to delete file: " + fileName);
-                    }
+                    System.out.println("Deleted unused S3 profile image: " + key);
                 }
-            }
+            });
 
-        } catch (IOException e) {
-            System.out.println("Failed to scan directory.");
-        }
+            continuationToken = response.nextContinuationToken();
+
+        } while (continuationToken != null);
     }
 
+    @Profile("prod")
     @Scheduled(fixedRate = 86400000)
     @Override
     public void cleanupUnusedListingImages() {
 
-        try {
-            Path uploadPath = Paths.get("uploads/listing-images/");
+        Set<String> validKeys = listingPhotoRepository.findAllUrls()
+                .stream()
+                .map(url -> url != null && url.startsWith("/") ? url.substring(1) : url)
+                .collect(Collectors.toSet());
 
-            if (!Files.exists(uploadPath)) {
-                return;
-            }
+        String continuationToken = null;
 
-            List<Path> files = Files.list(uploadPath).toList();
+        do {
+            ListObjectsV2Request request = ListObjectsV2Request.builder()
+                    .bucket(bucketName)
+                    .prefix("listing-images/")
+                    .continuationToken(continuationToken)
+                    .build();
 
-            List<String> urls = listingPhotoRepository.findAllUrls();
+            ListObjectsV2Response response = s3Client.listObjectsV2(request);
 
-            Set<String> validFiles = urls.stream()
-                    .map(url -> url.replace("/uploads/listing-images/", ""))
-                    .collect(Collectors.toSet());
+            response.contents().forEach(obj -> {
+                String key = obj.key(); // listing-images/file.jpg
 
-            for (Path file : files) {
-                String fileName = file.getFileName().toString();
+                if (!validKeys.contains(key)) {
+                    s3Client.deleteObject(DeleteObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(key)
+                            .build());
 
-                if (!validFiles.contains(fileName)) {
-                    try {
-                        Files.deleteIfExists(file);
-                        System.out.println("Deleted unused file: " + fileName);
-                    } catch (IOException e) {
-                        System.out.println("Failed to delete file: " + fileName);
-                    }
+                    System.out.println("Deleted unused S3 listing image: " + key);
                 }
-            }
+            });
 
-        } catch (IOException e) {
-            System.out.println("Failed to scan directory.");
-        }
+            continuationToken = response.nextContinuationToken();
+
+        } while (continuationToken != null);
     }
 }
