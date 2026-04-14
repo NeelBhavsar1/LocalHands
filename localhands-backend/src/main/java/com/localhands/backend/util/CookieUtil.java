@@ -1,4 +1,4 @@
-package com.localhands.backend.controller;
+package com.localhands.backend.util;
 
 import org.springframework.http.ResponseCookie;
 

@@ -2,10 +2,10 @@ package com.localhands.backend.service.implementation;
 
 import com.localhands.backend.repository.*;
 import com.localhands.backend.service.CleanupServices;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -6,7 +6,9 @@ import com.localhands.backend.dto.response.PublicProfileResponseDTO;
 import com.localhands.backend.dto.response.UserInfoResponseDTO;
 import com.localhands.backend.dto.response.UserProfileUpdateResponseDTO;
 import com.localhands.backend.security.UserPrincipal;
+import com.localhands.backend.service.AuthService;
 import com.localhands.backend.service.UserService;
+import com.localhands.backend.util.CookieUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final AuthService authService;
 
     @GetMapping("/me")
     public ResponseEntity<UserInfoResponseDTO> getPrivateUserInfo(@AuthenticationPrincipal UserPrincipal user) {
@@ -48,7 +51,7 @@ public class UserController {
             @CookieValue(value = "refreshToken", required = false) String refreshToken,
             @RequestBody UserAccountUpdateRequestDTO requestDTO
     ) {
-        CookieResponseDTO cookies = userService.updateUserAccount(user.getId(), refreshToken, requestDTO);
+        CookieResponseDTO cookies = authService.updateUserAccount(user.getId(), refreshToken, requestDTO);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookies.getRefreshCookie().toString())

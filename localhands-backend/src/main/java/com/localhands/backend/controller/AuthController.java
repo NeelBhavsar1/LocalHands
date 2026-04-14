@@ -9,8 +9,8 @@ import com.localhands.backend.exception.AppException;
 import com.localhands.backend.security.UserPrincipal;
 import com.localhands.backend.service.AuthService;
 import com.localhands.backend.service.UserService;
+import com.localhands.backend.util.CookieUtil;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,10 +31,10 @@ public class AuthController {
             @RequestBody UserRegisterRequestDTO requestDTO
     )
     {
-        CookieResponseDTO cookies = userService.registerUser(requestDTO);
+        CookieResponseDTO cookies = authService.registerUser(requestDTO);
 
         if (refreshToken != null) {
-            userService.logout(refreshToken);
+            authService.logout(refreshToken);
         }
 
         return ResponseEntity.ok()
@@ -49,10 +49,10 @@ public class AuthController {
             @RequestBody UserLoginRequestDTO requestDTO
     )
     {
-        CookieResponseDTO cookies = userService.loginUser(requestDTO);
+        CookieResponseDTO cookies = authService.loginUser(requestDTO);
 
         if (refreshToken != null) {
-            userService.logout(refreshToken);
+            authService.logout(refreshToken);
         }
 
         return ResponseEntity.ok()
@@ -65,7 +65,7 @@ public class AuthController {
     public ResponseEntity<String> logout(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
 
         if (refreshToken != null) {
-            userService.logout(refreshToken);
+            authService.logout(refreshToken);
         }
 
         return ResponseEntity.ok()
@@ -81,7 +81,7 @@ public class AuthController {
                 throw new AppException("Refresh token missing.", HttpStatus.UNAUTHORIZED);
             }
 
-            CookieResponseDTO cookies = userService.generateNewTokenCookies(token);
+            CookieResponseDTO cookies = authService.generateNewTokenCookies(token);
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, cookies.getRefreshCookie().toString())
@@ -105,19 +105,19 @@ public class AuthController {
 
     @PostMapping("/resend-activation-email")
     public ResponseEntity<String> resendActivationEmail(@AuthenticationPrincipal UserPrincipal user) {
-        userService.resendActivationEmail(user.getId());
+        authService.resendActivationEmail(user.getId());
         return ResponseEntity.ok("Resent account activation email.");
     }
 
     @GetMapping("/activate-account")
     public ResponseEntity<String> activateAccount(@RequestParam String token) {
-        userService.activateAccount(token);
+        authService.activateAccount(token);
         return ResponseEntity.ok("Account activated successfully.");
     }
 
     @GetMapping("/deactivate-account")
     public ResponseEntity<String> deactivateAccount(@RequestParam String token) {
-        userService.deactivateAccount(token);
+        authService.deactivateAccount(token);
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, CookieUtil.clearCookie("refreshToken").toString())
                 .header(HttpHeaders.SET_COOKIE, CookieUtil.clearCookie("accessToken").toString())
