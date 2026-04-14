@@ -14,6 +14,7 @@ export default function page() {
     const {t} = useTranslation();
     const router = useRouter();
 
+    //state for form data object, holds all the information that gets sent to the endpoint /api/auth/register
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -26,18 +27,25 @@ export default function page() {
         rememberMe: false
     });
 
+    //state for holding an object containing the errors
     const [errors, setErrors] = useState({});
 
+    /**
+     * Handles changes to the form data
+     * @param {Object} e - The event object
+     */
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
 
-        setFormData((prev) => ({
-        ...prev,
-        [name]: type === "checkbox" ? checked : value
-        }));
+        setFormData((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }))
     };
 
 
+    /**
+     * Handles form submission. Performs client sided validation prior to submitting data to the endpoint
+     * 
+     * @param {Object} e - The event object
+     */
     const submitForm = async (e) => {
         e.preventDefault();
 
@@ -73,6 +81,11 @@ export default function page() {
         console.log("Form submitted!", formData);
     }
 
+    /**
+     * Handles role changes for the form
+     * @param {string} role - The role to change
+     * @param {boolean} isChecked - Whether the role is checked
+     */
     const handleRoleChange = (role, isChecked) => {
         setFormData((prev) => ({ ...prev, [role]: isChecked }))
     };
@@ -95,6 +108,7 @@ export default function page() {
                         <div className={styles.leftColumn}>
                             <label htmlFor='firstName'>{t("signup.fname")}
                                 <input type='text' id='firstName' name='firstName' required placeholder={t("signup.fnameExample")} value={formData.firstName} onChange={handleChange}/>
+                                {/*key and value pairs from the object errors*/}
                                 {errors.firstName && <span className={styles.error}>{errors.firstName}</span>}
                             </label>
 
@@ -163,6 +177,7 @@ export default function page() {
                         {t("signup.continue")}
                     </button>
 
+                    {/* provide user alternate access to login if they already have an account*/}
                     <p className={styles.goToLogin}>
                         {t("signup.alreadyhaveanaccount")}{" "}
                         <Link href="/login">{t("signup.login")}</Link>

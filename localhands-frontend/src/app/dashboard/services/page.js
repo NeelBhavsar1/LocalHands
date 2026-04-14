@@ -25,7 +25,9 @@ export default function ServicesPage() {
     const [workType, setWorkType] = useState('BOTH')
     const [currentUser, setCurrentUser] = useState(null)
 
-    // Get user info and location on mount
+    /**
+     * This hook fetches the current user info and gets the user's location on mount.
+     */
     useEffect(() => {
         // Fetch current user info
         const fetchUserInfo = async () => {
@@ -41,6 +43,7 @@ export default function ServicesPage() {
         // Get location
         if (!navigator.geolocation) return
 
+        // Get current position
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const lat = position.coords.latitude

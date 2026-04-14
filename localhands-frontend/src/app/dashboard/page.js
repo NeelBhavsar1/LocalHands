@@ -20,12 +20,31 @@ export default function page({ children }) {
   const [listings, setListings] = useState([]);
   
 
+  /**
+   * This hook initializes the dashboard page, including fetching user data and listings.
+   * Since the user must be authenticated in order to access the dashboard page we retrieve
+   * user information from the endpoint /api/users/me. 
+   */
   useEffect(() => {
     const init = async () => {
       try {
         const userData = await getUserInfo();
         setUser(userData);
 
+        /**
+         * optional chaining to check the json data the endpoint 
+         * returns to see whether a user is a seller. This will return json data such as:
+         * {
+         *   listingId,
+         *   title,
+         *   description,
+         *   category,
+         *   location,
+         *   images,
+         *   createdAt,
+         *   updatedAt
+         * }
+         */
         if (userData?.roles?.includes("SELLER")) {
           const listingsData = await getMyListings();
           setListings(listingsData);
@@ -56,6 +75,7 @@ export default function page({ children }) {
           <p className={styles.headerSubTitle}>{t('dashboard.subtitle')}</p>
         </div>
 
+        {/*conditional rendering based on user role*/}
         {user?.roles?.includes("SELLER") ? (
           <div className={styles.contentSection}>
             <div className={styles.sectionHeader}>

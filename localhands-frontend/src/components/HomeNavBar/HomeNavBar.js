@@ -17,6 +17,7 @@ export default function HomeNavBar({ showLinks = true, scrollToSection }) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    {/*checks if a user is authenticated, and updates the useState for loggedIn*/}
     useEffect(() => {
         const checkAuth = async () => {
             try {
