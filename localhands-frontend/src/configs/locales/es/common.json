@@ -238,5 +238,30 @@
     "publicProfile.reviews": "Reseñas",
     "publicProfile.noListings": "Aún no hay anuncios",
     "publicProfile.noReviews": "Aún no hay reseñas",
-    "publicProfile.profileNotFound": "Perfil no encontrado"
+    "publicProfile.profileNotFound": "Perfil no encontrado",
+
+    "services.title": "Nuestros Servicios",
+    "services.subtitle": "Descubre la amplia gama de servicios disponibles en LocalHands",
+    "services.card1.title": "Servicios del Hogar",
+    "services.card1.description": "Reparación profesional, mantenimiento y servicios de mejora del hogar",
+    "services.card2.title": "Servicios Digitales",
+    "services.card2.description": "Diseño web, desarrollo y soluciones de marketing digital",
+    "services.card3.title": "Servicios Personales",
+    "services.card3.description": "Tutoría, coaching y servicios de desarrollo personal",
+    "services.card4.title": "Servicios Empresariales",
+    "services.card4.description": "Consultoría, contabilidad y soporte empresarial profesional",
+    "services.ctaButton": "Comienza Hoy",
+
+    "contact.title": "Contáctanos",
+    "contact.subtitle": "Nos encantaría saber de ti. Envíanos un mensaje y responderemos lo antes posible.",
+    "contact.email.title": "Correo Electrónico",
+    "contact.email.value": "soporte@localhands.com",
+    "contact.phone.title": "Teléfono",
+    "contact.phone.value": "+1 (555) 123-4567",
+    "contact.address.title": "Dirección",
+    "contact.address.value": "123 Calle Principal, Ciudad, Estado 12345",
+    "contact.form.name": "Tu Nombre",
+    "contact.form.email": "Tu Correo",
+    "contact.form.message": "Tu Mensaje",
+    "contact.form.submit": "Enviar Mensaje"
 }

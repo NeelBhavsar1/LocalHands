@@ -11,7 +11,7 @@ import { logoutUser } from "@/api/authApi";
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 
-export default function HomeNavBar({ showLinks = true }) {
+export default function HomeNavBar({ showLinks = true, scrollToSection }) {
     const { t } = useTranslation();
     const router = useRouter();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -58,10 +58,10 @@ export default function HomeNavBar({ showLinks = true }) {
 
             {showLinks && (
             <div className={styles.navLinks}>
-                <a href="/home">{t("nav.home")}</a>
-                <a href="/about">{t("nav.about")}</a>
-                <a href="/services">{t("nav.services")}</a>
-                <a href="/contact">{t("nav.contact")}</a>
+                <a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection && scrollToSection('home'); }}>{t("nav.home")}</a>
+                <a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection && scrollToSection('about'); }}>{t("nav.about")}</a>
+                <a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection && scrollToSection('services'); }}>{t("nav.services")}</a>
+                <a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection && scrollToSection('contact'); }}>{t("nav.contact")}</a>
             </div>
             )}
             
@@ -105,10 +105,10 @@ export default function HomeNavBar({ showLinks = true }) {
                 <div className={styles.mobileMenu}>
                     {showLinks && 
                     <>
-                        <a href="/home" onClick={toggleMobileMenu}>{t("nav.home")}</a>
-                        <a href="/services" onClick={toggleMobileMenu}>{t("nav.services")}</a>
-                        <a href="/about" onClick={toggleMobileMenu}>{t("nav.about")}</a>
-                        <a href="/contact" onClick={toggleMobileMenu}>{t("nav.contact")}</a>
+                        <a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection && scrollToSection('home'); toggleMobileMenu(); }}>{t("nav.home")}</a>
+                        <a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection && scrollToSection('about'); toggleMobileMenu(); }}>{t("nav.about")}</a>
+                        <a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection && scrollToSection('services'); toggleMobileMenu(); }}>{t("nav.services")}</a>
+                        <a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection && scrollToSection('contact'); toggleMobileMenu(); }}>{t("nav.contact")}</a>
                     </>
                     }
 

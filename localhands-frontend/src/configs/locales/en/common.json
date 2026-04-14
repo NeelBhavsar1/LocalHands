@@ -270,5 +270,30 @@
     "publicProfile.reviews": "Reviews",
     "publicProfile.noListings": "No listings yet",
     "publicProfile.noReviews": "No reviews yet",
-    "publicProfile.profileNotFound": "Profile not found"
+    "publicProfile.profileNotFound": "Profile not found",
+
+    "services.title": "Our Services",
+    "services.subtitle": "Discover the comprehensive range of services available on LocalHands",
+    "services.card1.title": "Home Services",
+    "services.card1.description": "Professional home repair, maintenance, and improvement services",
+    "services.card2.title": "Digital Services",
+    "services.card2.description": "Web design, development, and digital marketing solutions",
+    "services.card3.title": "Personal Services",
+    "services.card3.description": "Tutoring, coaching, and personal development services",
+    "services.card4.title": "Business Services",
+    "services.card4.description": "Consulting, accounting, and professional business support",
+    "services.ctaButton": "Get Started Today",
+
+    "contact.title": "Get in Touch",
+    "contact.subtitle": "We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
+    "contact.email.title": "Email",
+    "contact.email.value": "support@localhands.com",
+    "contact.phone.title": "Phone",
+    "contact.phone.value": "+1 (555) 123-4567",
+    "contact.address.title": "Address",
+    "contact.address.value": "123 Main Street, City, State 12345",
+    "contact.form.name": "Your Name",
+    "contact.form.email": "Your Email",
+    "contact.form.message": "Your Message",
+    "contact.form.submit": "Send Message"
 }

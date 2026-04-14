@@ -10,7 +10,7 @@ export default function SiteMap() {
 
     return (
         <div className={styles.container}>
-            <HomeNavBar showLinks={false}/>
+            <HomeNavBar showLinks={true}/>
 
             <Footer />
         </div>

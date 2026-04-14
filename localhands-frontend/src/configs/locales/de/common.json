@@ -262,5 +262,30 @@
     "publicProfile.reviews": "Bewertungen",
     "publicProfile.noListings": "Noch keine Angebote",
     "publicProfile.noReviews": "Noch keine Bewertungen",
-    "publicProfile.profileNotFound": "Profil nicht gefunden"
+    "publicProfile.profileNotFound": "Profil nicht gefunden",
+
+    "services.title": "Unsere Dienstleistungen",
+    "services.subtitle": "Entdecken Sie die umfassende Palette von Dienstleistungen auf LocalHands",
+    "services.card1.title": "Haushaltsdienste",
+    "services.card1.description": "Professionelle Hausreparatur, Wartung und Verbesserungsdienste",
+    "services.card2.title": "Digitale Dienstleistungen",
+    "services.card2.description": "Webdesign, Entwicklung und digitale Marketinglösungen",
+    "services.card3.title": "Persönliche Dienstleistungen",
+    "services.card3.description": "Nachhilfe, Coaching und persönliche Entwicklungsdienste",
+    "services.card4.title": "Geschäftsdienstleistungen",
+    "services.card4.description": "Beratung, Buchhaltung und professionelle Geschäftsunterstützung",
+    "services.ctaButton": "Heute Beginnen",
+
+    "contact.title": "Kontaktieren Sie Uns",
+    "contact.subtitle": "Wir würden gerne von Ihnen hören. Senden Sie uns eine Nachricht und wir werden so schnell wie möglich antworten.",
+    "contact.email.title": "E-Mail",
+    "contact.email.value": "support@localhands.com",
+    "contact.phone.title": "Telefon",
+    "contact.phone.value": "+1 (555) 123-4567",
+    "contact.address.title": "Adresse",
+    "contact.address.value": "123 Hauptstraße, Stadt, Bundesland 12345",
+    "contact.form.name": "Ihr Name",
+    "contact.form.email": "Ihre E-Mail",
+    "contact.form.message": "Ihre Nachricht",
+    "contact.form.submit": "Nachricht Senden"
 }

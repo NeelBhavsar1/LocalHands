@@ -2,6 +2,7 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    scroll-behavior: smooth;
 }
 
 .hero {
@@ -69,4 +70,270 @@
 .howButton:hover {
     background-color: var(--text);
     color: var(--background);
+}
+
+
+
+
+.mainContent {
+    flex: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    color: var(--text);
+}
+
+.headerArea {
+    text-align: center;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    margin-bottom:2rem;
+}
+
+.mainTitle {
+    font-size: 3.5rem;
+    margin: 0;
+    transform-origin: center center;
+    background: linear-gradient(90deg, var(--text), #60a5fa);
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+
+.subTitle {
+    font-size: 1.2rem;
+    color: #94a3b8;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.aboutGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.aboutSection {
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.aboutSection:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.aboutSection h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.aboutSection p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+}
+
+.missionArea {
+    text-align: center;
+    margin-top: 4rem;
+    padding: 2rem;
+    background: rgba(99, 102, 241, 0.05);
+    border-radius: 12px;
+}
+
+.missionArea h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.missionArea p {
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.servicesSection {
+    padding: 4rem 2rem;
+    background: var(--background);
+}
+
+.sectionHeader {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.sectionHeader h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.sectionSubtitle {
+    font-size: 1.2rem;
+    color: var(--text);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.servicesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.serviceCard {
+    background: var(--surface);
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform all 300ms ease-in-out;
+}
+
+.serviceCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.serviceIcon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.serviceCard h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+}
+
+.serviceCard p {
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.servicesCTA {
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.ctaButton {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 300ms ease;
+}
+
+.ctaButton:hover {
+    background: var(--primary-dark);
+}
+
+.contactSection {
+    padding: 4rem 2rem;
+    background: var(--surface);
+}
+
+.contactContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.contactInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.contactItem h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+
+.contactItem p {
+    color: var(--text);
+    font-size: 1.1rem;
+}
+
+.contactForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.formInput,
+.formTextarea {
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--background);
+    color: var(--text);
+    transition: all 300ms ease;
+}
+
+.formInput:focus,
+.formTextarea:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.submitButton {
+    padding: 1rem 2rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+}
+
+.submitButton:hover {
+    background: var(--primary-dark);
+}
+
+@media (max-width: 768px) {
+    .contactContent {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .servicesGrid {
+        grid-template-columns: 1fr;
+    }
+    
+    .sectionHeader h2 {
+        font-size: 2rem;
+    }
 }
