@@ -9,19 +9,7 @@ import api from "./api";
  */
 export const createListing = async (listingData, photos, altTexts) => {
     try {
-        // DEBUG: Log exactly what we're sending
-        console.log("=== CREATE LISTING DEBUG ===");
-        console.log("listingData:", JSON.stringify(listingData, null, 2));
-        console.log("listingData.categoryIds:", listingData.categoryIds);
-        console.log("listingData.categoryIds types:", listingData.categoryIds?.map(id => `${id} (${typeof id})`));
-        console.log("listingData.workType:", listingData.workType, `(typeof: ${typeof listingData.workType})`);
-        console.log("listingData.latitude:", listingData.latitude, `(typeof: ${typeof listingData.latitude})`);
-        console.log("listingData.longitude:", listingData.longitude, `(typeof: ${typeof listingData.longitude})`);
-        console.log("photos count:", photos?.length);
-        console.log("altTexts:", altTexts);
-        console.log("photos.length === altTexts.length:", photos?.length === altTexts?.length);
-        console.log("===========================");
-
+        // Create form data, this is needed to send files to the server
         const formData = new FormData();
         
         // Add listing as JSON blob
@@ -34,6 +22,7 @@ export const createListing = async (listingData, photos, altTexts) => {
         });
         
         // Build altTexts as query params
+        //encodeURI is used to encode the alt texts to handle special characters
         const altTextsParams = altTexts.map(text => `altTexts=${encodeURIComponent(text)}`).join('&');
         
         const res = await api.post(`/api/listings?${altTextsParams}`, formData, {
@@ -189,10 +178,11 @@ export const updateListing = async (listingId, listingData, photos, altTexts) =>
 /**
  * Deletes a listing
  * @param {*} listingId - The id of the listing to delete
- * @returns 
+ * @returns - The response data from the server
  */
 export const deleteListing = async (listingId) => {
     try {
+        // DELETE request to delete a listing using params
         const res = await api.delete("/api/listings", {
             params: { listingId }
         })
