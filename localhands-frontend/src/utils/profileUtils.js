@@ -1,5 +1,7 @@
 //profile page utility functions
 
+import { TRANSLATIONS } from './translations';
+
 export const BACKEND_URL ='http://localhost:8080';
 
 //create formdata for profile update
@@ -92,9 +94,9 @@ export const createProfileSaveHandler = ({
             setProfileImage(response.profilePhotoUrl ? BACKEND_URL + response.profilePhotoUrl : defaultProfileImage);
         }
 
-        alert('Profile updated successfully!')
+        alert(TRANSLATIONS.profileUpdatedSuccessfully)
     } catch (error) {
-        alert('Failed to update profile: ' + error)
+        alert(TRANSLATIONS.failedToUpdateProfile + ': ' + error)
     } finally {
         setSaving(false)
     }
@@ -111,7 +113,7 @@ export const fetchUserReviews = async (backendUrl) => {
         credentials: 'include'
     })
     if (!response.ok) {
-        throw new Error('Failed to fetch reviews')
+        throw new Error(TRANSLATIONS.validation.reviewsFetchFailed)
     }
     return await response.json()
 }

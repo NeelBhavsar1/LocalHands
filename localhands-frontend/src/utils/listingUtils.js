@@ -1,5 +1,7 @@
 // Backend URL for image loading
-export const BACKEND_URL = 'http://localhost:8080';
+import { TRANSLATIONS } from './translations';
+
+const BACKEND_URL = 'http://localhost:8080';
 
 // Leaflet icon for maps (lazy loaded for SSR compatibility)
 export const getDefaultIcon = () => {
@@ -39,15 +41,15 @@ export const createWorkTypeHandler = (setWorkType, setFormData) => (type) => {
 // Validate create listing form
 export const validateServiceForm = (formData, photos, workType, selectedCategories) => {
     if (!photos || photos.length === 0) {
-        return { valid: false, error: 'Please add at least one photo' };
+        return { valid: false, error: TRANSLATIONS.validation.photoRequired };
     }
 
     if (!selectedCategories || selectedCategories.length === 0) {
-        return { valid: false, error: 'Please select at least one category' };
+        return { valid: false, error: TRANSLATIONS.validation.categoryRequired };
     }
 
     if (workType === 'in-person' && (!formData.latitude || !formData.longitude)) {
-        return { valid: false, error: 'Please select a location on the map' };
+        return { valid: false, error: TRANSLATIONS.validation.locationRequired };
     }
 
     // Convert frontend workType to backend enum
@@ -101,14 +103,14 @@ export const createMapLocationHandler = (setEditForm) => (lat, lng) => {
 export const validateListingForm = (editForm, newPhotos, selectedCategories, workType = 'ONLINE', isEdit = false) => {
     //photos are optional when editingonly validate required photos for new listings
     if (!isEdit && (!newPhotos || newPhotos.length === 0)) {
-        return { valid: false, error: 'Please select at least one photo' }
+        return { valid: false, error: TRANSLATIONS.validation.photoRequired }
     }
 
     const lat = parseFloat(editForm.latitude);
     const lng = parseFloat(editForm.longitude);
 
     if (isNaN(lat) || isNaN(lng)) {
-        return { valid: false, error: 'Please select a location on the map' }
+        return { valid: false, error: TRANSLATIONS.validation.locationRequired }
     }
 
     //ensure categoryids are numbers
@@ -120,39 +122,20 @@ export const validateListingForm = (editForm, newPhotos, selectedCategories, wor
     }
 };
 
-//categoru name mapping
-export const CATEGORY_NAME_MAP = {
-    'CLEANING': 'Cleaning',
-    'PLUMBING': 'Plumbing',
-    'ELECTRICAL': 'Electrical',
-    'GARDENING': 'Gardening',
-    'PAINTING': 'Painting',
-    'CARPENTRY': 'Carpentry',
-    'HANDYMAN': 'Handyman',
-    'MOVING': 'Moving',
-    'DELIVERY': 'Delivery',
-    'HEAVY_LIFTING': 'Heavy Lifting',
-    'TUTORING': 'Tutoring',
-    'IT_SUPPORT': 'IT Support',
-    'TECH_SETUP': 'Tech Setup',
-    'PET_CARE': 'Pet Care',
-    'BABYSITTING': 'Babysitting',
-    'CAR_WASH': 'Car Wash',
-    'CAR_REPAIR': 'Car Repair',
-    'BEAUTY': 'Beauty',
-    'HAIRDRESSING': 'Hairdressing',
-    'PHOTOGRAPHY': 'Photography',
-    'VIDEOGRAPHY': 'Videography',
-    'FITNESS_TRAINING': 'Fitness Training',
-    'EVENT_HELP': 'Event Help',
-    'CATERING': 'Catering',
-    'HOME_REPAIR': 'Home Repair',
-    'APPLIANCE_REPAIR': 'Appliance Repair',
-    'OTHER': 'Other'
-};
+//categoru name mapping - now using translation constants
+export const CATEGORY_NAME_MAP = TRANSLATIONS.categories;
 
 //helper function to get human readable category name
-export const getCategoryDisplayName = (categoryName) => {
+export const getCategoryDisplayName = (categoryName, t) => {
+    if (t) {
+        const translationKey = `categories.${categoryName}`;
+        const translatedName = t(translationKey);
+        // Return translated name if it's different from the key (i.e., translation exists)
+        if (translatedName !== translationKey) {
+            return translatedName;
+        }
+    }
+    // Fallback to English mapping or formatted name
     return CATEGORY_NAME_MAP[categoryName] || categoryName?.replace(/_/g, ' ')
 };
 

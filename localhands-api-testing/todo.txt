@@ -2,15 +2,7 @@ To Do:
 
 	Frontend
 		
-		(COMPLETED) Touch up on the dashboard home page for service providers (with or without listings already) and customers. Make sure all links work and translations work for each part of the page/pages.
 		- Touch up on the very base URL home page, footer and header links etc.
-		(COMPLETED)- View public profiles feature with all listings, and reviews given. Can be accessible thru a link to their profile on listing/messages etc. And maybe have the pfp in the listing.
-		(COMPLETED)- Add reviews to all public listings.
-		(COMPLETED)- When adding a review, refresh the page so it appears.
 		- Check language support everywhere.
-		(COMPLETED) I've changed the update listing api so new photos are no longer required if the user wants them to stay the same, please check it works and update the photos section of edit listings to let them know only to change the photos. Also make sure it is tailored depending on the work type
-		(COMPLETED) I've changed the user update profile slightly. UserProfileUpdateRequestDTO now contains resetProfilePhoto (Boolean) that is now checked to see if the user wants the default pfp back. I thought this was a good idea for a button if someone wants to make the pfp default again.
-			- If you want the pfp to stay the same - don't upload a pfp and resetProfilePhoto false.
-			- If you want the pfp to change - upload a new pfp and resetProfilePhoto false.
-			- If you want the pfp to go to default - don't upload a pfp and resetProfilePhoto true.
-			- Any other combination is forbidden.
+		- If signed in as a service provider, listings on the main dashboard still stick to the left, not too sure if this is intended.
+		- On the profile page, the pfp if uploaded still has inverted colours in dark mode.

@@ -1,4 +1,6 @@
 
+import { TRANSLATIONS } from './translations';
+
 /**
  * Creates a change handler for form inputs
  * @param {Function} setFormData - The setter function for form data
@@ -48,7 +50,7 @@ const validateSettingsForm = (formData) => {
     const errors = {};
     
     if (formData.newPassword && formData.newPassword !== formData.confirmPassword) {
-        errors.confirmPassword = 'Passwords do not match';
+        errors.confirmPassword = TRANSLATIONS.validation.confirmPasswordMismatch;
     }
     
     return errors;
@@ -106,11 +108,11 @@ export const handleUpdateAccount = async (formData, setErrors, setFormData, upda
     try {
         const updateData = createUpdateData(formData)
         await updateAccountInfo(updateData)
-        alert('Account information updated successfully!\nIf you have changed your email, we have sent an email to confirm it.')
+        alert(TRANSLATIONS.accountUpdated)
         
         clearPasswordFields(setFormData);
     } catch (error) {
-        alert('Error updating account: ' + error)
+        alert(TRANSLATIONS.errorUpdatingAccount + error)
     }
 };
 
@@ -119,13 +121,13 @@ export const handleUpdateAccount = async (formData, setErrors, setFormData, upda
  * @param {*} deleteUserAccount 
  */
 export const handleDeleteAccount = async (deleteUserAccount) => {
-    if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+    if (window.confirm(TRANSLATIONS.accountDeleteConfirm)) {
         try {
             await deleteUserAccount()       
-            alert('Account deleted successfully!')
+            alert(TRANSLATIONS.accountDeletedSuccessfully)
             window.location.href = '/signup'
         } catch (error) {
-            alert('Error deleting account: ' + error)
+            alert(TRANSLATIONS.errorDeletingAccount + error)
         }
     }
 };

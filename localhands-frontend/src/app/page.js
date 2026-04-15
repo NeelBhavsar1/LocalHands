@@ -238,26 +238,6 @@ export default function Home() {
               <p>{t("contact.address.value")}</p>
             </div>
           </motion.div>
-
-          <motion.form 
-            className={styles.contactForm}
-            initial={{opacity:0, x:50}}
-            whileInView={{opacity:1, x:0}}
-            viewport={{once:true, margin:"-100px"}}
-            transition={{duration:0.6, delay:0.2}}>
-            <div className={styles.formGroup}>
-              <input type="text" placeholder={t("contact.form.name")} className={styles.formInput} />
-            </div>
-            <div className={styles.formGroup}>
-              <input type="email" placeholder={t("contact.form.email")} className={styles.formInput} />
-            </div>
-            <div className={styles.formGroup}>
-              <textarea placeholder={t("contact.form.message")} className={styles.formTextarea} rows={5}></textarea>
-            </div>
-            <button type="submit" className={styles.submitButton}>
-              {t("contact.form.submit")}
-            </button>
-          </motion.form>
         </div>
       </section>
 

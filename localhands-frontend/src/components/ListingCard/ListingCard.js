@@ -15,8 +15,6 @@ export default function ListingCard({ listing }) {
     router.push(`/dashboard/listings/${listing.listingId}`)
   }
 
-  // Safety check for photos
-  // TODO: Add proper error handling for missing photos
   const hasPhotos = listing.photos && listing.photos.length > 0
   const photoUrl = hasPhotos ? `${BACKEND_URL}${listing.photos[0].url}` : '/placeholder.png'
   const photoAlt = hasPhotos ? listing.photos[0].altText : "No image available"
@@ -39,7 +37,7 @@ export default function ListingCard({ listing }) {
                 )}
                 {listing.categories && listing.categories.slice(0, 2).map((category) => (
                     <span key={category.id} className={styles.categoryTag}>
-                        {getCategoryDisplayName(category.category)}
+                        {getCategoryDisplayName(category.category, t)}
                     </span>
                 ))}
                 {listing.categories && listing.categories.length > 2 && (

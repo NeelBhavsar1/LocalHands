@@ -12,7 +12,6 @@ import com.localhands.backend.repository.UserRepository;
 import com.localhands.backend.service.FileStorageService;
 import com.localhands.backend.service.ListingService;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

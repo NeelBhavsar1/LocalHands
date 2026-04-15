@@ -17,6 +17,7 @@ export default function HomeNavBar({ showLinks = true, scrollToSection }) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    {/*checks if a user is authenticated, and updates the useState for loggedIn*/}
     useEffect(() => {
         const checkAuth = async () => {
             try {
@@ -52,7 +53,7 @@ export default function HomeNavBar({ showLinks = true, scrollToSection }) {
     return (
         <div className={styles.container}>
             <div className={styles.logo}>
-                <a href="/"><Image src="/logo-v2.png" alt="LocalHands Logo" width={100} height={100} className={styles.localHandsImage}/></a>
+                <a href="/"><Image src="/logo-v2.png" alt={t('alt.localHandsLogo')} width={100} height={100} className={styles.localHandsImage} loading="eager"/></a>
                 <p>Local<span>Hands</span></p>
             </div>
 
@@ -97,7 +98,7 @@ export default function HomeNavBar({ showLinks = true, scrollToSection }) {
 
             <div className={styles.mobileMenuButton}>
                 <button onClick={toggleMobileMenu} className={styles.hamburgerButton}>
-                    <Image src="/hamburger.png" alt="Mobile Menu Icon" width={30} height={30} className={styles.hamburgerIcon} />
+                    <Image src="/hamburger.png" alt={t('alt.mobileMenuIcon')} width={30} height={30} className={styles.hamburgerIcon} />
                 </button>
             </div>
 

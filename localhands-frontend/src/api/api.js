@@ -1,11 +1,10 @@
 import axios from 'axios';
 
 /**
- * creates an axios instance
- * meaning every request will use this configuration
- * all the api calls will be coming from endpoint baseUrl: http://localhost:8080 (whether it be /api/user/login)
- * 
- * This sends JSON data
+ * The code below creates an axios instance with pre-defined settings that can be used all over the frontend application.
+ * baseURL: sets the backend server url (all api calls will be relative to the baseURL)
+ * withCredentials: allows cookies to be sent with requests (sends cookies with each request)
+ * headers: sets the content type to json (tells the backend to expect json data, can be overriden per request exa: file uploads)
  */
 const api = axios.create({
     baseURL: "http://localhost:8080",

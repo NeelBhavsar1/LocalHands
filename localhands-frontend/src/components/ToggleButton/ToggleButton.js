@@ -3,6 +3,7 @@ import styles from "./ToggleButton.module.css";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes"; //next-themes package
+import { useTranslation } from "react-i18next";
 
 /*
 this is the toggle button component, it will be used to toggle between light and dark mode
@@ -18,6 +19,7 @@ export default function ToggleButton({ onToggleComplete }) {
     */
     const {theme, setTheme, systemTheme} = useTheme(); 
     const [mounted, setMounted] = useState(false);
+    const { t } = useTranslation();
 
     
     /*
@@ -63,7 +65,7 @@ export default function ToggleButton({ onToggleComplete }) {
     return (
         <div className={styles.toggleButtonContainer}>
             <button type="button" className={styles.toggleButton} onClick={toggleButton}>
-                <Image src={isDark ? "/moon.png" : "/sun.png"} alt="toggle theme" width={24} height={24} className={styles.icon} />
+                <Image src={isDark ? "/moon.png" : "/sun.png"} alt={t('alt.toggleTheme')} width={24} height={24} className={styles.icon} />
             </button>
         </div>
     );

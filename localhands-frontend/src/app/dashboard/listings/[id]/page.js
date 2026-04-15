@@ -215,7 +215,7 @@ export default function ListingDetailPage() {
                             <div className={styles.categoriesGrid}>
                                 {categories.map((category) => (
                                     <button key={category.id} type="button" className={`${styles.categoryBtn} ${selectedCategories.includes(category.id) ? styles.active : ''}`} onClick={() => handleCategoryToggle(category.id)}>
-                                        {getCategoryDisplayName(category.category)}
+                                        {getCategoryDisplayName(category.category, t)}
                                     </button>
                                 ))}
                             </div>
@@ -288,7 +288,7 @@ export default function ListingDetailPage() {
                             
                             {listing.categories && listing.categories.map((category) => (
                                 <span key={category.id} className={styles.categoryTag}>
-                                    {getCategoryDisplayName(category.category)}
+                                    {getCategoryDisplayName(category.category, t)}
                                 </span>
                             ))}
                             <span className={`${styles.workTypeTag} ${styles[listing.workType?.toLowerCase()]}`}>

@@ -68,7 +68,10 @@ export default function page() {
         fetchUserData();
     }, []);
 
-    const handleFileChange = createFileChangeHandler(setSelectedFile, setProfileImage);
+    const handleFileChange = (e) => {
+        createFileChangeHandler(setSelectedFile, setProfileImage)(e);
+        setResetProfilePhoto(false);
+    };
 
     const handleChangePicture = triggerFileInput(fileInputRef);
 
@@ -76,6 +79,10 @@ export default function page() {
         setSelectedFile(null);
         setResetProfilePhoto(true);
         setProfileImage(DEFAULT_PROFILE_IMAGE);
+
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
     };
 
     const handleSave = createProfileSaveHandler({

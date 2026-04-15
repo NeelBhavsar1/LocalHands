@@ -7,12 +7,11 @@ import com.localhands.backend.entity.Listing;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
 
 import java.util.stream.Collectors;
 
 public class ListingMapper {
-
-    public static final GeometryFactory geometryFactory = new GeometryFactory();
 
     public static Listing mapToListing(ListingRequestDTO requestDTO) {
 
@@ -57,9 +56,12 @@ public class ListingMapper {
         );
     }
 
-    public static Point createPoint(double longitude, double latitude) {
-        Point point = geometryFactory.createPoint(new Coordinate(longitude, latitude));
+    public static Point createPoint(Double lon, Double lat) {
+        if (lon == null || lat == null) return null;
 
+        GeometryFactory gf = new GeometryFactory(new PrecisionModel(), 4326);
+
+        Point point = gf.createPoint(new Coordinate(lon, lat));
         point.setSRID(4326);
 
         return point;

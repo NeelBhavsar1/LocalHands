@@ -24,7 +24,7 @@ export default function PublicProfilePage() {
             try {
                 const userId = parseInt(id)
                 if (isNaN(userId)) {
-                    setError('Invalid user ID')
+                    setError(t('errors.invalidUserId'))
                     setLoading(false)
                     return
                 }
@@ -32,7 +32,7 @@ export default function PublicProfilePage() {
                 setProfile(data)
             } catch (err) {
                 console.error('Failed to fetch profile:', err)
-                setError(err.message || 'Failed to load profile')
+                setError(err.message || t('errors.failedToLoadProfile'))
             } finally {
                 setLoading(false)
             }
@@ -57,10 +57,10 @@ export default function PublicProfilePage() {
         return (
             <div className={styles.container}>
                 <div className={styles.error}>
-                    <h2>{error || 'Profile not found'}</h2>
+                    <h2>{error || t('errors.profileNotFound')}</h2>
                     <button onClick={() => router.back()} className={styles.backButton}>
                         <ArrowLeft size={20} />
-                        {t('back')}
+                        {t('common.back')}
                     </button>
                 </div>
             </div>
@@ -74,7 +74,7 @@ export default function PublicProfilePage() {
             <div className={styles.header}>
                 <button onClick={() => router.back()} className={styles.backButton}>
                     <ArrowLeft size={20} />
-                    {t('back')}
+                    {t('common.back')}
                 </button>
             </div>
 
@@ -112,7 +112,7 @@ export default function PublicProfilePage() {
                                     {listing.photos && listing.photos[0] ? (
                                         <img src={`${BACKEND_URL}${listing.photos[0]}`} alt={listing.name} className={styles.listingImage} />
                                     ) : (
-                                        <div className={styles.noImage}>No Image</div>
+                                        <div className={styles.noImage}>{t('alt.noImage')}</div>
                                     )}
                                 </div>
 

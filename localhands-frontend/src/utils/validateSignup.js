@@ -1,3 +1,5 @@
+import { TRANSLATIONS } from './translations';
+
 /**
  * Validates signup form data before user registration
  * 
@@ -41,49 +43,49 @@
  *   // Display errors to user
  * }
  */
-export const validateSignupForm = (formData) => {
+export const validateSignupForm = (formData, t) => {
     // Initialize empty errors object
     const errors = {};
 
     // First name validation - required field
     if (!formData.firstName.trim()) {
-        errors.firstName = 'First name is required!';
+        errors.firstName = t ? t('validation.firstName.required') : 'First name is required!';
     }
 
     // Last name validation - required field
     if (!formData.lastName.trim()) {
-        errors.lastName = 'Last name is required!';
+        errors.lastName = t ? t('validation.lastName.required') : 'Last name is required!';
     }
 
     // Email validation - required and format check
     if (!formData.email.trim()) {
-        errors.email = 'Email address is required!';
+        errors.email = t ? t('validation.email.required') : 'Email address is required!';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-        errors.email = 'Enter a valid email address';
+        errors.email = t ? t('validation.email.invalid') : 'Enter a valid email address';
     }
 
     // Date of birth validation - required field
     if (!formData.dateOfBirth) {
-        errors.dateOfBirth = 'Date of birth is required';
+        errors.dateOfBirth = t ? t('validation.dateOfBirth.required') : 'Date of birth is required';
     }
 
     // Password validation - required and minimum length
     if (!formData.password) {
-        errors.password = 'Password is required';
+        errors.password = t ? t('validation.password.required') : 'Password is required';
     } else if (formData.password.length < 8) {
-        errors.password = 'Password must be at least 8 characters';
+        errors.password = t ? t('validation.password.minLength') : 'Password must be at least 8 characters';
     }
 
     // Password confirmation validation - required and match check
     if (!formData.confirmPassword) {
-        errors.confirmPassword = 'Please confirm your password';
+        errors.confirmPassword = t ? t('validation.confirmPassword.required') : 'Please confirm your password';
     } else if (formData.password !== formData.confirmPassword) {
-        errors.confirmPassword = 'Passwords do not match';
+        errors.confirmPassword = t ? t('validation.confirmPassword.mismatch') : TRANSLATIONS.validation.passwordMismatch;
     }
 
     // Account type validation - at least one type must be selected
     if (!formData.isServiceProvider && !formData.isConsumer) {
-        errors.isServiceProvider = 'Please select at least one account type';
+        errors.isServiceProvider = t ? t('validation.accountType.required') : 'Please select at least one account type';
     }
 
     // Return errors object (empty if no validation errors)

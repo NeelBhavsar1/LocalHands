@@ -5,9 +5,11 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { deactivateAccount } from '@/api/authApi'
 import HomeNavBar from '@/components/HomeNavBar/HomeNavBar'
+import { useTranslation } from 'react-i18next'
 import styles from './page.module.css'
 
 export default function DeactivateAccountPage() {
+    const { t } = useTranslation()
     const searchParams = useSearchParams()
     const token = searchParams.get('token')
     const [status, setStatus] = useState('loading')
@@ -16,7 +18,7 @@ export default function DeactivateAccountPage() {
     useEffect(() => {
         if (!token) {
             setStatus('error')
-            setMessage('No deactivation token provided.')
+            setMessage(t('deactivateAccount.noToken'))
             return
         }
 
@@ -24,10 +26,10 @@ export default function DeactivateAccountPage() {
             try {
                 const result = await deactivateAccount(token)
                 setStatus('success')
-                setMessage(result || 'Account deactivated successfully. You have been logged out.')
+                setMessage(result || t('deactivateAccount.successMessage'))
             } catch (error) {
                 setStatus('error')
-                setMessage(error || 'Account deactivation failed. The token may be invalid or expired.')
+                setMessage(error || t('deactivateAccount.errorMessage'))
             }
         }
 
@@ -40,9 +42,9 @@ export default function DeactivateAccountPage() {
             <div className={styles.container}>
             <div className={styles.card}>
                 <h1 className={styles.title}>
-                    {status === 'loading' && 'Deactivating Account...'}
-                    {status === 'success' && 'Account Deactivated'}
-                    {status === 'error' && 'Deactivation Failed'}
+                    {status === 'loading' && t('deactivateAccount.loading')}
+                    {status === 'success' && t('deactivateAccount.success')}
+                    {status === 'error' && t('deactivateAccount.failed')}
                 </h1>
                 
                 <p className={`${styles.message} ${styles[status]}`}>
@@ -51,7 +53,7 @@ export default function DeactivateAccountPage() {
 
                 {status !== 'loading' && (
                     <Link href="/" className={styles.link}>
-                        Return Home
+                        {t('deactivateAccount.returnHome')}
                     </Link>
                 )}
             </div>

@@ -14,6 +14,7 @@ export default function page() {
     const {t} = useTranslation();
     const router = useRouter();
 
+    //state for form data object, holds all the information that gets sent to the endpoint /api/auth/register
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -26,29 +27,25 @@ export default function page() {
         rememberMe: false
     });
 
+    //state for holding an object containing the errors
     const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
 
-        setFormData((prev) => ({
-        ...prev,
-        [name]: type === "checkbox" ? checked : value
-        }));
+        setFormData((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }))
     };
-
 
     const submitForm = async (e) => {
         e.preventDefault();
 
-        const validationErrors = validateSignupForm(formData);
+        const validationErrors = validateSignupForm(formData, t);
         setErrors(validationErrors);
 
         if (Object.keys(validationErrors).length > 0) {
             return;
         }
 
-        //do not send confirmPassword to backend only for frontend validation
         const requestBody = {
             firstName: formData.firstName,
             lastName: formData.lastName,
@@ -67,10 +64,6 @@ export default function page() {
         } catch (error) {
             alert("Error: " + error);
         }
-        
-
-        //remove me later
-        console.log("Form submitted!", formData);
     }
 
     const handleRoleChange = (role, isChecked) => {
@@ -95,6 +88,7 @@ export default function page() {
                         <div className={styles.leftColumn}>
                             <label htmlFor='firstName'>{t("signup.fname")}
                                 <input type='text' id='firstName' name='firstName' required placeholder={t("signup.fnameExample")} value={formData.firstName} onChange={handleChange}/>
+                                {/*key and value pairs from the object errors*/}
                                 {errors.firstName && <span className={styles.error}>{errors.firstName}</span>}
                             </label>
 
@@ -116,12 +110,12 @@ export default function page() {
 
                         <div className={styles.rightColumn}>
                             <label htmlFor='password'>{t("signup.password")}
-                                <input type='password' id='password' name='password' required placeholder='**********' value={formData.password} onChange={handleChange}/>
+                                <input type='password' id='password' name='password' required placeholder={t("signup.password.placeholder")} value={formData.password} onChange={handleChange}/>
                                 {errors.password && <span className={styles.error}>{errors.password}</span>}
                             </label>
 
                             <label htmlFor='confirmPassword'>{t("signup.confirmPassword")}
-                                <input type='password' id='confirmPassword' name='confirmPassword' required placeholder='**********' value={formData.confirmPassword} onChange={handleChange}/>
+                                <input type='password' id='confirmPassword' name='confirmPassword' required placeholder={t("signup.confirmPassword.placeholder")} value={formData.confirmPassword} onChange={handleChange}/>
                                 {errors.confirmPassword && <span className={styles.error}>{errors.confirmPassword}</span>}
                             </label>
 
@@ -141,10 +135,7 @@ export default function page() {
 
                                     <div className={styles.accountTypeOption}>
                                         <span className={styles.accountTypeText}>{t("signup.customerAndProvider")}</span>
-                                        <ToggleSwitch 
-                                            isOn={formData.isServiceProvider} 
-                                            setIsOn={(isOn) => {handleRoleChange("isServiceProvider", isOn); if (isOn) handleRoleChange("isConsumer", false);}} 
-                                        />
+                                        <ToggleSwitch isOn={formData.isServiceProvider} setIsOn={(isOn) => {handleRoleChange("isServiceProvider", isOn); if (isOn) handleRoleChange("isConsumer", false);}} />
                                     </div>
                                 </div>
 
@@ -163,6 +154,7 @@ export default function page() {
                         {t("signup.continue")}
                     </button>
 
+                    {/* provide user alternate access to login if they already have an account*/}
                     <p className={styles.goToLogin}>
                         {t("signup.alreadyhaveanaccount")}{" "}
                         <Link href="/login">{t("signup.login")}</Link>

@@ -1,3 +1,5 @@
+import { TRANSLATIONS } from './translations';
+
 /**
  * Validates login form data before submission
  * 
@@ -20,22 +22,22 @@
  *   // Display errors to user
  * }
  */
-export const validateLoginForm = (formData) => {
+export const validateLoginForm = (formData, t) => {
     // Initialize empty errors object
     const errors = {};
 
     // Email validation
     if (!formData.email.trim()) {
-      errors.email = "Email is required!"
+      errors.email = t ? t('validation.email.required') : 'Email is required!';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = "Enter a valid email!"
+      errors.email = t ? t('validation.email.invalid') : 'Enter a valid email!';
     }
 
     // Password validation
     if (!formData.password) {
-      errors.password = "Password is required!"
+      errors.password = t ? t('validation.password.required') : 'Password is required!';
     } else if (formData.password.length < 8) {
-      errors.password = "Password must be at least 8 characters"
+      errors.password = t ? t('validation.password.minLength') : 'Password must be at least 8 characters';
     }
 
     // Return errors object (empty if no validation errors)
