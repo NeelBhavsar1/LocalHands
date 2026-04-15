@@ -6,6 +6,7 @@ import styles from "./page.module.css";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { motion, useScroll, useTransform} from "framer-motion";
+import { FaHome, FaWrench, FaMobile, FaBusinessTime} from "react-icons/fa";
 
 export default function Home() {
 
@@ -57,7 +58,7 @@ export default function Home() {
             initial={{opacity:0}}
             whileInView={{opacity:1, y:0}}
             viewport={{once:true, margin:"-100px"}}
-            transition={{duration:0.6, delay:0.5, ease: "easeOut"}}>
+            transition={{duration:0.6, delay:0.3, ease: "easeOut"}}>
 
             <h3>{t("about.gridSection.find.title")}</h3>
             <p>{t("about.gridSection.find.description")}</p>
@@ -68,7 +69,7 @@ export default function Home() {
             initial={{opacity:0, y:50}}
             whileInView={{opacity:1, y:0}}
             viewport={{once:true, margin:"-100px"}}
-            transition={{duration:0.6, delay:0.75}}>
+            transition={{duration:0.6, delay:0.4}}>
 
             <h3>{t("about.gridSection.verified.title")}</h3>
             <p>{t("about.gridSection.verified.description")}</p>
@@ -90,23 +91,23 @@ export default function Home() {
             initial={{opacity:0, y:50}}
             whileInView={{opacity:1, y:0}}
             viewport={{once:true, margin:"-100px"}}
-            transition={{duration:0.6, delay:0.75}}>
+            transition={{duration:0.6, delay:0.6}}>
 
             <h3>{t("about.gridSection.secure.title")}</h3>
             <p>{t("about.gridSection.secure.description")}</p>
           </motion.div>
+        </div>
 
           <motion.div
-            className={styles.aboutSection}
+            className={`${styles.aboutSection} ${styles.centredSection}`}
             initial={{opacity:0, y:50}}
             whileInView={{opacity:1, y:0}}
             viewport={{once:true, margin:"-100px"}}
-            transition={{duration:0.6, delay:0.5}}>
+            transition={{duration:0.6, delay:0.7}}>
 
             <h3>{t("about.gridSection.accessible.title")}</h3>
             <p>{t("about.gridSection.accessible.description")}</p>
           </motion.div>
-        </div>
 
         <motion.div
           className={styles.missionArea}
@@ -126,7 +127,7 @@ export default function Home() {
             initial={{opacity:0, y:30}}
             whileInView={{opacity:1, y:0}}
             viewport={{once:true, margin:"-100px"}}
-            transition={{duration:0.6}}>
+            transition={{duration:0.6, delay: 0.5}}>
             {t("services.title")}
           </motion.h2>
           <motion.p 
@@ -146,7 +147,7 @@ export default function Home() {
             whileInView={{opacity:1, y:0}}
             viewport={{once:true, margin:"-100px"}}
             transition={{duration:0.6, delay:0.1}}>
-            <div className={styles.serviceIcon}>?</div>
+            <div className={styles.serviceIcon}><FaHome /></div>
             <h3>{t("services.card1.title")}</h3>
             <p>{t("services.card1.description")}</p>
           </motion.div>
@@ -157,7 +158,7 @@ export default function Home() {
             whileInView={{opacity:1, y:0}}
             viewport={{once:true, margin:"-100px"}}
             transition={{duration:0.6, delay:0.2}}>
-            <div className={styles.serviceIcon}>?</div>
+            <div className={styles.serviceIcon}><FaWrench /></div>
             <h3>{t("services.card2.title")}</h3>
             <p>{t("services.card2.description")}</p>
           </motion.div>
@@ -168,7 +169,7 @@ export default function Home() {
             whileInView={{opacity:1, y:0}}
             viewport={{once:true, margin:"-100px"}}
             transition={{duration:0.6, delay:0.3}}>
-            <div className={styles.serviceIcon}>?</div>
+            <div className={styles.serviceIcon}><FaMobile /></div>
             <h3>{t("services.card3.title")}</h3>
             <p>{t("services.card3.description")}</p>
           </motion.div>
@@ -179,7 +180,7 @@ export default function Home() {
             whileInView={{opacity:1, y:0}}
             viewport={{once:true, margin:"-100px"}}
             transition={{duration:0.6, delay:0.4}}>
-            <div className={styles.serviceIcon}>?</div>
+            <div className={styles.serviceIcon}><FaBusinessTime /></div>
             <h3>{t("services.card4.title")}</h3>
             <p>{t("services.card4.description")}</p>
           </motion.div>
