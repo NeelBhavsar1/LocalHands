@@ -5,9 +5,11 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { activateAccount } from '@/api/authApi'
 import HomeNavBar from '@/components/HomeNavBar/HomeNavBar'
+import { useTranslation } from 'react-i18next'
 import styles from './page.module.css'
 
 export default function ActivateAccountPage() {
+    const { t } = useTranslation()
     const searchParams = useSearchParams()
     const token = searchParams.get('token')
     const [status, setStatus] = useState('loading')
@@ -16,7 +18,7 @@ export default function ActivateAccountPage() {
     useEffect(() => {
         if (!token) {
             setStatus('error')
-            setMessage('No activation token provided.')
+            setMessage(t('activateAccount.noToken'))
             return
         }
 
@@ -24,10 +26,10 @@ export default function ActivateAccountPage() {
             try {
                 const result = await activateAccount(token)
                 setStatus('success')
-                setMessage(result || 'Account activated successfully!')
+                setMessage(result || t('activateAccount.successMessage'))
             } catch (error) {
                 setStatus('error')
-                setMessage(error || 'Account activation failed. The token may be invalid or expired.')
+                setMessage(error || t('activateAccount.errorMessage'))
             }
         }
 
@@ -40,9 +42,9 @@ export default function ActivateAccountPage() {
             <div className={styles.container}>
             <div className={styles.card}>
                 <h1 className={styles.title}>
-                    {status === 'loading' && 'Activating Account...'}
-                    {status === 'success' && 'Account Activated!'}
-                    {status === 'error' && 'Activation Failed'}
+                    {status === 'loading' && t('activateAccount.loading')}
+                    {status === 'success' && t('activateAccount.success')}
+                    {status === 'error' && t('activateAccount.failed')}
                 </h1>
                 
                 <p className={`${styles.message} ${styles[status]}`}>
@@ -51,7 +53,7 @@ export default function ActivateAccountPage() {
 
                 {status !== 'loading' && (
                     <Link href="/login" className={styles.link}>
-                        Go to Login
+                        {t('activateAccount.goToLogin')}
                     </Link>
                 )}
             </div>

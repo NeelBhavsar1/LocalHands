@@ -56,7 +56,7 @@ export default function page() {
     //prevents browser from refreshing the page
     e.preventDefault();
 
-    const validationErrors = validateLoginForm(formData);
+    const validationErrors = validateLoginForm(formData, t);
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) {

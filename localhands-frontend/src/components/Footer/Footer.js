@@ -13,7 +13,7 @@ export default function Footer() {
 
       <div className={styles.container}>
           <div className={styles.leftColumn}>
-            <Image src="/logo-v2.png" alt="LocalHands Logo" width={100} height={100} className={styles.localHandsImage}/>
+            <Image src="/logo-v2.png" alt={t('alt.localHandsLogo')} width={100} height={100} className={styles.localHandsImage} loading="lazy"/>
             <p>Local<span>Hands</span></p>
           </div>
           <div className={styles.middleColumns}>

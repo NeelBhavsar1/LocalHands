@@ -50,7 +50,7 @@ export default function SearchBar({ radius, onRadiusChange, onCategoriesChange, 
         <div className={styles.wrapper}>
             <div className={styles.container}>
                 <Search className={styles.icon} size={20} />
-                <input type="text" className={styles.input} placeholder="Search services..." value={searchQuery || ''} onChange={(e) => onSearchChange?.(e.target.value)} />
+                <input type="text" className={styles.input} placeholder={t('search.placeholder')} value={searchQuery || ''} onChange={(e) => onSearchChange?.(e.target.value)} />
             </div>
 
             <div className={styles.filters}>
@@ -91,10 +91,10 @@ export default function SearchBar({ radius, onRadiusChange, onCategoriesChange, 
 
                 <div className={styles.filterGroup}>
                     <Tag size={16} />
-                    <label>Categories:</label>
+                    <label>{t('search.categories.label')}</label>
                     <div className={styles.categoryFilterWrapper}>
                         <button className={`${styles.categoryDropdownBtn} ${selectedCategories.length > 0 ? styles.active : ''}`} onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}>
-                            {selectedCategories.length > 0 ? `${selectedCategories.length} selected` : 'Select categories'}
+                            {selectedCategories.length > 0 ? `${selectedCategories.length} ${t('search.categories.selected')}` : t('search.categories.selectCategories')}
                         </button>
                         
                         {showCategoryDropdown && (
@@ -115,7 +115,7 @@ export default function SearchBar({ radius, onRadiusChange, onCategoriesChange, 
                                             {categories.map((category) => (
                                                 <label key={category.id} className={`${styles.categoryItem} ${selectedCategories.includes(category.id) ? styles.selected : ''}`}>
                                                     <input type="checkbox" checked={selectedCategories.includes(category.id)} onChange={() => handleCategoryToggle(category.id)} />
-                                                    <span className={styles.categoryName}>{getCategoryDisplayName(category.category)}</span>
+                                                    <span className={styles.categoryName}>{getCategoryDisplayName(category.category, t)}</span>
                                                 </label>
                                             ))}
                                         </div>

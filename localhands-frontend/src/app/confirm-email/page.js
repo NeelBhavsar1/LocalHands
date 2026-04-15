@@ -5,9 +5,11 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { confirmEmail } from '@/api/authApi'
 import HomeNavBar from '@/components/HomeNavBar/HomeNavBar'
+import { useTranslation } from 'react-i18next'
 import styles from './page.module.css'
 
 export default function ConfirmEmailPage() {
+    const { t } = useTranslation()
     const searchParams = useSearchParams()
     const token = searchParams.get('token')
     const [status, setStatus] = useState('loading')
@@ -16,7 +18,7 @@ export default function ConfirmEmailPage() {
     useEffect(() => {
         if (!token) {
             setStatus('error')
-            setMessage('No confirmation token provided.')
+            setMessage(t('confirmEmail.noToken'))
             return
         }
 
@@ -24,10 +26,10 @@ export default function ConfirmEmailPage() {
             try {
                 const result = await confirmEmail(token)
                 setStatus('success')
-                setMessage(result || 'Email confirmed successfully!')
+                setMessage(result || t('confirmEmail.successMessage'))
             } catch (error) {
                 setStatus('error')
-                setMessage(error || 'Email confirmation failed. The token may be invalid or expired.')
+                setMessage(error || t('confirmEmail.errorMessage'))
             }
         }
 
@@ -40,9 +42,9 @@ export default function ConfirmEmailPage() {
             <div className={styles.container}>
             <div className={styles.card}>
                 <h1 className={styles.title}>
-                    {status === 'loading' && 'Confirming Email...'}
-                    {status === 'success' && 'Email Confirmed!'}
-                    {status === 'error' && 'Confirmation Failed'}
+                    {status === 'loading' && t('confirmEmail.loading')}
+                    {status === 'success' && t('confirmEmail.success')}
+                    {status === 'error' && t('confirmEmail.failed')}
                 </h1>
                 
                 <p className={`${styles.message} ${styles[status]}`}>
@@ -52,7 +54,7 @@ export default function ConfirmEmailPage() {
 
                 {status !== 'loading' && (
                     <Link href="/dashboard" className={styles.link}>
-                        Go to Dashboard
+                        {t('confirmEmail.goToDashboard')}
                     </Link>
                 )}
             </div>

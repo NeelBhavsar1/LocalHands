@@ -89,14 +89,6 @@ export default function page({ children }) {
               listings={listings}
               emptyMessage={t('dashboard.sellerEmptyState')}
             />
-            {listings.length === 0 && (
-              <div className={styles.emptyStateAction}>
-                <Link href="/dashboard/services" className={styles.createButtonLarge}>
-                  <Plus size={20} />
-                  {t('dashboard.createFirstListing')}
-                </Link>
-              </div>
-            )}
           </div>
         ) : (
           <div className={styles.contentSection}>

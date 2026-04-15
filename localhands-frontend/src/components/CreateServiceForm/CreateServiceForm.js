@@ -83,11 +83,11 @@ export default function CreateServiceForm({ onSuccess }) {
         try {
             const altTexts = generateAltTexts(photos, formData.name)
             await createListing(validation.data, photos, altTexts)
-            alert('Service created successfully!')
+            alert(t('createServiceForm.success'))
             resetServiceForm(setFormData, setPhotos, setWorkType, setShowForm, setSelectedCategories)
             onSuccess?.()
         } catch (error) {
-            alert('Error creating service: ' + error)
+            alert(t('createServiceForm.error') + error)
         } finally {
             setLoading(false)
         }
@@ -96,7 +96,7 @@ export default function CreateServiceForm({ onSuccess }) {
     return (
         <div className={styles.container}>
             <button onClick={() => setShowForm(!showForm)} className={styles.createButton}>
-                {showForm ? 'Cancel' : '+'}
+                {showForm ? t('cancel') : '+'}
             </button>
 
             {showForm && (
@@ -131,7 +131,7 @@ export default function CreateServiceForm({ onSuccess }) {
                             <div className={styles.categoriesGrid}>
                                 {categories.map((category) => (
                                     <button key={category.id} type="button" className={`${styles.categoryBtn} ${selectedCategories.includes(category.id) ? styles.active : ''}`} onClick={() => handleCategoryToggle(category.id)}>
-                                        {getCategoryDisplayName(category.category)}
+                                        {getCategoryDisplayName(category.category, t)}
                                     </button>
                                 ))}
                             </div>
