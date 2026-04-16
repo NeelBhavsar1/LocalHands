@@ -219,11 +219,22 @@
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform all 300ms ease-in-out;
+    position: relative;
 }
 
 .serviceCard:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.stepArrow {
+    position: absolute;
+    top: 50%;
+    right: -1rem;
+    transform: translate(50%, -50%);
+    font-size: 1.5rem;
+    color: var(--text);
+    opacity: 0.25;
 }
 
 .serviceIcon {
@@ -348,6 +359,10 @@
     
     .servicesGrid {
         grid-template-columns: 1fr;
+    }
+
+    .stepArrow {
+        display: none;
     }
     
     .sectionHeader h2 {

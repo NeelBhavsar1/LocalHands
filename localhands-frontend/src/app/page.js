@@ -6,7 +6,7 @@ import styles from "./page.module.css";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { motion, useScroll, useTransform} from "framer-motion";
-import { FaHome, FaWrench, FaMobile, FaBusinessTime} from "react-icons/fa";
+import { FaUserCheck, FaPlusSquare, FaFileAlt, FaCheckCircle, FaChevronRight} from "react-icons/fa";
 
 export default function Home() {
 
@@ -128,16 +128,9 @@ export default function Home() {
             whileInView={{opacity:1, y:0}}
             viewport={{once:true, margin:"-100px"}}
             transition={{duration:0.6, delay: 0.5}}>
-            {t("services.title")}
+            {t("howItWorks.title")}
+            <FaChevronRight className={styles.stepArrow} />
           </motion.h2>
-          <motion.p 
-            className={styles.sectionSubtitle}
-            initial={{opacity:0, y:20}}
-            whileInView={{opacity:1, y:0}}
-            viewport={{once:true, margin:"-100px"}}
-            transition={{duration:0.6, delay:0.2}}>
-            {t("services.subtitle")}
-          </motion.p>
         </div>
 
         <div className={styles.servicesGrid}>
@@ -147,9 +140,10 @@ export default function Home() {
             whileInView={{opacity:1, y:0}}
             viewport={{once:true, margin:"-100px"}}
             transition={{duration:0.6, delay:0.1}}>
-            <div className={styles.serviceIcon}><FaHome /></div>
-            <h3>{t("services.card1.title")}</h3>
-            <p>{t("services.card1.description")}</p>
+            <div className={styles.serviceIcon}><FaUserCheck /></div>
+            <h3>{t("howItWorks.step1.title")}</h3>
+            <p>{t("howItWorks.step1.content")}</p>
+            <FaChevronRight className={styles.stepArrow} />
           </motion.div>
 
           <motion.div 
@@ -158,9 +152,10 @@ export default function Home() {
             whileInView={{opacity:1, y:0}}
             viewport={{once:true, margin:"-100px"}}
             transition={{duration:0.6, delay:0.2}}>
-            <div className={styles.serviceIcon}><FaWrench /></div>
-            <h3>{t("services.card2.title")}</h3>
-            <p>{t("services.card2.description")}</p>
+            <div className={styles.serviceIcon}><FaPlusSquare /></div>
+            <h3>{t("howItWorks.step2.title")}</h3>
+            <p>{t("howItWorks.step2.content")}</p>
+            <FaChevronRight className={styles.stepArrow} />
           </motion.div>
 
           <motion.div 
@@ -169,9 +164,10 @@ export default function Home() {
             whileInView={{opacity:1, y:0}}
             viewport={{once:true, margin:"-100px"}}
             transition={{duration:0.6, delay:0.3}}>
-            <div className={styles.serviceIcon}><FaMobile /></div>
-            <h3>{t("services.card3.title")}</h3>
-            <p>{t("services.card3.description")}</p>
+            <div className={styles.serviceIcon}><FaFileAlt /></div>
+            <h3>{t("howItWorks.step3.title")}</h3>
+            <p>{t("howItWorks.step3.content")}</p>
+            <FaChevronRight className={styles.stepArrow} />
           </motion.div>
 
           <motion.div 
@@ -180,9 +176,9 @@ export default function Home() {
             whileInView={{opacity:1, y:0}}
             viewport={{once:true, margin:"-100px"}}
             transition={{duration:0.6, delay:0.4}}>
-            <div className={styles.serviceIcon}><FaBusinessTime /></div>
-            <h3>{t("services.card4.title")}</h3>
-            <p>{t("services.card4.description")}</p>
+            <div className={styles.serviceIcon}><FaCheckCircle /></div>
+            <h3>{t("howItWorks.step4.title")}</h3>
+            <p>{t("howItWorks.step4.content")}</p>
           </motion.div>
         </div>
 
@@ -193,7 +189,7 @@ export default function Home() {
           viewport={{once:true, margin:"-100px"}}
           transition={{duration:0.6, delay:0.5}}>
           <Link href="/signup" className={styles.ctaButton}>
-            {t("services.ctaButton")}
+            {t("howItWorks.ctaButton")}
           </Link>
         </motion.div>
       </section>
@@ -228,14 +224,6 @@ export default function Home() {
             <div className={styles.contactItem}>
               <h3>{t("contact.email.title")}</h3>
               <p>{t("contact.email.value")}</p>
-            </div>
-            <div className={styles.contactItem}>
-              <h3>{t("contact.phone.title")}</h3>
-              <p>{t("contact.phone.value")}</p>
-            </div>
-            <div className={styles.contactItem}>
-              <h3>{t("contact.address.title")}</h3>
-              <p>{t("contact.address.value")}</p>
             </div>
           </motion.div>
         </div>
