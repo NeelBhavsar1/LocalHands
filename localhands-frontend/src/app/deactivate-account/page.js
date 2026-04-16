@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { deactivateAccount } from '@/api/authApi'
@@ -8,7 +8,7 @@ import HomeNavBar from '@/components/HomeNavBar/HomeNavBar'
 import { useTranslation } from 'react-i18next'
 import styles from './page.module.css'
 
-export default function DeactivateAccountPage() {
+function DeactivateAccountContent() {
     const { t } = useTranslation()
     const searchParams = useSearchParams()
     const token = searchParams.get('token')
@@ -59,5 +59,13 @@ export default function DeactivateAccountPage() {
             </div>
         </div>
         </>
+    )
+}
+
+export default function DeactivateAccountPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <DeactivateAccountContent />
+        </Suspense>
     )
 }

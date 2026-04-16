@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { confirmEmail } from '@/api/authApi'
@@ -8,7 +8,7 @@ import HomeNavBar from '@/components/HomeNavBar/HomeNavBar'
 import { useTranslation } from 'react-i18next'
 import styles from './page.module.css'
 
-export default function ConfirmEmailPage() {
+function ConfirmEmailContent() {
     const { t } = useTranslation()
     const searchParams = useSearchParams()
     const token = searchParams.get('token')
@@ -60,5 +60,13 @@ export default function ConfirmEmailPage() {
             </div>
         </div>
         </>
+    )
+}
+
+export default function ConfirmEmailPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ConfirmEmailContent />
+        </Suspense>
     )
 }

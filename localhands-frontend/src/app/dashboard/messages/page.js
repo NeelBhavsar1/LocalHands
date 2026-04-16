@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import styles from './page.module.css'
@@ -13,7 +13,7 @@ import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
 import { findExistingConversation, createNewConversation, addConversationIfNotExists, updateConversationsList, isMessageRelevantToConversation, addMessageToList } from '@/utils/messagesUtils'
 import { useRouter } from 'next/navigation'
 
-export default function MessagesPage() {
+function MessagesPageContent() {
     const { t } = useTranslation()
     const router = useRouter()
     const searchParams = useSearchParams()
@@ -167,5 +167,13 @@ export default function MessagesPage() {
                 </div>
             </div>
         </div>
+    )
+}
+
+export default function MessagesPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <MessagesPageContent />
+        </Suspense>
     )
 }
