@@ -136,6 +136,17 @@
     transform: translateY(-1px);
 }
 
+.listingsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 1200px;
+  justify-content: center;
+}
+
+
+
 @media (max-width: 768px) {
     .container {
         padding: 1rem;
@@ -153,7 +164,13 @@
     .buyerSection {
         padding: 1.5rem 1rem;
     }
+
+    .listingsGrid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+    }
 }
+
 
 
 

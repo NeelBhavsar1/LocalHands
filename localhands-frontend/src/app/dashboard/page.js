@@ -7,7 +7,7 @@ import { getUserInfo } from '@/api/userApi';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { getMyListings } from '@/api/listingApi';
-import ListingList from '@/components/ListingList/ListingList';
+import ListingCard from '@/components/ListingCard/ListingCard';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 
@@ -85,10 +85,11 @@ export default function page({ children }) {
                 {t('dashboard.createListing')}
               </Link>
             </div>
-            <ListingList
-              listings={listings}
-              emptyMessage={t('dashboard.sellerEmptyState')}
-            />
+            <div className={styles.listingsGrid}>
+              {listings.map((listing) => (
+                <ListingCard key={listing.listingId} listing={listing} />
+              ))}
+            </div>
           </div>
         ) : (
           <div className={styles.contentSection}>
