@@ -8,6 +8,7 @@ import ListingCard from '@/components/ListingCard/ListingCard'
 import { searchListings } from '@/api/listingApi'
 import { getUserInfo } from '@/api/userApi'
 import { useRouter } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
 
 // Convert miles to meters for API
 const milesToMeters = (miles) => Math.round(miles * 1609.34)
@@ -17,6 +18,7 @@ const DEBOUNCE_DELAY = 1500
 
 export default function ServicesPage() {
     const router = useRouter()
+    const { t } = useTranslation()
     const [location, setLocation] = useState(null)
     const [nearbyListings, setNearbyListings] = useState([])
     const [listingsLoading, setListingsLoading] = useState(false)
@@ -104,8 +106,8 @@ export default function ServicesPage() {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <h1>Services</h1>
-                <p>Post your services here, or view services on offer!</p>
+                <h1>{t('services.title')}</h1>
+                <p>{t('services.subtitle')}</p>
             </div>
 
             <div className={styles.midPage}>
@@ -114,12 +116,12 @@ export default function ServicesPage() {
             </div>
 
             <div className={styles.nearbySection}>
-                <h2>{debouncedSearchQuery ? `Search Results for "${debouncedSearchQuery}"` : location ? 'Nearby Services' : 'Online Services'}</h2>
+                <h2>{debouncedSearchQuery ? t('services.searchResults', { query: debouncedSearchQuery }) : location ? t('services.nearbyServices') : t('services.onlineServices')}</h2>
                 {listingsLoading ? (
-                    <p className={styles.loadingText}>{location ? 'Loading nearby services...' : 'Loading online services...'}</p>
+                    <p className={styles.loadingText}>{location ? t('services.loadingNearby') : t('services.loadingOnline')}</p>
                 ) : nearbyListings.length === 0 ? (
                     <p className={styles.noListingsText}>
-                        {location ? 'There are currently no listings available in your area, either increase your search radius or check for online work.': 'There are currently no online listings available. Please enable location access to see services in your area.'}
+                        {location ? t('services.noNearbyListings') : t('services.noOnlineListings')}
                     </p>
                 ) : (
                     <div className={styles.listingsGrid}>

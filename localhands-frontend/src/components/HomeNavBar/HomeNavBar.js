@@ -54,7 +54,7 @@ export default function HomeNavBar({ showLinks = true, scrollToSection }) {
         <div className={styles.container}>
             <div className={styles.logo}>
                 <a href="/"><Image src="/logo-v2.png" alt={t('alt.localHandsLogo')} width={100} height={100} className={styles.localHandsImage} loading="eager"/></a>
-                <p>Local<span>Hands</span></p>
+                <p>{t('brand.localHands')}</p>
             </div>
 
             {showLinks && (

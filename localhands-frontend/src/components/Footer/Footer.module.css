@@ -60,7 +60,7 @@
 .linkColumn a {
     text-decoration: none;
     color: var(--text);
-    padding: px 5px;
+    padding: 4px 5px;
     font-weight: 500;
 
     transition: all 120ms ease-in-out;

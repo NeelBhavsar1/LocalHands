@@ -453,5 +453,19 @@
     "faq.footer.title": "Besoin d'aide ?",
     "faq.footer.subtitle": "Vous ne trouvez pas ce que vous cherchez ? Notre équipe de support est là pour vous aider.",
     "faq.contact.support": "Contacter le support",
-    "faq.contact.email": "Envoyez-nous un e-mail"
+    "faq.contact.email": "Envoyez-nous un e-mail",
+
+    "services.title": "Services",
+    "services.subtitle": "Publiez vos services ici, ou consultez les services proposés !",
+    "services.searchResults": "Résultats de recherche pour \"{query}\"",
+    "services.nearbyServices": "Services à proximité",
+    "services.onlineServices": "Services en ligne",
+    "services.loadingNearby": "Chargement des services à proximité...",
+    "services.loadingOnline": "Chargement des services en ligne...",
+    "services.noNearbyListings": "Il n'y a actuellement aucune annonce disponible dans votre région, augmentez votre rayon de recherche ou consultez le travail en ligne.",
+    "services.noOnlineListings": "Il n'y a actuellement aucune annonce en ligne disponible. Veuillez activer l'accès à votre localisation pour voir les services dans votre région.",
+    "settings.removeServiceProviderWarning": "Ceci supprimera toutes vos annonces et services",
+    "brand.localHands": "LocalHands",
+    "footer.copyright": "{year} LocalHands",
+    "listings.notFound": "Annonce non trouvée"
 }

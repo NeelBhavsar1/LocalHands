@@ -14,21 +14,19 @@ export default function Footer() {
       <div className={styles.container}>
           <div className={styles.leftColumn}>
             <Image src="/logo-v2.png" alt={t('alt.localHandsLogo')} width={100} height={100} className={styles.localHandsImage} loading="lazy"/>
-            <p>Local<span>Hands</span></p>
+            <p>{t('brand.localHands')}</p>
           </div>
           <div className={styles.middleColumns}>
             <h2>{t("footer.links")}</h2>
             <div className={styles.linkColumn}>
               <Link href='/'>{t("footer.home")}</Link>
               <Link href='/faq'>{t("footer.faq")}</Link>
-              <Link href='/contact'>{t("footer.contactus")}</Link>
               <Link href='/termsofservice'>{t("footer.termsofservice")}</Link>
               <Link href='/privacypolicy'>{t("footer.privacypolicy")}</Link>
-              <Link href='/sitemap'>{t("footer.sitemap")}</Link>
             </div>
           </div>           
       </div>
-      <p className={styles.copyWriteLolHailCC}><Copyright size={12} />&nbsp; {new Date().getFullYear()} LocalHands</p>
+      <p className={styles.copyWriteLolHailCC}><Copyright size={12} />&nbsp; {t('footer.copyright', { year: new Date().getFullYear() })}</p>
     </div>
   )
 }

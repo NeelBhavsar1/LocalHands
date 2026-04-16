@@ -84,7 +84,7 @@ export default function page() {
                             <label>{t("settings.serviceProvider")}</label>
                             <div className={styles.toggleRow}>
                                 <ToggleSwitch isOn={formData.isServiceProvider} setIsOn={(value) => setFormData(prev => ({ ...prev, isServiceProvider: value }))} />
-                                <span className={styles.hint}>Removing this will delete all your listings and services</span>
+                                <span className={styles.hint}>{t("settings.removeServiceProviderWarning")}</span>
                             </div>
                         </div>
                     </div>

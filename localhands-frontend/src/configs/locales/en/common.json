@@ -469,6 +469,20 @@
     "faq.answer.editReview": "Yes, you can edit or delete your own reviews. Go to 'Your Reviews' in your Profile, find the review you want to modify, and use the 'Edit Review' or 'Delete Review' buttons. You can only edit/delete reviews that you wrote.",
     "faq.answer.loginProblems": "First, try clearing your browser cache and cookies. Check that you're using the correct email and password. Use 'Forgot Password' to reset if needed. If problems persist, try a different browser or contact support with the error message you're seeing.",
     "faq.answer.profileNotUpdating": "Make sure you're clicking the save button after making changes. Check your internet connection. Some changes may take a few minutes to appear across the platform. If issues persist, try refreshing the page or logging out and back in.",
-    "faq.answer.photosNotUploading": "Check that your photos are in JPG or PNG format and under 5MB in size. Ensure you have a stable internet connection. Try refreshing the page and attempting the upload again. If problems continue, try a different browser or compress your images."
+    "faq.answer.photosNotUploading": "Check that your photos are in JPG or PNG format and under 5MB in size. Ensure you have a stable internet connection. Try refreshing the page and attempting the upload again. If problems continue, try a different browser or compress your images.",
+
+    "services.title": "Services",
+    "services.subtitle": "Post your services here, or view services on offer!",
+    "services.searchResults": "Search Results for \"{query}\"",
+    "services.nearbyServices": "Nearby Services",
+    "services.onlineServices": "Online Services",
+    "services.loadingNearby": "Loading nearby services...",
+    "services.loadingOnline": "Loading online services...",
+    "services.noNearbyListings": "There are currently no listings available in your area, either increase your search radius or check for online work.",
+    "services.noOnlineListings": "There are currently no online listings available. Please enable location access to see services in your area.",
+    "settings.removeServiceProviderWarning": "Removing this will delete all your listings and services",
+    "brand.localHands": "LocalHands",
+    "footer.copyright": "{year} LocalHands",
+    "listings.notFound": "Listing not found"
 }
 

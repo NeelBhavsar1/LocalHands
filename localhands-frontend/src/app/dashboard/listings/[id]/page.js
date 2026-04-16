@@ -194,7 +194,7 @@ export default function ListingDetailPage() {
     if (!currentUser) { return null; }
 
     if (!listing) {
-        return <div className={styles.container}>Listing not found</div>
+        return <div className={styles.container}>{t('listings.notFound')}</div>
     }
 
     return (
