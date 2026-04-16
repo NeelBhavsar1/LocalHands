@@ -22,42 +22,42 @@ export default function Services() {
                 </div>
 
                 <motion.div className={styles.directoryList} initial="hidden" whileInView="visible" viewport={{once: true, margin: "-50px"}} transition={{staggerChildren: 0.15}}>
-                    <motion.div className={styles.serviceRow} variants={rowVariant} transition={{duration: 0.5}}>
+                    <motion.div className={styles.serviceRow} variants={rowAnimation} transition={{duration: 0.5}}>
                         <div className={styles.rowContent}>
                             <h2>{t("services.category.home.title")}</h2>
                             <p>{t("services.category.home.description")}</p>
                         </div>
                     </motion.div>
 
-                    <motion.div className={styles.serviceRow} variants={rowVariant} transition={{duration: 0.5}}>
+                    <motion.div className={styles.serviceRow} variants={rowAnimation} transition={{duration: 0.5}}>
                         <div className={styles.rowContent}>
                             <h2>{t("services.category.outdoor.title")}</h2>
                             <p>{t("services.category.outdoor.description")}</p>
                         </div>
                     </motion.div>
 
-                    <motion.div className={styles.serviceRow} variants={rowVariant} transition={{duration: 0.5}}>
+                    <motion.div className={styles.serviceRow} variants={rowAnimation} transition={{duration: 0.5}}>
                         <div className={styles.rowContent}>
                             <h2>{t("services.category.errands.title")}</h2>
                             <p>{t("services.category.errands.description")}</p>
                         </div>
                     </motion.div>
 
-                    <motion.div className={styles.serviceRow} variants={rowVariant} transition={{duration: 0.5}}>
+                    <motion.div className={styles.serviceRow} variants={rowAnimation} transition={{duration: 0.5}}>
                         <div className={styles.rowContent}>
                             <h2>{t("services.category.pets.title")}</h2>
                             <p>{t("services.category.pets.description")}</p>
                         </div>
                     </motion.div>
 
-                    <motion.div className={styles.serviceRow} variants={rowVariant} transition={{duration: 0.5}}>
+                    <motion.div className={styles.serviceRow} variants={rowAnimation} transition={{duration: 0.5}}>
                         <div className={styles.rowContent}>
                             <h2>{t("services.category.tech.title")}</h2>
                             <p>{t("services.category.tech.description")}</p>
                         </div>
                     </motion.div>
 
-                    <motion.div className={styles.serviceRow} variants={rowVariant} transition={{duration: 0.5}}>
+                    <motion.div className={styles.serviceRow} variants={rowAnimation} transition={{duration: 0.5}}>
                         <div className={styles.rowContent}>
                             <h2>{t("services.category.professional.title")}</h2>
                             <p>{t("services.category.professional.description")}</p>
