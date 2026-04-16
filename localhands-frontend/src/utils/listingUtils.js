@@ -1,7 +1,7 @@
 // Backend URL for image loading
 import { TRANSLATIONS } from './translations';
 
-const BACKEND_URL = 'http://localhost:8080';
+export const BACKEND_URL = 'http://localhost:8080';
 
 // Leaflet icon for maps (lazy loaded for SSR compatibility)
 export const getDefaultIcon = () => {
