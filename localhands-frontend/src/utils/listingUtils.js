@@ -1,7 +1,7 @@
 // Backend URL for image loading
 import { TRANSLATIONS } from './translations';
 
-export const BACKEND_URL = 'http://localhost:8080';
+export const BACKEND_URL = 'https://api.projectlocalhands.com';
 
 
 // Input change handler

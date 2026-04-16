@@ -4,7 +4,7 @@ import Link from 'next/link';
 import styles from './ChatWindow.module.css';
 import { Send, ChevronLeft } from 'lucide-react';
 
-const BACKEND_URL = 'http://localhost:8080';
+const BACKEND_URL = 'https://api.projectlocalhands.com';
 
 export default function ChatWindow({ conversation, messages, currentUser, onSendMessage, canSendMessages, listingTitle, otherUserName, otherUserProfilePicture, onBack, isMobile }) {
     const { t } = useTranslation();

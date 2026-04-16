@@ -4,7 +4,7 @@ import api from "./api";
  * Base URL for the LocalHands backend API
  * Used for direct API calls when needed and for configuration purposes
  */
-const BACKEND_URL = 'http://localhost:8080';
+const BACKEND_URL = 'https://api.projectlocalhands.com';
 
 /**
  * Retrieves the current user's message inbox

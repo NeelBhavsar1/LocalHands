@@ -7,7 +7,7 @@ import axios from 'axios';
  * headers: sets the content type to json (tells the backend to expect json data, can be overriden per request exa: file uploads)
  */
 const api = axios.create({
-    baseURL: "http://localhost:8080",
+    baseURL: "https://api.projectlocalhands.com",
     withCredentials: true,
     headers: { "Content-Type": "application/json" }
 })

@@ -2,7 +2,7 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
-const BACKEND_URL = 'http://localhost:8080';
+const BACKEND_URL = 'https://api.projectlocalhands.com';
 
 export function useWebSocket(currentUserId) {
     const clientRef = useRef(null)
