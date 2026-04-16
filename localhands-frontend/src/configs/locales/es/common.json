@@ -454,6 +454,6 @@
     "services.noOnlineListings": "Actualmente no hay listados online disponibles. Por favor habilita el acceso a tu ubicación para ver servicios en tu área.",
     "settings.removeServiceProviderWarning": "Eliminar esto borrará todos tus listados y servicios",
     "brand.localHands": "LocalHands",
-    "footer.copyright": "{year} LocalHands",
+    "footer.copyright": "2026 LocalHands",
     "listings.notFound": "Listado no encontrado"
 }
