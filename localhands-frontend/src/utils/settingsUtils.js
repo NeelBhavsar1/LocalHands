@@ -17,9 +17,10 @@ export const createChangeHandler = (setFormData) => (e) => {
  * @param {*} setFormData - The setter function for form data
  * @param {*} setLoading - The setter function for loading state
  * @param {*} getUserInfo - The function to get user info
+ * @param {*} router - The router instance for navigation
  * @returns 
  */
-export const createLoadUserData = (setUser, setFormData, setLoading, getUserInfo) => async () => {
+export const createLoadUserData = (setUser, setFormData, setLoading, getUserInfo, router) => async () => {
     try {
         const userData = await getUserInfo()
         setUser(userData)
@@ -36,6 +37,8 @@ export const createLoadUserData = (setUser, setFormData, setLoading, getUserInfo
         })
     } catch (error) {
         console.error('Failed to load user data:', error)
+        router.push('/login')
+        return
     } finally {
         setLoading(false)
     }

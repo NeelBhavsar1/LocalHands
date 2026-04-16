@@ -66,6 +66,11 @@ export default function ListingDetailPage() {
 
             } catch (error) {
                 console.error('Error fetching listing:', error)
+                
+                if (error.response?.status === 401 || error.message?.includes('401')) {
+                    router.push('/login')
+                    return
+                }
                 alert('Failed to load listing')
                 router.push('/dashboard')
 
@@ -169,6 +174,9 @@ export default function ListingDetailPage() {
     if (loading) {
         return <div className={styles.container}><LoadingSpinner /></div>
     }
+
+
+    if (!currentUser) { return null; }
 
     if (!listing) {
         return <div className={styles.container}>Listing not found</div>

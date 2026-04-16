@@ -6,10 +6,12 @@ import { getUserInfo, updateAccountInfo, deleteUserAccount } from '@/api/userApi
 import ToggleSwitch from '@/components/ToggleSwitch/ToggleSwitch'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
 import { handleUpdateAccount, handleDeleteAccount, createChangeHandler, createLoadUserData } from '@/utils/settingsUtils'
+import { useRouter } from 'next/navigation'
 
 
 export default function page() {
     const { t } = useTranslation();
+    const router = useRouter();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState({
@@ -28,7 +30,7 @@ export default function page() {
     const handleChange = createChangeHandler(setFormData)
 
     useEffect(() => {
-        const loadUserData = createLoadUserData(setUser, setFormData, setLoading, getUserInfo)
+        const loadUserData = createLoadUserData(setUser, setFormData, setLoading, getUserInfo, router)
         loadUserData()
     }, [])
 
@@ -45,6 +47,9 @@ export default function page() {
     if (loading) {
         return <LoadingSpinner />;
     }
+    
+    
+    if (!user) { return null; }
 
     return (
         <div className={styles.container}>

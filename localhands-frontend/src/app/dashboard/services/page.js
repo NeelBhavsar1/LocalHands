@@ -7,6 +7,7 @@ import SearchBar from '@/components/searchBar/SearchBar'
 import ListingCard from '@/components/ListingCard/ListingCard'
 import { searchListings } from '@/api/listingApi'
 import { getUserInfo } from '@/api/userApi'
+import { useRouter } from 'next/navigation'
 
 // Convert miles to meters for API
 const milesToMeters = (miles) => Math.round(miles * 1609.34)
@@ -15,6 +16,7 @@ const milesToMeters = (miles) => Math.round(miles * 1609.34)
 const DEBOUNCE_DELAY = 1500 
 
 export default function ServicesPage() {
+    const router = useRouter()
     const [location, setLocation] = useState(null)
     const [nearbyListings, setNearbyListings] = useState([])
     const [listingsLoading, setListingsLoading] = useState(false)
@@ -36,6 +38,8 @@ export default function ServicesPage() {
                 setCurrentUser(userData)
             } catch (error) {
                 console.error('Failed to fetch user info:', error)
+                router.push('/login')
+                return
             }
         }
         fetchUserInfo()
@@ -93,6 +97,9 @@ export default function ServicesPage() {
 
         fetchListings()
     }, [location, radius, selectedCategories, debouncedSearchQuery, workType, currentUser])
+
+    
+    if (!currentUser) { return null; }
 
     return (
         <div className={styles.container}>

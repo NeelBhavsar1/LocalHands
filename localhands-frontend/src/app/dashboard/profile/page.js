@@ -60,7 +60,8 @@ export default function page() {
                 setUserReviews(reviewsData);
             } catch (error) {
                 console.error('Failed to fetch user data:', error);
-                alert('Failed to load profile data');
+                router.push('/login');
+                return;
             } finally {
                 setLoading(false);
             }
@@ -107,6 +108,9 @@ export default function page() {
             </div>
         );
     }
+    
+    
+    if (!user) { return null; }
 
     return (
         <div className={styles.container}>

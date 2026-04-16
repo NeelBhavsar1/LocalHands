@@ -11,9 +11,11 @@ import { getInbox, getConversation, sendMessage } from '@/api/messageApi'
 import { getUserInfo } from '@/api/userApi'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
 import { findExistingConversation, createNewConversation, addConversationIfNotExists, updateConversationsList, isMessageRelevantToConversation, addMessageToList } from '@/utils/messagesUtils'
+import { useRouter } from 'next/navigation'
 
 export default function MessagesPage() {
     const { t } = useTranslation()
+    const router = useRouter()
     const searchParams = useSearchParams()
     const urlUserId = searchParams.get('userId')
     const urlListingId = searchParams.get('listingId')
@@ -36,6 +38,8 @@ export default function MessagesPage() {
                 setCurrentUser(user)
             } catch (error) {
                 console.error('Failed to fetch user:', error)
+                router.push('/login')
+                return
             }
         }
         fetchUser()
@@ -146,6 +150,9 @@ export default function MessagesPage() {
             </div>
         )
     }
+    
+    
+    if (!currentUser) { return null; }
 
     return (
         <div className={styles.container}>
