@@ -6,10 +6,8 @@ const __dirname = path.dirname(__filename);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  turbopack: {
-    // Ensure Next uses the frontend folder as project root.
-    root: __dirname,
-  },
+  //vercel automatically sets outputFileTracingRoot, 
+  //removing turbopack.root to avoid conflicts
 };
 
 export default nextConfig;
