@@ -37,7 +37,7 @@ npm install
 Create `.env.local`:
 
 ```
-NEXT_PUBLIC_BACKEND_URL=http://localhost:8080
+NEXT_PUBLIC_BACKEND_URL=https://api.projectlocalhands.com
 ```
 
 ### Development
