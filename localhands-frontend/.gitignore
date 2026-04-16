@@ -14,6 +14,7 @@ node_modules/
 .env
 localhands-api-testing/API_Reference.txt
 localhands-api-testing/Postman_Testing_Guide.txt
+DEPLOYMENT_GUIDE.md
 
 
 # testing
