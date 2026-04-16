@@ -11,12 +11,27 @@ import { getUserInfo } from '@/api/userApi'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
 import ReviewModal from '@/components/ReviewModal/ReviewModal'
 import ReviewsSection from '@/components/ReviewsSection/ReviewsSection'
-import { BACKEND_URL, getDefaultIcon, createEditChangeHandler, createPhotoChangeHandler, createMapLocationHandler, validateListingForm, generateAltTexts, getCategoryDisplayName, createReviewChangeHandler, submitReview, createCategoryToggleHandler, updateReviewInListing, removeReviewFromListing } from '@/utils/listingUtils'
+import { BACKEND_URL, createEditChangeHandler, createPhotoChangeHandler, createMapLocationHandler, validateListingForm, generateAltTexts, getCategoryDisplayName, createReviewChangeHandler, submitReview, createCategoryToggleHandler, updateReviewInListing, removeReviewFromListing } from '@/utils/listingUtils'
 import { useTranslation } from 'react-i18next'
 import { MessageCircle, UserStar } from 'lucide-react'
 import Link from 'next/link'
 
 const MapWithNoSSR = dynamic(() => import('@/components/LocationPicker/LocationPicker'), { ssr: false })
+
+// Create icon lazily to avoid SSR issues
+const getDefaultIcon = () => {
+    if (typeof window === 'undefined') return null
+    const L = require('leaflet')
+    return L.icon({
+        iconUrl: '/marker-icon.png',
+        iconRetinaUrl: '/marker-icon-2x.png',
+        shadowUrl: '/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    })
+}
 
 export default function ListingDetailPage() {
     const params = useParams()
