@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 export default function Services() {
     const { t } = useTranslation();
     const rowAnimation = { hidden: {opacity: 0, x: -30}, visible: {opacity: 1, x:0}};
-    }
+    
 
     return (
         <div className={styles.container}>
