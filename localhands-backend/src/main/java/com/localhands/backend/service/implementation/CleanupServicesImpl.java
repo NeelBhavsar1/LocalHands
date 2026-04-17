@@ -118,7 +118,7 @@ public class CleanupServicesImpl implements CleanupServices {
             ListObjectsV2Response response = s3Client.listObjectsV2(request);
 
             response.contents().forEach(obj -> {
-                String key = obj.key(); // listing-images/file.jpg
+                String key = obj.key();
 
                 if (!validKeys.contains(key)) {
                     s3Client.deleteObject(DeleteObjectRequest.builder()
