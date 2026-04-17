@@ -2,7 +2,8 @@
 import { TRANSLATIONS } from './translations';
 import api from '@/api/api';
 
-export const BACKEND_URL = 'https://api.projectlocalhands.com';
+export const BACKEND_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
+export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 
 // Input change handler

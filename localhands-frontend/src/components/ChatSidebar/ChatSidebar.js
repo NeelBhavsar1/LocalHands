@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { User } from 'lucide-react';
 import styles from './ChatSidebar.module.css';
 
-const BACKEND_URL ='https://api.projectlocalhands.com';
+const BACKEND_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 
 export default function ChatSidebar({ conversations, selectedConversation, onSelectConversation, currentUserId }) {
     const { t } = useTranslation();

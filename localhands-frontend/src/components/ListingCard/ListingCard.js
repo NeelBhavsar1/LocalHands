@@ -5,7 +5,7 @@ import styles from './ListingCard.module.css'
 import { useTranslation } from 'react-i18next'
 
 // Get backend URL from environment or default to production
-const BACKEND_URL = 'https://api.projectlocalhands.com';
+const BACKEND_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 
 export default function ListingCard({ listing }) {
   const { t } = useTranslation()

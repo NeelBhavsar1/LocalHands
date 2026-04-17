@@ -2,7 +2,7 @@
 
 import { TRANSLATIONS } from './translations';
 
-export const BACKEND_URL ='https://api.projectlocalhands.com';
+export const BACKEND_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 
 //create formdata for profile update
 export const createProfileFormData = (bio, selectedFile, resetProfilePhoto = false) => {

@@ -4,7 +4,7 @@ import api from "./api";
  * Base URL for the LocalHands backend API
  * Used for direct API calls when needed and for configuration purposes
  */
-const BACKEND_URL = 'https://api.projectlocalhands.com';
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
 
 /**
  * Retrieves the current user's message inbox
