@@ -80,7 +80,7 @@ export default function PublicProfilePage() {
 
             <div className={styles.profileCard}>
                 <div className={styles.profileHeader}>
-                    <img src={profile.profilePhoto?.fileUrl ? `${BACKEND_URL}${profile.profilePhoto.fileUrl}` : '/profile.png'} alt={`${profile.firstName} ${profile.lastName}`} className={styles.profilePicture} />
+                    <img src={profile.profilePhoto ? `${BACKEND_URL}${profile.profilePhoto}` : '/profile.png'} alt={`${profile.firstName} ${profile.lastName}`} className={styles.profilePicture} />
                     <div className={styles.profileInfo}>
 
                         <h1 className={styles.name}>{profile.firstName} {profile.lastName}</h1>
