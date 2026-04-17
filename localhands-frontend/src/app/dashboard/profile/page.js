@@ -27,6 +27,7 @@ export default function page() {
     const [listings, setListings] = useState([]);
     const [userReviews, setUserReviews] = useState([]);
     const [user, setUser] = useState(null);
+    const [error, setError] = useState(null);
     const fileInputRef = useRef(null);
     const DEFAULT_PROFILE_IMAGE = '/profile.png';
 
@@ -65,8 +66,8 @@ export default function page() {
                     router.push('/login');
                     return;
                 }
-                // For other errors, show loading state but don't redirect
-                setUser(null);
+              //set error but no redirect
+                setError(error.message || 'Failed to load profile');
             } finally {
                 setLoading(false);
             }
@@ -114,6 +115,20 @@ export default function page() {
         );
     }
     
+    
+    if (error) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.errorContainer}>
+                    <h2>{t("profile.errorTitle") || "Error"}</h2>
+                    <p>{error}</p>
+                    <button onClick={() => window.location.reload()} className={styles.retryButton}>
+                        {t("profile.retry") || "Retry"}
+                    </button>
+                </div>
+            </div>
+        );
+    }
     
     if (!user) { return null; }
 
