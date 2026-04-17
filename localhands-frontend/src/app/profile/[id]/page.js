@@ -4,10 +4,9 @@ import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import styles from './page.module.css'
-import { getPublicProfile } from '@/api/userApi'
+import { getPublicProfile, getUserInfo } from '@/api/userApi'
 import { BACKEND_URL } from '@/utils/listingUtils'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
-import ReviewsSection from '@/components/ReviewsSection/ReviewsSection'
 import Link from 'next/link'
 import { MapPin, MessageCircle, ArrowLeft, Star } from 'lucide-react'
 
@@ -23,6 +22,7 @@ export default function PublicProfilePage() {
         const fetchProfile = async () => {
             try {
                 const userId = parseInt(id)
+                
                 if (isNaN(userId)) {
                     setError(t('errors.invalidUserId'))
                     setLoading(false)
@@ -80,7 +80,7 @@ export default function PublicProfilePage() {
 
             <div className={styles.profileCard}>
                 <div className={styles.profileHeader}>
-                    <img src={profile.profilePhoto ? `${BACKEND_URL}${profile.profilePhoto.fileUrl}` : '/profile.png'} alt={`${profile.firstName} ${profile.lastName}`} className={styles.profilePicture} />
+                    <img src={profile.profilePhoto?.fileUrl ? `${BACKEND_URL}${profile.profilePhoto.fileUrl}` : '/profile.png'} alt={`${profile.firstName} ${profile.lastName}`} className={styles.profilePicture} />
                     <div className={styles.profileInfo}>
 
                         <h1 className={styles.name}>{profile.firstName} {profile.lastName}</h1>
