@@ -1,6 +1,7 @@
 //profile page utility functions
 
 import { TRANSLATIONS } from './translations';
+import api from '@/api/api';
 
 export const BACKEND_URL = process.env.NEXT_PUBLIC_IMAGE_URL;
 
