@@ -129,7 +129,6 @@ export default function Home() {
             viewport={{once:true, margin:"-100px"}}
             transition={{duration:0.6, delay: 0.5}}>
             {t("howItWorks.title")}
-            <FaChevronRight className={styles.stepArrow} />
           </motion.h2>
         </div>
 
