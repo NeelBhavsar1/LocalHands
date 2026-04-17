@@ -1,6 +1,5 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { Client } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -15,9 +14,12 @@ export function useWebSocket(currentUserId) {
             return
         }
 
-        const socket = new SockJS(`${BACKEND_URL}/ws`)
+        const wsUrl = BACKEND_URL.startsWith('https')
+            ? BACKEND_URL.replace('https', 'wss')
+            : BACKEND_URL.replace('http', 'ws')
+
         const client = new Client({
-            webSocketFactory: () => socket,
+            brokerURL: `${wsUrl}/ws`,
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000,
@@ -27,13 +29,18 @@ export function useWebSocket(currentUserId) {
 
                 client.subscribe('/user/queue/messages', (message) => {
                     const body = JSON.parse(message.body)
-                    setMessages((prev) => [...prev, body])
-                })
+                    setMessages(prev => {
+                        if (prev.length > 0 && prev[prev.length - 1].id === body.id) {
+                            return prev
+                        }
+                        return [...prev, body]
+                    })
+                }, { id: 'messages-sub' })
 
                 client.subscribe('/user/queue/inbox', (message) => {
                     const body = JSON.parse(message.body)
                     setInboxUpdates(body)
-                })
+                }, { id: 'inbox-sub' })
             },
             onDisconnect: () => {
                 console.log('WebSocket disconnected')
