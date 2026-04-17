@@ -61,18 +61,8 @@ api.interceptors.response.use(
             return Promise.reject(error);
         }
 
-        /**
-         * 
-        // only refresh if backend explicitly says token expired, if another type of 401, don't refresh
-        if (backendError !== "TOKEN_EXPIRED" && backendError !== "NO_TOKEN") {
-            return Promise.reject(error);
-        }
-        refresh token for any 401 error except refresh endpoint itself
-        this handles invalid sessions, expired tokens, and missing tokens
-
-        remove this comment later
-        */
-        //if we already retried once, then stop to prevent infinite retry loops
+        // Refresh token for any 401 error except refresh endpoint itself
+        // This handles invalid sessions, expired tokens, and missing tokens
         if (originalRequest._retry) {
             return Promise.reject(error);
         }
