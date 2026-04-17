@@ -485,7 +485,7 @@
     "services.noOnlineListings": "There are currently no online listings available. Please enable location access to see services in your area.",
     "settings.removeServiceProviderWarning": "Removing this will delete all your listings and services",
     "brand.localHands": "LocalHands",
-    "footer.copyright": "2026 LocalHands",
+    "footer.copyright": "{{year}} LocalHands",
     "listings.notFound": "Listing not found"
 }
 

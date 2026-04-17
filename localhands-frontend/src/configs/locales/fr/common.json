@@ -469,6 +469,6 @@
     "services.noOnlineListings": "Il n'y a actuellement aucune annonce en ligne disponible. Veuillez activer l'accès à votre localisation pour voir les services dans votre région.",
     "settings.removeServiceProviderWarning": "Ceci supprimera toutes vos annonces et services",
     "brand.localHands": "LocalHands",
-    "footer.copyright": "2026 LocalHands",
+    "footer.copyright": "{{year}} LocalHands",
     "listings.notFound": "Annonce non trouvée"
 }

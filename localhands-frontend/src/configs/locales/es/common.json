@@ -467,5 +467,6 @@
     "faq.answer.editListing": "Ve a 'Tus anuncios' en tu Perfil, selecciona 'Editar anuncio', realiza los cambios necesarios y guarda. La actualización es inmediata.",
     "faq.answer.deleteListing": "En 'Tus anuncios', selecciona 'Eliminar anuncio' y confirma. Esta acción es definitiva. Asegúrate de no tener trabajos pendientes para ese servicio.",
     "faq.answer.listingVisibility": "Asegúrate de que el anuncio esté activo, tenga fotos, ubicación y que tu área de servicio coincida con la búsqueda. Los anuncios incompletos tienen menos visibilidad.",
-    "faq.answer.leaveReview": "Una vez que el servicio se haya completado y pagado, verás la opción de 'Escribir reseña'..."
+    "faq.answer.leaveReview": "Una vez que el servicio se haya completado y pagado, verás la opción de 'Escribir reseña'...",
+    "footer.copyright": "{{year}} LocalHands"
 }
