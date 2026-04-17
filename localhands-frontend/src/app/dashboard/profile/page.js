@@ -60,8 +60,13 @@ export default function page() {
                 setUserReviews(reviewsData);
             } catch (error) {
                 console.error('Failed to fetch user data:', error);
-                router.push('/login');
-                return;
+                // Only redirect to login for authentication errors (401)
+                if (error.response?.status === 401) {
+                    router.push('/login');
+                    return;
+                }
+                // For other errors, show loading state but don't redirect
+                setUser(null);
             } finally {
                 setLoading(false);
             }
