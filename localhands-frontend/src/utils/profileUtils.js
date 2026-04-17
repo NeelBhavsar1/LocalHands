@@ -62,20 +62,7 @@ export const createPrivacyToggleHandler = (setState, updatePrivacyInfo, otherVal
 };
 
 //create profile save handler
-export const createProfileSaveHandler = ({
-    setSaving,
-    allowMessages,
-    publicProfile,
-    bio,
-    selectedFile,
-    resetProfilePhoto,
-    updatePrivacyInfo,
-    updateProfileInfo,
-    setSelectedFile,
-    setResetProfilePhoto,
-    setProfileImage,
-    defaultProfileImage
-}) => async () => {
+export const createProfileSaveHandler = ({ setSaving, allowMessages, publicProfile, bio, selectedFile, resetProfilePhoto, updatePrivacyInfo, updateProfileInfo, setSelectedFile, setResetProfilePhoto, setProfileImage, defaultProfileImage }) => async () => {
     setSaving(true);
     try {
         await updatePrivacyInfo({
@@ -109,13 +96,13 @@ export const hasListingsRole = (user) => {
 
 //fetch user's reviews
 export const fetchUserReviews = async (backendUrl) => {
-    const response = await fetch(`${backendUrl}/api/reviews/me`, {
-        credentials: 'include'
-    })
-    if (!response.ok) {
+    try {
+        const response = await api.get("/api/reviews/me")
+        return response.data
+    } catch (error) {
+        console.error("Failed to fetch user reviews:", error)
         throw new Error(TRANSLATIONS.validation.reviewsFetchFailed)
     }
-    return await response.json()
 }
 
 //update review in user reviews state

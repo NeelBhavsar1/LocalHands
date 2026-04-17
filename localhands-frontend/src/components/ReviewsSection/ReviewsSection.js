@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import styles from './ReviewsSection.module.css'
 import { Star, ChevronDown, ChevronUp, Pencil, Trash2, ExternalLink } from 'lucide-react'
+import api from '../../api/api'
 
 export default function ReviewsSection({ reviews, backendUrl, t, currentUser, onReviewUpdated, onReviewDeleted, showViewListing, onViewListing }) {
     const [expandedReview, setExpandedReview] = useState(null)
@@ -45,22 +46,13 @@ export default function ReviewsSection({ reviews, backendUrl, t, currentUser, on
         setLoading(true)
 
         try {
-            const response = await fetch(`${backendUrl}/api/reviews`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({
-                    reviewId: reviewId,
-                    rating: editForm.rating,
-                    reviewBody: editForm.reviewBody
-                })
+            const response = await api.put("/api/reviews", {
+                reviewId: reviewId,
+                rating: editForm.rating,
+                reviewBody: editForm.reviewBody
             })
 
-            if (!response.ok) {
-                throw new Error('Failed to update review')
-            }
-
-            const updatedReview = await response.json()
+            const updatedReview = response.data
             onReviewUpdated?.(updatedReview)
             setEditingReview(null)
             alert('Review updated successfully!')
@@ -80,14 +72,7 @@ export default function ReviewsSection({ reviews, backendUrl, t, currentUser, on
         }
 
         try {
-            const response = await fetch(`${backendUrl}/api/reviews?reviewId=${reviewId}`, {
-                method: 'DELETE',
-                credentials: 'include'
-            })
-
-            if (!response.ok) {
-                throw new Error('Failed to delete review')
-            }
+            await api.delete(`/api/reviews?reviewId=${reviewId}`)
 
             onReviewDeleted?.(reviewId)
             setExpandedReview(null)

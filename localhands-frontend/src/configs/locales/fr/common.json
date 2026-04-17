@@ -68,6 +68,7 @@
     "forgotPassword.pinStep.pinLabel": "PIN",
     "forgotPassword.pinStep.verifyButton": "Vérifier le PIN",
     "forgotPassword.pinStep.useDifferentEmail": "Utiliser un autre e-mail",
+    "forgotPassword.pinStep.resendButton": "Renvoyer l'e-mail",
     "forgotPassword.errors.emailRequired": "L'adresse e-mail est requise.",
     "forgotPassword.errors.invalidEmail": "Veuillez entrer une adresse e-mail valide.",
     "forgotPassword.errors.emailNotFound": "Cette adresse e-mail n'existe pas encore.",
@@ -427,6 +428,7 @@
     "faq.question.loginProblems": "J'ai des problèmes de connexion. Que devrais-je faire?",
     "faq.question.profileNotUpdating": "Mes changements de profil ne s'enregistrent pas. Quel est le problème?",
     "faq.question.photosNotUploading": "Pourquoi mes photos ne se chargent-elles pas?",
+    "faq.question.serviceProviderToggle": "Comment activer/désactiver mon statut de prestataire de services?",
 
     "faq.answer.changeName": "Pour changer votre nom, allez à votre Tableau de bord, cliquez sur 'Profil' dans la barre latérale, puis cliquez sur 'Modifier les informations du compte'. Mettez à jour votre prénom et/ou nom de famille dans le formulaire, puis cliquez sur 'Enregistrer les modifications du compte'. Votre nom sera mis à jour immédiatement sur toute la plateforme.",
     "faq.answer.changeAccountType": "Oui ! Allez à votre Tableau de bord, cliquez sur 'Paramètres', puis cherchez la section 'Type de compte'. Vous pouvez passer de Client Seulement à Client et Fournisseur pour commencer à offrir des services. Si vous voulez rétrograder de Fournisseur à Client Seulement, vous devrez contacter le support car nous devons nous assurer que vous n'avez pas d'annonces ou réservations actives.",

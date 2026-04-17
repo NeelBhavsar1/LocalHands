@@ -123,7 +123,8 @@ export default function ListingDetailPage() {
         setSubmittingReview(true)
 
         try {
-            await submitReview(BACKEND_URL, listingId, reviewForm)
+            //removed BACKEND_URL
+            await submitReview(listingId, reviewForm)
             alert('Review submitted successfully!')
             closeReview()
             //refreshes page on successful reviw submission

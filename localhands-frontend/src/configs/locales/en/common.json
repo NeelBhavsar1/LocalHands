@@ -90,6 +90,7 @@
     "forgotPassword.errors.passwordMismatch": "Passwords do not match",
     "forgotPassword.errors.pinNumeric": "PIN must contain only numbers",
     "forgotPassword.errors.invalidPin": "Invalid PIN",
+    "forgotPassword.pinStep.resendButton": "Resend email",
 
     "settings.title": "Settings",
     "settings.accountInfo": "Account Information",
@@ -451,6 +452,7 @@
     "faq.question.loginProblems": "I'm having trouble logging in. What should I do?",
     "faq.question.profileNotUpdating": "My profile changes aren't saving. What's wrong?",
     "faq.question.photosNotUploading": "Why won't my photos upload?",
+    "faq.question.serviceProviderToggle": "How do I enable/disable my service provider status?",
 
     "faq.answer.changeName": "To change your name, go to your Dashboard, click on 'Profile' in the sidebar, then click 'Edit Account Info'. Update your first name and/or last name in the form, then click 'Save Account Changes'. Your name will be updated immediately across the platform.",
     "faq.answer.changeAccountType": "Yes! Go to your Dashboard, click on 'Settings', then look for the 'Account Type' section. You can upgrade from Customer Only to Customer and Provider to start offering services. If you want to downgrade from Provider to Customer Only, you'll need to contact support as we need to ensure you have no active listings or bookings.",

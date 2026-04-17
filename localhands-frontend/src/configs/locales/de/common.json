@@ -68,6 +68,7 @@
     "forgotPassword.pinStep.pinLabel": "PIN",
     "forgotPassword.pinStep.verifyButton": "PIN verifizieren",
     "forgotPassword.pinStep.useDifferentEmail": "Andere E-Mail verwenden",
+    "forgotPassword.pinStep.resendButton": "E-Mail erneut senden",
     "forgotPassword.errors.emailRequired": "E-Mail-Adresse ist erforderlich.",
     "forgotPassword.errors.invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
     "forgotPassword.errors.emailNotFound": "Diese E-Mail-Adresse existiert noch nicht.",
@@ -438,6 +439,7 @@
     "faq.question.loginProblems": "Ich habe Probleme beim Anmelden. Was soll ich tun?",
     "faq.question.profileNotUpdating": "Meine Profiländerungen werden nicht gespeichert. Was ist falsch?",
     "faq.question.photosNotUploading": "Warum werden meine Fotos nicht hochgeladen?",
+    "faq.question.serviceProviderToggle": "Wie aktiviere/deaktiviere ich meinen Status als Dienstanbieter?",
 
     "faq.answer.changeName": "Um Ihren Namen zu ändern, gehen Sie zu Ihrem Dashboard, klicken Sie auf 'Profil' in der Seitenleiste, dann klicken Sie auf 'Kontoinformationen bearbeiten'. Aktualisieren Sie Ihren Vor- und/oder Nachnamen im Formular, dann klicken Sie auf 'Kontoänderungen speichern'. Ihr Name wird sofort auf der gesamten Plattform aktualisiert.",
     "faq.answer.changeAccountType": "Ja! Gehen Sie zu Ihrem Dashboard, klicken Sie auf 'Einstellungen', dann suchen Sie den Abschnitt 'Kontotyp'. Sie können von Nur Kunde zu Kunde und Anbieter aktualisieren, um Dienstleistungen anzubieten. Wenn Sie von Anbieter zu Nur Kunde herabstufen wollen, müssen Sie den Support kontaktieren, da wir sicherstellen müssen, dass Sie keine aktiven Angebote oder Buchungen haben.",

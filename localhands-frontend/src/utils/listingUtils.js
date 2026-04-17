@@ -1,5 +1,6 @@
 // Backend URL for image loading
 import { TRANSLATIONS } from './translations';
+import api from '@/api/api';
 
 export const BACKEND_URL = 'https://api.projectlocalhands.com';
 
@@ -132,24 +133,18 @@ export const createReviewChangeHandler = (setReviewForm) => (e) => {
 }
 
 //submits review to backend
-export const submitReview = async (backendUrl, listingId, reviewForm) => {
-    const response = await fetch(`${backendUrl}/api/reviews`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
+//removed backend url from params
+export const submitReview = async (listingId, reviewForm) => {
+    try {
+        const response = await api.post("/api/reviews", {
             listingId: parseInt(listingId),
             rating: reviewForm.rating,
             reviewBody: reviewForm.reviewBody
         })
-    })
-
-    if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.message || 'Failed to submit review')
+        return response.data
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to submit review')
     }
-
-    return await response.json()
 }
 
 //category toggle handler creator
