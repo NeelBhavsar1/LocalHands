@@ -8,7 +8,7 @@ import { getPublicProfile, getUserInfo } from '@/api/userApi'
 import { BACKEND_URL } from '@/utils/listingUtils'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
 import Link from 'next/link'
-import { MapPin, MessageCircle, ArrowLeft, Star } from 'lucide-react'
+import { MapPin, MessageCircle, ArrowLeft, Star, ExternalLink } from 'lucide-react'
 
 export default function PublicProfilePage() {
     const { id } = useParams()
@@ -173,9 +173,18 @@ export default function PublicProfilePage() {
                                 
                                 <p className={styles.reviewBody}>{review.reviewBody}</p>
                                 
-                                <span className={styles.reviewDate}>
-                                    {new Date(review.creationTime).toLocaleDateString()}
-                                </span>
+                                <div className={styles.reviewFooter}>
+                                    <span className={styles.reviewDate}>
+                                        {new Date(review.creationTime).toLocaleDateString()}
+                                    </span>
+                                    
+                                    {review.listingId && (
+                                        <Link href={`/dashboard/listings/${review.listingId}`} className={styles.viewListingBtn} title={t('viewListing')}>
+                                            <ExternalLink size={14} />
+                                            <span>{t('viewListing')}</span>
+                                        </Link>
+                                    )}
+                                </div>
                             </div>
                         ))}
                     </div>
