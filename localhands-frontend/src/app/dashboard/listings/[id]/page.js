@@ -259,16 +259,18 @@ export default function ListingDetailPage() {
                         </div>
                     )}
 
-                    <div className={styles.formRow}>
-                        <div className={styles.formGroup}>
-                            <label>{t('latitude')}</label>
-                            <input type="text" value={editForm.latitude} readOnly />
+                    {listing.workType !== 'ONLINE' && (
+                        <div className={styles.formRow}>
+                            <div className={styles.formGroup}>
+                                <label>{t('latitude')}</label>
+                                <input type="text" value={editForm.latitude} readOnly />
+                            </div>
+                            <div className={styles.formGroup}>
+                                <label>{t('longitude')}</label>
+                                <input type="text" value={editForm.longitude} readOnly />
+                            </div>
                         </div>
-                        <div className={styles.formGroup}>
-                            <label>{t('longitude')}</label>
-                            <input type="text" value={editForm.longitude} readOnly />
-                        </div>
-                    </div>
+                    )}
 
                     <div className={styles.formGroup}>
                         <label htmlFor="photos">
