@@ -335,7 +335,7 @@ export default function ListingDetailPage() {
                         <div className={styles.infoSection}>
                             <h1 className={styles.serviceTitle}>{listing.name}</h1>
                             <p className={styles.description}>{listing.description}</p>
-                            <ReviewsSection reviews={listing.reviews} backendUrl={BACKEND_URL} t={t} currentUser={currentUser} onReviewUpdated={(updatedReview) => updateReviewInListing(setListing, updatedReview)} onReviewDeleted={(reviewId) => removeReviewFromListing(setListing, reviewId)} />
+                            <ReviewsSection reviews={listing.reviews} backendUrl={BACKEND_URL} t={t} currentUser={currentUser} onReviewUpdated={(updatedReview) => updateReviewInListing(setListing, updatedReview)} onReviewDeleted={(reviewId) => removeReviewFromListing(setListing, reviewId)} showServiceLinks={false} />
                         </div>
 
                         {Boolean(listing.latitude) && Boolean(listing.longitude) && (

@@ -6,7 +6,7 @@ import styles from './ReviewsSection.module.css'
 import { Star, ChevronDown, ChevronUp, Pencil, Trash2, ExternalLink } from 'lucide-react'
 import api from '../../api/api'
 
-export default function ReviewsSection({ reviews, backendUrl, t, currentUser, onReviewUpdated, onReviewDeleted, showViewListing, onViewListing }) {
+export default function ReviewsSection({ reviews, backendUrl, t, currentUser, onReviewUpdated, onReviewDeleted, showViewListing, onViewListing, showServiceLinks = true }) {
     const [expandedReview, setExpandedReview] = useState(null)
     const [editingReview, setEditingReview] = useState(null)
     const [editForm, setEditForm] = useState({ rating: 5, reviewBody: '' })
@@ -156,8 +156,8 @@ export default function ReviewsSection({ reviews, backendUrl, t, currentUser, on
                                             </span>
 
                                             <div className={styles.reviewActions}>
-                                                {review.listingId && (
-                                                    <Link href={`/listings/${review.listingId}`} className={styles.serviceLinkBtn} title={`${t('review.forService')} ${review.serviceTitle || ''}`}>
+                                                {showServiceLinks && review.listingId && (
+                                                    <Link href={`/dashboard/listings/${review.listingId}`} className={styles.serviceLinkBtn} title={`${t('review.forService')} ${review.serviceTitle || ''}`}>
                                                         <ExternalLink size={14} />
                                                         <span>{t('viewListing')}</span>
                                                     </Link>
