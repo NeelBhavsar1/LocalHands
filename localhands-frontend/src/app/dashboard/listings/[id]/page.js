@@ -250,12 +250,14 @@ export default function ListingDetailPage() {
                         )}
                     </div>
 
-                    <div className={styles.mapSection}>
-                        <label>{t('clickOnMapToUpdateLocation')}</label>
-                        <div className={styles.mapContainer}>
-                            <MapWithNoSSR onLocationSelect={handleMapLocationSelect} initialPosition={listing?.latitude && listing?.longitude ? [listing.latitude, listing.longitude] : null} />
+                    {listing.workType !== 'ONLINE' && (
+                        <div className={styles.mapSection}>
+                            <label>{t('clickOnMapToUpdateLocation')}</label>
+                            <div className={styles.mapContainer}>
+                                <MapWithNoSSR onLocationSelect={handleMapLocationSelect} initialPosition={listing?.latitude && listing?.longitude ? [listing.latitude, listing.longitude] : null} />
+                            </div>
                         </div>
-                    </div>
+                    )}
 
                     <div className={styles.formRow}>
                         <div className={styles.formGroup}>
