@@ -340,10 +340,12 @@ public class AuthServiceImpl implements AuthService {
 
         String hashed = hashToken(refreshToken);
 
-        RefreshToken currentToken = user.getRefreshTokens().stream()
-                .filter(t -> t.getToken().equals(hashed))
-                .findFirst()
-                .orElseThrow(() -> new AppException("Session not found.", HttpStatus.UNAUTHORIZED));
+        RefreshToken currentToken = refreshTokenRepository.findByToken(hashed)
+                .orElseThrow(() -> new AppException("Invalid refresh token.", HttpStatus.UNAUTHORIZED));
+
+        if (!currentToken.getUser().getId().equals(userId)) {
+            throw new AppException("Invalid session.", HttpStatus.UNAUTHORIZED);
+        }
 
         Instant oldExpiry = currentToken.getExpiryDate();
 
