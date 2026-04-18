@@ -240,6 +240,7 @@
     "createServiceForm.serviceName": "Service Name",
     "createServiceForm.categories": "Categories",
     "createServiceForm.photosSelected": "photos selected",
+    "createServiceForm.categoriesSelected": "category(s) selected",
     "createServiceForm.createService": "Create Service",
     "createServiceForm.success": "Service created successfully!",
     "createServiceForm.error": "Error creating service: ",
@@ -484,8 +485,14 @@
     "services.noNearbyListings": "There are currently no listings available in your area, either increase your search radius or check for online work.",
     "services.noOnlineListings": "There are currently no online listings available. Please enable location access to see services in your area.",
     "settings.removeServiceProviderWarning": "Removing this will delete all your listings and services",
+    "listings.notFound": "Listing not found",
+    "serviceName": "Service Name",
+    "categoriesSelected": "category(s) selected",
+    "clickOnMapToUpdateLocation": "Click on map to update location",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "photosSelected": "photos selected",
     "brand.localHands": "LocalHands",
-    "footer.copyright": "{{year}} LocalHands",
-    "listings.notFound": "Listing not found"
+    "footer.copyright": "{{year}} LocalHands"
 }
 

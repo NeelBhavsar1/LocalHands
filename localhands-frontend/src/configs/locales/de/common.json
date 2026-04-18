@@ -220,7 +220,6 @@
     "errors.invalidUserId": "Ungültige Benutzer-ID",
     "errors.failedToLoadProfile": "Profil konnte nicht geladen werden",
     "errors.profileNotFound": "Profil nicht gefunden",
-    "common.back": "Zurück",
 
     "validation.photoRequired": "Bitte fügen Sie mindestens ein Foto hinzu",
     "validation.categoryRequired": "Bitte wählen Sie mindestens eine Kategorie aus",
@@ -268,6 +267,7 @@
     "createServiceForm.serviceName": "Service Name",
     "createServiceForm.categories": "Kategorien",
     "createServiceForm.photosSelected": "Fotos ausgewählt",
+    "createServiceForm.categoriesSelected": "Kategorie(n) ausgewählt",
     "createServiceForm.createService": "Service Erstellen",
     "createServiceForm.success": "Service erfolgreich erstellt!",
     "createServiceForm.error": "Fehler beim Erstellen des Service: ",
@@ -449,18 +449,24 @@
     "faq.answer.changePassword": "Gehen Sie zu 'Einstellungen' in Ihrem Dashboard, finden Sie den Abschnitt 'Passwort ändern', geben Sie Ihr aktuelles Passwort ein, dann Ihr neues Passwort (mindestens 8 Zeichen) und bestätigen Sie das neue Passwort. Klicken Sie auf 'Kontoänderungen speichern', um Ihr Passwort zu aktualisieren. Sie werden abgemeldet und müssen sich mit Ihrem neuen Passwort anmelden.",
     "faq.answer.profilePhoto": "Gehen Sie zu Ihrer Profilseite, klicken Sie auf 'Profilbild ändern', wählen Sie ein neues Foto von Ihrem Gerät (JPG oder PNG, max 5MB), und es wird automatisch hochgeladen. Sie können auch auf 'Auf Standard zurücksetzen' klicken, um Ihr Foto zu entfernen und das Standardprofilbild zu verwenden.",
     "faq.answer.privacySettings": "In Ihren Profileinstellungen können Sie kontrollieren, wer Ihnen Nachrichten senden kann, indem Sie 'Nachrichten erlauben' umschalten, Ihr Profil öffentlich oder privat machen und kontrollieren, welche Informationen für andere Benutzer sichtbar sind. Diese Einstellungen helfen Ihnen, Ihre Privatsphäre bei der Nutzung der Plattform zu verwalten.",
-    "faq.answer.serviceProviderToggle": "In Ihren Profileinstellungen finden Sie einen Schalter für 'Dienstleister'. Wenn aktiviert, können Sie Dienstleistungsanzeigen erstellen und verwalten. Wenn deaktiviert, werden Ihre bestehenden Angebote ausgeblendet aber nicht gelöscht. Sie können dies jederzeit wieder aktivieren.",
+    "faq.answer.providerToggle": "In Ihren Profileinstellungen finden Sie einen Schalter für 'Dienstleister'. Wenn aktiviert, können Sie Dienstleistungsanzeigen erstellen und verwalten. Wenn deaktiviert, werden Ihre bestehenden Angebote ausgeblendet aber nicht gelöscht. Sie können dies jederzeit wieder aktivieren.",
     "faq.answer.bioUpdate": "Gehen Sie zu Ihrer Profilseite, finden Sie den Bio-Abschnitt, klicken Sie auf den Textbereich, um Ihre Bio zu bearbeiten, schreiben Sie eine Beschreibung über sich oder Ihre Dienstleistungen, und klicken Sie auf 'Bio/Profilbild speichern'. Ihre Bio hilft anderen Benutzer, Sie besser kennenzulernen.",
     "faq.answer.createListing": "Von Ihrem Dashboard aus klicken Sie auf 'Anzeige erstellen'. Füllen Sie den Dienstleistungstitel, Beschreibung, Preis, Arbeitstyp (online/vor Ort), laden Sie Fotos hoch, setzen Sie Ihren Standort auf der Karte, wählen Sie Kategorien, und klicken Sie auf 'Dienst erstellen'. Ihre Anzeige wird sofort live, damit andere sie finden können.",
     "faq.answer.editListing": "Gehen Sie zu 'Ihre Angebote' in Ihrem Profil, finden Sie die Anzeige, die Sie bearbeiten wollen, klicken Sie auf 'Anzeige bearbeiten', machen Sie Ihre Änderungen an Titel, Beschreibung, Preis, Fotos oder Standort, dann klicken Sie auf 'Änderungen speichern'. Ihre Anzeige wird sofort aktualisiert.",
-    "faq.answer.deleteListing": "Im Abschnitt 'Ihre Angebote' Ihres Profils finden Sie die Anzeige, die Sie entfernen wollen, klicken Sie auf 'Anzeige löschen' und bestätigen Sie die Löschung. Diese Aktion ist permanent und kann nicht rückgängig gemacht werden. Stellen Sie sicher, dass Sie keine aktiven Buchungen für diesen Dienst haben, bevor Sie löschen.",
+    "faq.answer.deleteListing": "Im Abschnitt 'Ihre Angebote' in Ihrem Profil finden Sie das Angebot, das Sie löschen möchten, klicken Sie auf 'Angebot löschen' und bestätigen Sie das Löschen. Diese Aktion ist dauerhaft und kann nicht rückgängig gemacht werden. Stellen Sie sicher, dass Sie keine aktiven Reservierungen für diesen Service haben, bevor Sie löschen.",
     "faq.answer.listingVisibility": "Überprüfen Sie, ob Ihre Anzeige aktiv ist, vollständige Informationen einschließlich Fotos und Standort hat, und ob Ihr Dienstbereich den Suchstandort einschließt. Anzeigen mit unvollständigen Informationen können eine reduzierte Sichtbarkeit haben. Stellen Sie auch sicher, dass Ihre Preise und Verfügbarkeit korrekt eingestellt sind.",
     "faq.answer.leaveReview": "Nachdem ein Dienst abgeschlossen und bezahlt ist, sehen Sie eine Option 'Bewertung schreiben' auf der Dienstleistungsseite oder in Ihren abgeschlossenen Buchungen. Klicken Sie darauf, wählen Sie eine Sternebewertung (1-5), schreiben Sie Ihre Bewertung, und klicken Sie auf 'Bewertung senden'. Bewertungen helfen, Vertrauen in der Gemeinschaft aufzubauen.",
     "faq.answer.editReview": "Ja, Sie können Ihre eigenen Bewertungen bearbeiten oder löschen. Gehen Sie zu 'Ihre Bewertungen' in Ihrem Profil, finden Sie die Bewertung, die Sie ändern wollen, und verwenden Sie die Buttons 'Bewertung bearbeiten' oder 'Bewertung löschen'. Sie können nur Bewertungen bearbeiten/löschen, die Sie geschrieben haben.",
     "faq.answer.loginProblems": "Versuchen Sie zuerst, Ihren Browser-Cache und Cookies zu leeren. Überprüfen Sie, ob Sie die richtige E-Mail und das richtige Passwort verwenden. Verwenden Sie 'Passwort vergessen', um bei Bedarf zurückzusetzen. Wenn Probleme bestehen, versuchen Sie einen anderen Browser oder kontaktieren Sie den Support mit der Fehlermeldung, die Sie sehen.",
     "faq.answer.profileNotUpdating": "Stellen Sie sicher, dass Sie auf den Speichern-Button klicken, nachdem Sie Änderungen vorgenommen haben. Überprüfen Sie Ihre Internetverbindung. Einige Änderungen können einige Minuten dauern, um auf der gesamten Plattform zu erscheinen. Wenn Probleme bestehen, versuchen Sie, die Seite zu aktualisieren oder sich ab- und wieder anzumelden.",
     "faq.answer.photosNotUploading": "Überprüfen Sie, ob Ihre Fotos im JPG- oder PNG-Format und unter 5MB groß sind. Stellen Sie sicher, dass Sie eine stabile Internetverbindung haben. Versuchen Sie, die Seite zu aktualisieren und den Upload erneut zu versuchen. Wenn Probleme bestehen, versuchen Sie einen anderen Browser oder komprimieren Sie Ihre Bilder.",
-
+    "listings.notFound": "Angebot nicht gefunden",
+    "serviceName": "Service Name",
+    "categoriesSelected": "Kategorie(n) ausgewählt",
+    "clickOnMapToUpdateLocation": "Klicken Sie auf die Karte, um den Standort zu aktualisieren",
+    "latitude": "Breitengrad",
+    "longitude": "Längengrad",
+    "photosSelected": "Fotos ausgewählt",
     "faq.search.placeholder": "Antworten suchen...",
     "faq.noResults.title": "Keine FAQs gefunden",
     "faq.noResults.subtitle": "Versuchen Sie andere Suchbegriffe oder durchsuchen Sie alle Kategorien",
@@ -480,7 +486,6 @@
     "services.noOnlineListings": "Derzeit sind keine Online-Angebote verfügbar. Bitte aktivieren Sie den Standortzugriff, um Dienstleistungen in Ihrer Bereich zu sehen.",
     "settings.removeServiceProviderWarning": "Dies löscht alle Ihre Angebote und Dienstleistungen",
     "brand.localHands": "LocalHands",
-    "footer.copyright": "{{year}} LocalHands",
-    "listings.notFound": "Angebot nicht gefunden"
+    "footer.copyright": "{{year}} LocalHands"
 }
 

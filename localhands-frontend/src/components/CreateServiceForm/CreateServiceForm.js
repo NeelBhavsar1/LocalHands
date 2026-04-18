@@ -138,7 +138,7 @@ export default function CreateServiceForm({ onSuccess }) {
                         )}
 
                         {selectedCategories.length > 0 && (
-                            <p className={styles.selectedInfo}>{selectedCategories.length} category(s) selected</p>
+                            <p className={styles.selectedInfo}>{selectedCategories.length} {t('createServiceForm.categoriesSelected')}</p>
                         )}
                     </div>
 
