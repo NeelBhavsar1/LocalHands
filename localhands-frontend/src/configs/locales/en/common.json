@@ -323,7 +323,10 @@
     "about.mission.title": "Our Mission",
     "about.mission.description": "Whether you are a skilled professional looking to grow your local business, or a neighbour who just needs an extra set of hands, LocalHands is here to help. We are more than just a marketplace; we are a tool to build stronger, more connected, and reliable communities.",
 
-    "reviews": "Reviews",
+    "profile.reviews": "Reviews",
+    "profile.yourListings": "Your Listings",
+    "profile.yourReviews": "Your Reviews",
+    "review.forService": "Review for",
     "rating": "Rating",
     "review": "Review",
     "star": "star",

@@ -307,6 +307,12 @@
     "about.mission.description": "Que vous soyez un professionnel qualifié cherchant à développer votre entreprise locale, ou un voisin qui a juste besoin d'un coup de main, LocalHands est là pour vous aider. Nous sommes plus qu'une simple place de marché ; nous sommes un outil pour bâtir des communautés plus fortes, plus connectées et plus fiables.",
 
     "reviews": "Avis",
+    "profile.reviews": "Avis",
+    "profile.yourListings": "Vos Annonces",
+    "profile.yourReviews": "Vos Avis",
+    "profile.userListings": "Annonces",
+    "profile.userReviews": "Avis",
+    "review.forService": "Avis pour",
     "rating": "Évaluation",
     "review": "Avis",
     "star": "étoile",

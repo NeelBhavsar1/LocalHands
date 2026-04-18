@@ -17,6 +17,7 @@ export default function PublicProfilePage() {
     const [profile, setProfile] = useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+    const [currentUser, setCurrentUser] = useState(null)
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -38,7 +39,17 @@ export default function PublicProfilePage() {
             }
         }
 
+        const fetchCurrentUser = async () => {
+            try {
+                const userInfo = await getUserInfo()
+                setCurrentUser(userInfo)
+            } catch (err) {
+                console.error('Failed to fetch current user:', err)
+            }
+        }
+
         fetchProfile()
+        fetchCurrentUser()
     }, [id])
 
     const handleMessageClick = () => {
@@ -68,6 +79,7 @@ export default function PublicProfilePage() {
     }
 
     const isServiceProvider = profile.roles?.includes('ROLE_PROVIDER')
+    const isOwnProfile = currentUser && currentUser.id === profile.id
 
     return (
         <div className={styles.container}>
@@ -102,7 +114,7 @@ export default function PublicProfilePage() {
 
             {isServiceProvider && profile.listings && profile.listings.length > 0 && (
                 <div className={styles.section}>
-                    <h2 className={styles.sectionTitle}>{t('profile.yourListings')}</h2>
+                    <h2 className={styles.sectionTitle}>{isOwnProfile ? t('profile.yourListings') : t('profile.userListings')}</h2>
                     <div className={styles.listingsGrid}>
 
                         {profile.listings.map((listing) => (
@@ -139,7 +151,7 @@ export default function PublicProfilePage() {
 
             {profile.reviews && profile.reviews.length > 0 && (
                 <div className={styles.section}>
-                    <h2 className={styles.sectionTitle}>{t('profile.yourReviews')}</h2>
+                    <h2 className={styles.sectionTitle}>{isOwnProfile ? t('profile.yourReviews') : t('profile.userReviews')}</h2>
                     
                     <div className={styles.reviewsList}>
                         {profile.reviews.map((review) => (

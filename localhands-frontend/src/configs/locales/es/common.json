@@ -144,7 +144,10 @@
     "profile.save": "Guardar perfil",
     "profile.yourListings": "Tus anuncios",
     "profile.yourReviews": "Tus reseñas",
-    "profile.saveBioPfp": "Guardar Bio/Foto",
+    "profile.yourListings": "Tus Anuncios",
+    "profile.yourReviews": "Tus Reseñas",
+    "profile.userListings": "Anuncios",
+    "profile.userReviews": "Reseñas",
 
     "listing.messageSeller": "Contactar al vendedor",
 
@@ -324,6 +327,12 @@
     "about.mission.description": "Ya seas un profesional cualificado que busca hacer crecer su negocio local o un vecino que solo necesita una mano extra, LocalHands está aquí para ayudar. Somos más que un mercado; somos una herramienta para construir comunidades más fuertes, conectadas y fiables.",
 
     "reviews": "Reseñas",
+    "profile.reviews": "Avis",
+    "profile.yourListings": "Vos Annonces",
+    "profile.yourReviews": "Vos Avis",
+    "profile.userListings": "Annonces",
+    "profile.userReviews": "Avis",
+    "review.forService": "Reseña para",
     "rating": "Calificación",
     "review": "Reseña",
     "star": "estrella",

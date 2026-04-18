@@ -98,7 +98,7 @@ export default function ReviewsSection({ reviews, backendUrl, t, currentUser, on
         <div className={styles.reviewsSection}>
             
             <h3 className={styles.reviewsHeader}>
-                {t('reviews')} ({reviews.length})
+                {t('profile.reviews')} ({reviews.length})
             </h3>
 
             <div className={styles.reviewsList}>
@@ -156,6 +156,13 @@ export default function ReviewsSection({ reviews, backendUrl, t, currentUser, on
                                             </span>
 
                                             <div className={styles.reviewActions}>
+                                                {review.listingId && (
+                                                    <Link href={`/listings/${review.listingId}`} className={styles.serviceLinkBtn} title={`${t('review.forService')} ${review.serviceTitle || ''}`}>
+                                                        <ExternalLink size={14} />
+                                                        <span>{t('viewListing')}</span>
+                                                    </Link>
+                                                )}
+                                                
                                                 {showViewListing && onViewListing && (
                                                     <button onClick={(e) => { e.stopPropagation(); onViewListing(review.listingId) }} className={styles.viewListingBtn} title={t('viewListing')}>
                                                         <ExternalLink size={16} />
