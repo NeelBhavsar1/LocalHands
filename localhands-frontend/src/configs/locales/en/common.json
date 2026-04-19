@@ -341,6 +341,7 @@
     "serviceLocation": "Service Location",
     "editListing": "Edit Listing",
     "deleteListing": "Delete Listing",
+    "editListing.description": "Description",
 
     "messages.title": "Messages",
     "messages.noConversations": "No conversations yet",

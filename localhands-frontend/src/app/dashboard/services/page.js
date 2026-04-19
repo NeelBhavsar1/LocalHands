@@ -116,7 +116,7 @@ export default function ServicesPage() {
             </div>
 
             <div className={styles.nearbySection}>
-                <h2>{debouncedSearchQuery ? t('services.searchResults', { query: debouncedSearchQuery }) : location ? t('services.nearbyServices') : t('services.onlineServices')}</h2>
+                <h2>{debouncedSearchQuery ? `${t('services.searchResults').replace('{query}', debouncedSearchQuery)}` : location ? t('services.nearbyServices') : t('services.onlineServices')}</h2>
                 {listingsLoading ? (
                     <p className={styles.loadingText}>{location ? t('services.loadingNearby') : t('services.loadingOnline')}</p>
                 ) : nearbyListings.length === 0 ? (

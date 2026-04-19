@@ -264,7 +264,7 @@
     "createServiceForm.latitude": "Breitengrad",
     "createServiceForm.longitude": "Längengrad",
     "createServiceForm.photos": "Fotos",
-    "createServiceForm.serviceName": "Service Name",
+    "createServiceForm.serviceName": "Dienstname",
     "createServiceForm.categories": "Kategorien",
     "createServiceForm.photosSelected": "Fotos ausgewählt",
     "createServiceForm.categoriesSelected": "Kategorie(n) ausgewählt",
@@ -340,6 +340,8 @@
     "serviceLocation": "Service-Standort",
     "editListing": "Angebot Bearbeiten",
     "deleteListing": "Angebot Löschen",
+    "editListing.description": "Beschreibung",
+    "editlisting.categories": "Kategorien bearbeiten",
 
     "messages.title": "Nachrichten",
     "messages.noConversations": "Noch keine Unterhaltungen",
@@ -465,7 +467,8 @@
     "faq.answer.profileNotUpdating": "Stellen Sie sicher, dass Sie auf den Speichern-Button klicken, nachdem Sie Änderungen vorgenommen haben. Überprüfen Sie Ihre Internetverbindung. Einige Änderungen können einige Minuten dauern, um auf der gesamten Plattform zu erscheinen. Wenn Probleme bestehen, versuchen Sie, die Seite zu aktualisieren oder sich ab- und wieder anzumelden.",
     "faq.answer.photosNotUploading": "Überprüfen Sie, ob Ihre Fotos im JPG- oder PNG-Format und unter 5MB groß sind. Stellen Sie sicher, dass Sie eine stabile Internetverbindung haben. Versuchen Sie, die Seite zu aktualisieren und den Upload erneut zu versuchen. Wenn Probleme bestehen, versuchen Sie einen anderen Browser oder komprimieren Sie Ihre Bilder.",
     "listings.notFound": "Angebot nicht gefunden",
-    "serviceName": "Service Name",
+    "serviceName": "Dienstname",
+    
     "categoriesSelected": "Kategorie(n) ausgewählt",
     "clickOnMapToUpdateLocation": "Klicken Sie auf die Karte, um den Standort zu aktualisieren",
     "latitude": "Breitengrad",

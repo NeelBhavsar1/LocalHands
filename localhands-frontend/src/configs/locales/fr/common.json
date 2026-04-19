@@ -329,6 +329,8 @@
     "serviceLocation": "Lieu du Service",
     "editListing": "Modifier l'Annonce",
     "deleteListing": "Supprimer l'Annonce",
+    "editListing.description": "Description",
+    "editlisting.categories": "Modifier les catégories",
 
     "messages.title": "Messages",
     "messages.noConversations": "Aucune conversation encore",

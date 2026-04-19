@@ -346,6 +346,8 @@
     "serviceLocation": "Ubicación del servicio",
     "editListing": "Editar anuncio",
     "deleteListing": "Eliminar anuncio",
+    "editListing.description": "Descripción",
+    "editlisting.categories": "Editar categorías",
 
     "messages.title": "Mensajes",
     "messages.noConversations": "Aún no hay conversaciones",
@@ -485,5 +487,15 @@
     "latitude": "Latitud",
     "longitude": "Longitud",
     "photosSelected": "fotos seleccionadas",
+    
+    "services.title": "Servicios",
+    "services.subtitle": "¡Publica tus servicios aquí, o consulta los servicios ofrecidos!",
+    "services.searchResults": "Resultados de búsqueda para \"{query}\"",
+    "services.nearbyServices": "Servicios cercanos",
+    "services.onlineServices": "Servicios en línea",
+    "services.loadingNearby": "Cargando servicios cercanos...",
+    "services.loadingOnline": "Cargando servicios en línea...",
+    "services.noNearbyListings": "No se encontraron servicios cercanos",
+    "services.noOnlineListings": "No se encontraron servicios en línea",
     "footer.copyright": "{{year}} LocalHands"
 }
