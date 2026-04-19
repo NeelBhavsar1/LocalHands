@@ -482,6 +482,8 @@
     
     "listings.notFound": "Anuncio no encontrado",
     "serviceName": "Nombre del servicio",
+    "description": "Descripción",
+    "categories": "Categorías",
     "categoriesSelected": "categoría(s) seleccionada(s)",
     "clickOnMapToUpdateLocation": "Haz clic en el mapa para actualizar ubicación",
     "latitude": "Latitud",

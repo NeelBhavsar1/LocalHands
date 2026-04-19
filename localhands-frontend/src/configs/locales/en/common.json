@@ -342,6 +342,7 @@
     "editListing": "Edit Listing",
     "deleteListing": "Delete Listing",
     "editListing.description": "Description",
+    "editlisting.categories": "Edit listing",
 
     "messages.title": "Messages",
     "messages.noConversations": "No conversations yet",
@@ -490,6 +491,8 @@
     "settings.removeServiceProviderWarning": "Removing this will delete all your listings and services",
     "listings.notFound": "Listing not found",
     "serviceName": "Service Name",
+    "description": "Description",
+    "categories": "Categories",
     "categoriesSelected": "category(s) selected",
     "clickOnMapToUpdateLocation": "Click on map to update location",
     "latitude": "Latitude",

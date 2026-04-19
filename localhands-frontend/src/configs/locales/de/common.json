@@ -468,7 +468,8 @@
     "faq.answer.photosNotUploading": "Überprüfen Sie, ob Ihre Fotos im JPG- oder PNG-Format und unter 5MB groß sind. Stellen Sie sicher, dass Sie eine stabile Internetverbindung haben. Versuchen Sie, die Seite zu aktualisieren und den Upload erneut zu versuchen. Wenn Probleme bestehen, versuchen Sie einen anderen Browser oder komprimieren Sie Ihre Bilder.",
     "listings.notFound": "Angebot nicht gefunden",
     "serviceName": "Dienstname",
-    
+    "description": "Beschreibung",
+    "categories": "Kategorien",
     "categoriesSelected": "Kategorie(n) ausgewählt",
     "clickOnMapToUpdateLocation": "Klicken Sie auf die Karte, um den Standort zu aktualisieren",
     "latitude": "Breitengrad",

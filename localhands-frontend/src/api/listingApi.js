@@ -52,7 +52,6 @@ export const getMyListings = async () => {
     }
 }
 
-
 /**
  * Gets a single listing by id
  * @param {*} listingId - The id of the listing to get

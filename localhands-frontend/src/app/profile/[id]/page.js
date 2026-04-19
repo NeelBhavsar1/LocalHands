@@ -5,7 +5,6 @@ import { useParams, useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 import styles from './page.module.css'
 import { getPublicProfile, getUserInfo } from '@/api/userApi'
-import { getMyListings } from '@/api/listingApi'
 import { BACKEND_URL } from '@/utils/listingUtils'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
 import Link from 'next/link'
@@ -19,7 +18,6 @@ export default function PublicProfilePage() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [currentUser, setCurrentUser] = useState(null)
-    const [userListings, setUserListings] = useState([])
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -33,16 +31,6 @@ export default function PublicProfilePage() {
                 }
                 const data = await getPublicProfile(userId)
                 setProfile(data)
-                
-                // Fetch user listings separately
-                try {
-                    const listings = await getMyListings()
-                    setUserListings(listings)
-                } catch (listingsErr) {
-                    console.error('Failed to fetch user listings:', listingsErr)
-                    
-                    setUserListings([])
-                }
             } catch (err) {
                 console.error('Failed to fetch profile:', err)
                 setError(err.message || t('errors.failedToLoadProfile'))
@@ -124,12 +112,12 @@ export default function PublicProfilePage() {
                 </div>
             </div>
 
-            {isServiceProvider && userListings && userListings.length > 0 && (
+            {isServiceProvider && profile.listings && profile.listings.length > 0 && (
                 <div className={styles.section}>
                     <h2 className={styles.sectionTitle}>{isOwnProfile ? t('profile.yourListings') : t('profile.userListings')}</h2>
                     <div className={styles.listingsGrid}>
 
-                        {userListings.map((listing) => (
+                        {profile.listings.map((listing) => (
                             <Link key={listing.id} href={`/dashboard/listings/${listing.id}`} className={styles.listingCard}>
                                 <div className={styles.listingImageContainer}>
 
