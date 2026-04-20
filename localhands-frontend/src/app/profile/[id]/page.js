@@ -118,11 +118,11 @@ export default function PublicProfilePage() {
                     <div className={styles.listingsGrid}>
 
                         {profile.listings.map((listing) => (
-                            <Link key={listing.id} href={`/dashboard/listings/${listing.id}`} className={styles.listingCard}>
+                            <Link key={listing.listingId || listing.id} href={`/dashboard/listings/${listing.listingId || listing.id}`} className={styles.listingCard}>
                                 <div className={styles.listingImageContainer}>
 
                                     {listing.photos && listing.photos[0] ? (
-                                        <img src={`${BACKEND_URL}${listing.photos[0]}`} alt={listing.name} className={styles.listingImage} />
+                                        <img src={`${BACKEND_URL}${listing.photos[0].url || listing.photos[0]}`} alt={listing.name} className={styles.listingImage} />
                                     ) : (
                                         <div className={styles.noImage}>{t('alt.noImage')}</div>
                                     )}
@@ -130,16 +130,19 @@ export default function PublicProfilePage() {
 
                                 <div className={styles.listingInfo}>
                                     <h3 className={styles.listingName}>{listing.name}</h3>
-                                    <p className={styles.listingPrice}>${listing.price}</p>
-
                                     <div className={styles.listingMeta}>
-                                        <span className={styles.workType}>{listing.workType}</span>
-                                        {listing.latitude && listing.longitude && (
+                                        <span className={styles.workType}>{listing.workType === 'ONLINE' ? t('search.workType.online') : t('search.workType.inPerson')}</span>
+                                        {listing.workType === 'ONLINE' ? (
+                                            <span className={styles.location}>
+                                                <MapPin size={14} />
+                                                {t('search.workType.online')}
+                                            </span>
+                                        ) : listing.latitude && listing.longitude && listing.latitude !== 0 && listing.longitude !== 0 ? (
                                             <span className={styles.location}>
                                                 <MapPin size={14} />
                                                 {t('serviceLocation')}
                                             </span>
-                                        )}
+                                        ) : null}
                                     </div>
 
                                 </div>
