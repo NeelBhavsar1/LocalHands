@@ -100,7 +100,7 @@ const clearPasswordFields = (setFormData) => {
  * @param {*} setFormData 
  * @param {*} updateAccountInfo 
  */
-export const handleUpdateAccount = async (formData, setErrors, setFormData, updateAccountInfo) => {
+export const handleUpdateAccount = async (formData, setErrors, setFormData, updateAccountInfo, t) => {
     const validationErrors = validateSettingsForm(formData);
     setErrors(validationErrors);
     
@@ -111,7 +111,7 @@ export const handleUpdateAccount = async (formData, setErrors, setFormData, upda
     try {
         const updateData = createUpdateData(formData)
         await updateAccountInfo(updateData)
-        alert(TRANSLATIONS.accountUpdated)
+        alert(t("settings.accountUpdated"))
         
         clearPasswordFields(setFormData);
     } catch (error) {

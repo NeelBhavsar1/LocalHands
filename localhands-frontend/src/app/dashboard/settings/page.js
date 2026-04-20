@@ -37,7 +37,7 @@ export default function page() {
 
     const onSubmit = (e) => {
         e.preventDefault()
-        handleUpdateAccount(formData, setErrors, setFormData, updateAccountInfo)
+        handleUpdateAccount(formData, setErrors, setFormData, updateAccountInfo, t)
     };
 
     const onDelete = () => {

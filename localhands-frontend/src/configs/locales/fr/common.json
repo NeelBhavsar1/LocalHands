@@ -482,6 +482,7 @@
     "services.noNearbyListings": "Il n'y a actuellement aucune annonce disponible dans votre région, augmentez votre rayon de recherche ou consultez le travail en ligne.",
     "services.noOnlineListings": "Il n'y a actuellement aucune annonce en ligne disponible. Veuillez activer l'accès à votre localisation pour voir les services dans votre région.",
     "settings.removeServiceProviderWarning": "Ceci supprimera toutes vos annonces et services",
+    "settings.accountUpdated": "Détails du compte mis à jour, si vous avez modifié votre email, vérifiez votre boîte de réception.",
     "brand.localHands": "LocalHands",
     "footer.copyright": "{{year}} LocalHands"
 }

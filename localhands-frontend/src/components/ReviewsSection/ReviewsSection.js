@@ -113,6 +113,9 @@ export default function ReviewsSection({ reviews, backendUrl, t, currentUser, on
                             </Link>
 
                             <div className={styles.reviewMeta}>
+                                {review.listingName && (
+                                    <span className={styles.listingName}>{review.listingName}</span>
+                                )}
                                 {renderStars(review.rating)}
                                 {expandedReview === review.id ? (
                                     <ChevronUp size={18} className={styles.chevron} />

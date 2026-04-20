@@ -85,6 +85,12 @@
     gap: 0.75rem;
 }
 
+.listingName {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
 .stars {
     display: flex;
     gap: 0.125rem;

@@ -227,12 +227,12 @@ export default function ListingDetailPage() {
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label htmlFor="description">{t('description')}</label>
+                        <label htmlFor="description">{t('editListing.description')}</label>
                         <textarea id="description" name="description" value={editForm.description} onChange={handleEditChange} rows={4} required />
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label>{t('categories')}</label>
+                        <label>{t('editlisting.categories')}</label>
                         {categoriesLoading ? (
                             <LoadingSpinner size="small" />
                         ) : (

@@ -490,6 +490,7 @@
     "services.noNearbyListings": "There are currently no listings available in your area, either increase your search radius or check for online work.",
     "services.noOnlineListings": "There are currently no online listings available. Please enable location access to see services in your area.",
     "settings.removeServiceProviderWarning": "Removing this will delete all your listings and services",
+    "settings.accountUpdated": "Account details updated, if you have changed your email, check your inbox.",
     "listings.notFound": "Listing not found",
     "serviceName": "Service Name",
     "description": "Description",

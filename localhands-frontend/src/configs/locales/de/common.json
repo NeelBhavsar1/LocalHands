@@ -493,6 +493,7 @@
     "services.noNearbyListings": "Derzeit sind keine Angebote in Ihrer Nähe verfügbar, erhöhen Sie Ihren Suchradius oder prüfen Sie Online-Arbeit.",
     "services.noOnlineListings": "Derzeit sind keine Online-Angebote verfügbar. Bitte aktivieren Sie den Standortzugriff, um Dienstleistungen in Ihrer Bereich zu sehen.",
     "settings.removeServiceProviderWarning": "Dies löscht alle Ihre Angebote und Dienstleistungen",
+    "settings.accountUpdated": "Kontodetails aktualisiert, wenn Sie Ihre E-Mail geändert haben, überprüfen Sie Ihren Posteingang.",
     "brand.localHands": "LocalHands",
     "footer.copyright": "{{year}} LocalHands"
 }
