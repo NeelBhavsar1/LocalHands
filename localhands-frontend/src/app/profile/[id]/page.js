@@ -7,6 +7,7 @@ import styles from './page.module.css'
 import { getPublicProfile, getUserInfo } from '@/api/userApi'
 import { BACKEND_URL } from '@/utils/listingUtils'
 import LoadingSpinner from '@/components/LoadingSpinner/LoadingSpinner'
+import HomeNavBar from '@/components/HomeNavBar/HomeNavBar'
 import Link from 'next/link'
 import { MapPin, MessageCircle, ArrowLeft, Star, ExternalLink } from 'lucide-react'
 
@@ -82,7 +83,9 @@ export default function PublicProfilePage() {
     const isOwnProfile = currentUser && currentUser.id === profile.id
 
     return (
-        <div className={styles.container}>
+        <>
+            <HomeNavBar showLinks={false} />
+            <div className={styles.container}>
             <div className={styles.header}>
                 <button onClick={() => router.back()} className={styles.backButton}>
                     <ArrowLeft size={20} />
@@ -194,5 +197,6 @@ export default function PublicProfilePage() {
                 </div>
             )}
         </div>
+        </>
     )
 }
