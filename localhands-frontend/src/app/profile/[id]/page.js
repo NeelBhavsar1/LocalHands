@@ -148,7 +148,7 @@ export default function PublicProfilePage() {
                                         ) : (
                                             <span className={styles.location}>
                                                 <MapPin size={14} />
-                                                {t('search.workType.online')}
+                                                {t('search.workType.inPerson')}
                                             </span>
                                         )}
                                     </div>

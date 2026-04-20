@@ -212,7 +212,7 @@ export default function page() {
                         )}
                         <div className={styles.reviewsSection}>
                             <h2 className={styles.sectionTitle}>{t("profile.yourReviews")}</h2>
-                            <ReviewsSection reviews={userReviews} backendUrl={BACKEND_URL} t={t} currentUser={user} onReviewUpdated={(updatedReview) => updateUserReview(setUserReviews, updatedReview)} onReviewDeleted={(reviewId) => removeUserReview(setUserReviews, reviewId)} showViewListing={false} />
+                            <ReviewsSection reviews={userReviews} backendUrl={BACKEND_URL} t={t} currentUser={user} onReviewUpdated={(updatedReview) => updateUserReview(setUserReviews, updatedReview)} onReviewDeleted={(reviewId) => removeUserReview(setUserReviews, reviewId)} showViewListing={true} />
                         </div>
                     </div>
                 </div>
