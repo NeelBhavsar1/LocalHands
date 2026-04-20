@@ -78,7 +78,7 @@ export default function PublicProfilePage() {
         )
     }
 
-    const isServiceProvider = profile.roles?.includes('ROLE_PROVIDER')
+    const isServiceProvider = profile.roles?.includes('SELLER')
     const isOwnProfile = currentUser && currentUser.id === profile.id
 
     return (
