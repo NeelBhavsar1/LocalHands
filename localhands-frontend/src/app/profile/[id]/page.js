@@ -136,11 +136,7 @@ export default function PublicProfilePage() {
                                     <div className={styles.listingMeta}>
                                         <span className={styles.workType}>{listing.workType === 'ONLINE' ? t('search.workType.online') : t('search.workType.inPerson')}</span>
                                         {/*This section over here checks whether the listing is ONLINE or IN-PERSON. If a listing contains longitude and latitude both being 0, then we display ONLINE. If not, then we display the location data */}
-                                        {listing.workType === 'ONLINE' ? (
-                                            <span className={styles.location}>
-                                                {t('search.workType.online')}
-                                            </span>
-                                        ) : (listing.latitude && listing.longitude && listing.latitude !== 0 && listing.longitude !== 0) ? (
+                                        {listing.workType === 'ONLINE' ? null : (listing.latitude && listing.longitude && listing.latitude !== 0 && listing.longitude !== 0) ? (
                                             <span className={styles.location}>
                                                 <MapPin size={14} />
                                                 {listing.latitude.toFixed(4)}, {listing.longitude.toFixed(4)}
