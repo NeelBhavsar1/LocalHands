@@ -18,6 +18,7 @@ public class ReviewResponseDTO {
     private Instant creationTime;
 
     private Long listingId;
+    private String listingName;
 
     private Long userId;
     private String userName;

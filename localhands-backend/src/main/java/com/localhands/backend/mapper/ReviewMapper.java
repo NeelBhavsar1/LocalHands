@@ -19,6 +19,7 @@ public class ReviewMapper {
                 review.getReviewBody(),
                 review.getCreationTime(),
                 review.getListing().getId(),
+                review.getListing().getName(),
                 reviewerId,
                 canSeeFullProfile
                         ? review.getUser().getFirstName() + " " + review.getUser().getLastName()
