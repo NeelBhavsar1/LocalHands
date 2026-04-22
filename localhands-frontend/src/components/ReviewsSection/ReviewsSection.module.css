@@ -289,6 +289,39 @@
 
     .reviewHeader {
         padding: 0.875rem 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .reviewUser {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .reviewMeta {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .listingName {
+        flex: 1;
+        min-width: 0;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .stars {
+        flex-shrink: 0;
+    }
+
+    .chevron {
+        flex-shrink: 0;
+        margin-left: auto;
     }
 
     .reviewUserPfp {
@@ -298,6 +331,11 @@
 
     .reviewUserName {
         font-size: 0.9rem;
+        flex: 1;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .reviewBody {

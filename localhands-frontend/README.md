@@ -34,11 +34,25 @@ npm install
 
 ### Environment Variables
 
-Create `.env.local`:
+Create `.env.local` in the root directory:
 
+**For Local Development:**
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8080
+NEXT_PUBLIC_IMAGE_URL=http://localhost:8080
 ```
-NEXT_PUBLIC_BACKEND_URL=https://api.projectlocalhands.com
+
+**For Production:**
+```env
+NEXT_PUBLIC_API_URL=https://api.projectlocalhands.com
+NEXT_PUBLIC_IMAGE_URL=https://api.projectlocalhands.com
 ```
+
+**Environment Variable Details:**
+- `NEXT_PUBLIC_API_URL` - Used for API calls and WebSocket connections
+- `NEXT_PUBLIC_IMAGE_URL` - Used for serving images and media files
+
+Make sure your backend is running on the specified port (default: 8080) before starting the frontend development server.
 
 ### Development
 
