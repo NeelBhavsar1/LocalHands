@@ -39,12 +39,16 @@ The application supports four languages:
 - **Map Integration/Leaflet.js** - Location services
 
 ### Backend
-- **Please fill this in**
+- **Java 21** - The chosen programming language
+- **Spring Boot 4.0.3** - The backend framework
+- **Maven 4.0.0** - Build tool that automatically packages the backend software enabling it to run on a server and provides the ability to use external libraries/dependencies easily
+- **MySQL 9.5** - Database to complement the backend
 
 ### Development Tools
 - **ESLint** - Code linting
 - **Prettier** - Code formatting
 - **TypeScript** - Type safety
+
 
 ## Key Components
 
