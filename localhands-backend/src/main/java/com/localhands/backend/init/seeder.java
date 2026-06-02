@@ -10,6 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 @Component
 @RequiredArgsConstructor
 public class seeder implements CommandLineRunner {
@@ -19,6 +23,14 @@ public class seeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+
+        try {
+            Files.createDirectories(Paths.get("uploads"));
+            Files.createDirectories(Paths.get("uploads/listing-images"));
+            Files.createDirectories(Paths.get("uploads/profile-pictures"));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to create upload directories", e);
+        }
 
         for (RoleName roleName : RoleName.values()) {
             if (!roleRepository.existsByRoleName(roleName)) {

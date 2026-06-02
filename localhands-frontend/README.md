@@ -45,7 +45,7 @@ NEXT_PUBLIC_IMAGE_URL=http://localhost:8080
 **For Production:**
 ```env
 NEXT_PUBLIC_API_URL=https://api.projectlocalhands.com
-NEXT_PUBLIC_IMAGE_URL=https://api.projectlocalhands.com
+NEXT_PUBLIC_IMAGE_URL=https://localhands-storage-692701344853-eu-west-2-an.s3.eu-west-2.amazonaws.com
 ```
 
 **Environment Variable Details:**
@@ -90,11 +90,7 @@ src/
 
 ## API Integration
 
-The frontend communicates with a Spring Boot backend at `NEXT_PUBLIC_BACKEND_URL`:
-
-- **Listings:** `GET /api/listings/me`, `POST /api/listings`, `PUT /api/listings`, `DELETE /api/listings`
-- **Auth:** JWT-based authentication with password reset flow
-- **Files:** Multipart/form-data for photo uploads
+The frontend communicates with a Spring Boot backend at `NEXT_PUBLIC_BACKEND_URL`.
 
 ## Scripts
 
@@ -103,6 +99,7 @@ The frontend communicates with a Spring Boot backend at `NEXT_PUBLIC_BACKEND_URL
 | `npm run dev` | Start development server with webpack |
 | `npm run build` | Production build |
 | `npm start` | Start production server |
+| `npm install` | Install dependencies |
 
 ## Learn More
 
