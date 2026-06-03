@@ -44,8 +44,8 @@ NEXT_PUBLIC_IMAGE_URL=http://localhost:8080
 
 **For Production:**
 ```env
-NEXT_PUBLIC_API_URL=https://api.projectlocalhands.com
-NEXT_PUBLIC_IMAGE_URL=https://localhands-storage-692701344853-eu-west-2-an.s3.eu-west-2.amazonaws.com
+NEXT_PUBLIC_API_URL={your own hosted backend URL}
+NEXT_PUBLIC_IMAGE_URL={your own Amazon S3 Bucket URL} 
 ```
 
 **Environment Variable Details:**
