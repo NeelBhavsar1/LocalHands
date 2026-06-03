@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
             }
 
             if (hasNewPhoto) {
-                savedFileUrl = fileStorageService.save(photo, "uploads/profile-pictures/");
+                savedFileUrl = fileStorageService.save(photo, "profile-pictures/");
 
                 ProfilePhoto profilePhoto = new ProfilePhoto();
 

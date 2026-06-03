@@ -57,9 +57,10 @@ public class AuthServiceImpl implements AuthService {
         return ResponseCookie.from("refreshToken", token)
                 .httpOnly(true)
                 .secure(true)
+                .sameSite("None")
+                .domain(".projectlocalhands.com")
                 .path("/")
                 .maxAge(maxAge)
-                .sameSite("Strict")
                 .build();
     }
 
@@ -70,9 +71,10 @@ public class AuthServiceImpl implements AuthService {
         return ResponseCookie.from("accessToken", token)
                 .httpOnly(true)
                 .secure(true)
+                .sameSite("None")
+                .domain(".projectlocalhands.com")
                 .path("/")
                 .maxAge(maxAge)
-                .sameSite("Strict")
                 .build();
     }
 

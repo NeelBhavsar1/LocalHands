@@ -7,9 +7,10 @@ public class CookieUtil {
         return ResponseCookie.from(name, "")
                 .httpOnly(true)
                 .secure(true)
+                .sameSite("None")
+                .domain(".projectlocalhands.com")
                 .path("/")
                 .maxAge(0)
-                .sameSite("Strict")
                 .build();
     }
 }
