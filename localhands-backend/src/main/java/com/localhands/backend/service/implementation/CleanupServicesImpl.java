@@ -32,6 +32,7 @@ public class CleanupServicesImpl implements CleanupServices {
     private final NewEmailTokenRepository newEmailTokenRepository;
     private final ProfilePhotoRepository profilePhotoRepository;
     private final UserRepository userRepository;
+    private final ActivateAccountTokenRepository activateAccountTokenRepository;
 
     private String normalizeObjectKey(String url) {
         if (url == null || url.isBlank()) {
@@ -70,7 +71,10 @@ public class CleanupServicesImpl implements CleanupServices {
     @Scheduled(fixedRate = 3600000)
     @Transactional
     @Override
-    public void deleteUsersWithExpiredActivationTokens() { userRepository.deleteUsersWithExpiredActivationTokens(Instant.now()); }
+    public void deleteUsersWithExpiredActivationTokens() {
+        activateAccountTokenRepository.deleteAllExpiredSince(Instant.now());
+        userRepository.deleteUsersWithExpiredActivationTokens(Instant.now());
+    }
 
     @Profile("prod")
     @Scheduled(fixedRate = 86400000)
