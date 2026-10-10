@@ -33,6 +33,9 @@ security:
 app:
   cors:
     allowed-origin: ${CORS_ALLOWED_ORIGIN}
-aws:
-  s3:
-    bucket: ${S3_BUCKET:local-bucket}
+r2:
+  endpoint: ${R2_ENDPOINT}
+  access-key-id: ${R2_ACCESS_KEY_ID}
+  secret-access-key: ${R2_SECRET_ACCESS_KEY}
+  bucket: ${R2_BUCKET}
+  public-url: ${R2_PUBLIC_URL}

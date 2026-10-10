@@ -62,7 +62,11 @@ DB_USERNAME={deployed database instance username}
 EMAIL_SERVICE_FROM_EMAIL={email address to send automated emails}
 EMAIL_SERVICE_PASSWORD={email app password}
 JWT_KEY={a 32-character sequence of your choice}
-S3_BUCKET={name of S3 bucket}
+R2_ENDPOINT=https://{account-id}.r2.cloudflarestorage.com
+R2_ACCESS_KEY_ID={R2 access key ID}
+R2_SECRET_ACCESS_KEY={R2 secret access key}
+R2_BUCKET={name of R2 bucket}
+R2_PUBLIC_URL=https://{bucket-name}.pub-{hash}.r2.dev
 ```
 
 **Environment Variable Details:**
@@ -74,11 +78,15 @@ S3_BUCKET={name of S3 bucket}
 - `EMAIL_SERVICE_FROM_EMAIL` - The email address to send automated emails with.
 - `EMAIL_SERVICE_PASSWORD` - The app password related to the email address to send automated emails with.
 - `JWT_KEY` - A key used to sign and verify JWTs.
-- `S3_BUCKET` - The S3 bucket used to store images in production.
+- `R2_ENDPOINT` - The Cloudflare R2 API endpoint used by the backend.
+- `R2_ACCESS_KEY_ID` - The access key used to authenticate with R2.
+- `R2_SECRET_ACCESS_KEY` - The matching secret key used to authenticate with R2.
+- `R2_BUCKET` - The Cloudflare R2 bucket used to store uploaded images in production.
+- `R2_PUBLIC_URL` - The public base URL used to serve uploaded files in the browser.
 
 **Note:** To enable emailing functionality, a valid Gmail account with an app password must be set up. If these are left unset, the backend will still run, but email features will be disabled.
 
-**Note:** The backend will facilitate local storage of images for local development, but will use AWS' S3 service to store them instead in production.
+**Note:** The backend will facilitate local storage of images for local development, but will use Cloudflare R2 in production for uploaded media files.
 
 ### Development
 

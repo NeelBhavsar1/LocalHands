@@ -19,8 +19,11 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     private final S3Client s3Client;
 
-    @Value("${aws.s3.bucket}")
+    @Value("${r2.bucket}")
     private String bucketName;
+
+    @Value("${r2.public-url}")
+    private String publicUrl;
 
     @Override
     public String save(MultipartFile file, String uploadDir) {
@@ -41,10 +44,14 @@ public class FileStorageServiceImpl implements FileStorageService {
 
             s3Client.putObject(request, RequestBody.fromBytes(file.getBytes()));
 
+            if (publicUrl != null && !publicUrl.isBlank()) {
+                return publicUrl.endsWith("/") ? publicUrl + key : publicUrl + "/" + key;
+            }
+
             return "/" + key;
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to upload file to S3.");
+            throw new RuntimeException("Failed to upload file to R2.");
         }
     }
 
@@ -55,7 +62,13 @@ public class FileStorageServiceImpl implements FileStorageService {
                 return;
             }
 
-            String key = url.startsWith("/") ? url.substring(1) : url;
+            String key = url;
+            if (key.startsWith("http://") || key.startsWith("https://")) {
+                key = java.net.URI.create(key).getPath();
+            }
+            if (key.startsWith("/")) {
+                key = key.substring(1);
+            }
 
             DeleteObjectRequest request = DeleteObjectRequest.builder()
                     .bucket(bucketName)
@@ -65,7 +78,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             s3Client.deleteObject(request);
 
         } catch (Exception e) {
-            System.out.println("Failed to delete file in S3: " + url);
+            System.out.println("Failed to delete file in R2: " + url);
         }
     }
 }

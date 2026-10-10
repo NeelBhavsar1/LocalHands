@@ -23,7 +23,7 @@ public class CleanupServicesImpl implements CleanupServices {
 
     private final S3Client s3Client;
 
-    @Value("${aws.s3.bucket}")
+    @Value("${r2.bucket}")
     private String bucketName;
 
     private final RefreshTokenRepository refreshTokenRepository;
@@ -32,6 +32,21 @@ public class CleanupServicesImpl implements CleanupServices {
     private final NewEmailTokenRepository newEmailTokenRepository;
     private final ProfilePhotoRepository profilePhotoRepository;
     private final UserRepository userRepository;
+
+    private String normalizeObjectKey(String url) {
+        if (url == null || url.isBlank()) {
+            return "";
+        }
+
+        String key = url;
+        if (key.startsWith("http://") || key.startsWith("https://")) {
+            key = java.net.URI.create(key).getPath();
+        }
+        if (key.startsWith("/")) {
+            key = key.substring(1);
+        }
+        return key;
+    }
 
     @Scheduled(fixedRate = 3600000)
     @Transactional
@@ -64,7 +79,7 @@ public class CleanupServicesImpl implements CleanupServices {
 
         Set<String> validKeys = profilePhotoRepository.findAllUrls()
                 .stream()
-                .map(url -> url != null && url.startsWith("/") ? url.substring(1) : url)
+                .map(this::normalizeObjectKey)
                 .collect(Collectors.toSet());
 
         String continuationToken = null;
@@ -87,7 +102,7 @@ public class CleanupServicesImpl implements CleanupServices {
                             .key(key)
                             .build());
 
-                    System.out.println("Deleted unused S3 profile image: " + key);
+                    System.out.println("Deleted unused R2 profile image: " + key);
                 }
             });
 
@@ -103,7 +118,7 @@ public class CleanupServicesImpl implements CleanupServices {
 
         Set<String> validKeys = listingPhotoRepository.findAllUrls()
                 .stream()
-                .map(url -> url != null && url.startsWith("/") ? url.substring(1) : url)
+                .map(this::normalizeObjectKey)
                 .collect(Collectors.toSet());
 
         String continuationToken = null;
@@ -126,7 +141,7 @@ public class CleanupServicesImpl implements CleanupServices {
                             .key(key)
                             .build());
 
-                    System.out.println("Deleted unused S3 listing image: " + key);
+                    System.out.println("Deleted unused R2 listing image: " + key);
                 }
             });
 
